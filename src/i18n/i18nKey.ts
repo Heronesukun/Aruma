@@ -5,6 +5,7 @@ enum I18nKey {
     archive = "archive",
     friends = "friends",
     anime = "anime",
+    diary = "diary",
     other = "other",
     about = "about",
     
@@ -32,11 +33,17 @@ enum I18nKey {
     // 页面标题
     friendsTitle = "friendsTitle",
     animeTitle = "animeTitle",
+    diaryTitle = "diaryTitle",
     archiveTitle = "archiveTitle",
     archiveYear = "archiveYear",
     categoryTitle = "categoryTitle",
     categoryWith = "categoryWith",
     tagWith = "tagWith",
+    
+    // 短文页面
+    diaryMinutesAgo = "diaryMinutesAgo",
+    diaryHoursAgo = "diaryHoursAgo",
+    diaryDaysAgo = "diaryDaysAgo",
     
     // 页脚
     allRightsReserved = "allRightsReserved",

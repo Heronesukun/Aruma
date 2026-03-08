@@ -8,6 +8,7 @@ export const zhCN: Translation = {
     [Key.archive]: "归档",
     [Key.friends]: "友人帐",
     [Key.anime]: "追番",
+    [Key.diary]: "日记",
     [Key.other]: "其他",
     [Key.about]: "关于",
     
@@ -35,11 +36,17 @@ export const zhCN: Translation = {
     // 页面标题
     [Key.friendsTitle]: "友情链接",
     [Key.animeTitle]: "追番",
+    [Key.diaryTitle]: "日记",
     [Key.archiveTitle]: "归档",
     [Key.archiveYear]: "归档: {year} 年",
     [Key.categoryTitle]: "分类",
     [Key.categoryWith]: "分类: {name}",
     [Key.tagWith]: "标签: {tag}",
+    
+    // 短文页面
+    [Key.diaryMinutesAgo]: " 分钟前",
+    [Key.diaryHoursAgo]: " 小时前",
+    [Key.diaryDaysAgo]: " 天前",
     
     // 页脚
     [Key.allRightsReserved]: "All rights reserved.",

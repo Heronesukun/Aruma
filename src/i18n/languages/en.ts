@@ -8,6 +8,7 @@ export const en: Translation = {
     [Key.archive]: "Archive",
     [Key.friends]: "Friends",
     [Key.anime]: "Anime",
+    [Key.diary]: "Diary",
     [Key.other]: "Other",
     [Key.about]: "About",
     
@@ -35,11 +36,17 @@ export const en: Translation = {
     // Page titles
     [Key.friendsTitle]: "Friend Links",
     [Key.animeTitle]: "Anime",
+    [Key.diaryTitle]: "Diary",
     [Key.archiveTitle]: "Archive",
     [Key.archiveYear]: "Archive: {year}",
     [Key.categoryTitle]: "Categories",
     [Key.categoryWith]: "Category: {name}",
     [Key.tagWith]: "Tag: {tag}",
+    
+    // Diary page
+    [Key.diaryMinutesAgo]: " minutes ago",
+    [Key.diaryHoursAgo]: " hours ago",
+    [Key.diaryDaysAgo]: " days ago",
     
     // Footer
     [Key.allRightsReserved]: "All rights reserved.",

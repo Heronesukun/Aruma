@@ -19,24 +19,26 @@ export const siteConfig = {
     { name: "Email", url: "mailto:example@email.com", icon: "email" },
   ],
   nav: [
-    { name: "首页", path: "/", icon: "home" },
-    { type: "category", name: "分类", icon: "widgets" },
-    { type: "archive", name: "归档", icon: "access_time" },
-    { name: "友人帐", path: "/friends", icon: "link" },
-    { name: "番剧", path: "/anime", icon: "movie" },
-    { 
-      name: "其他", 
-      path: "javascript:;", 
+    { name: "home", path: "/", icon: "home" },
+    { type: "category", icon: "widgets" },
+    { type: "archive", icon: "access_time" },
+    { name: "friends", path: "/friends", icon: "link" },
+    { name: "anime", path: "/anime", icon: "movie" },
+    { name: "diary", path: "/diary", icon: "book" },
+    {
+      name: "other",
+      path: "javascript:;",
       icon: "folder",
       children: [
-        { name: "关于", path: "/about" },
+        { name: "about", path: "/about" },
       ]
     },
   ],
 
   // { type: "divider" } ky1 分隔线
-  // { type: "archive", name: "归档", icon: "access_time" }, ky2 归档
-  // { type: "category", name: "分类", icon: "widgets" }, ky3 分类
+  // { type: "category", icon: "widgets" }, ky2 归档
+  // { type: "archive", icon: "access_time" }, ky3 分类
+
   randomImage: {
     enable: true,
     ignoreHeroImage: true, // 设为 true 时，即使文章设置了 heroImage 也会强制使用随机图
