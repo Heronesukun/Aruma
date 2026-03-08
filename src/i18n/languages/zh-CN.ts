@@ -1,0 +1,54 @@
+import Key from "../i18nKey";
+import type { Translation } from "../translation";
+
+export const zhCN: Translation = {
+    // 导航
+    [Key.home]: "首页",
+    [Key.category]: "分类",
+    [Key.archive]: "归档",
+    [Key.friends]: "友人帐",
+    [Key.anime]: "追番",
+    [Key.other]: "其他",
+    [Key.about]: "关于",
+    
+    // 搜索
+    [Key.searchPlaceholder]: "搜索",
+    [Key.searchResult]: "搜索结果",
+    [Key.searchResultFor]: "搜索结果: {query}",
+    [Key.foundPosts]: "共找到 {count} 篇相关内容",
+    [Key.noSearchResult]: "没有找到与 \"{query}\" 相关的文章",
+    [Key.viewAllPosts]: "查看全部文章",
+    
+    // 文章相关
+    [Key.sticky]: "[置顶]",
+    [Key.comments]: "{count} 条评论",
+    [Key.views]: "{count} 浏览",
+    [Key.readingTime]: "阅读时间: 约 {minutes} 分钟",
+    [Key.categoryLabel]: "分类: ",
+    [Key.tagsLabel]: "标签: ",
+    
+    // 侧边栏
+    [Key.recentReplies]: "最新回复",
+    [Key.noReplies]: "暂无回复",
+    [Key.tagCloud]: "标签云",
+    
+    // 页面标题
+    [Key.friendsTitle]: "友情链接",
+    [Key.animeTitle]: "追番",
+    [Key.archiveTitle]: "归档",
+    [Key.archiveYear]: "归档: {year} 年",
+    [Key.categoryTitle]: "分类",
+    [Key.categoryWith]: "分类: {name}",
+    [Key.tagWith]: "标签: {tag}",
+    
+    // 页脚
+    [Key.allRightsReserved]: "All rights reserved.",
+    [Key.poweredBy]: "Proudly powered by",
+    
+    // 代码复制
+    [Key.copyCode]: "复制代码",
+    [Key.copySuccess]: "复制成功",
+    
+    // RSS
+    [Key.rssSubscribe]: "RSS 订阅",
+};
