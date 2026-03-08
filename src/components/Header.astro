@@ -444,6 +444,7 @@ const archives = Object.entries(archiveCounts)
 
 <script>
   import QRCode from 'qrcode';
+  import { navigate } from 'astro:transitions/client';
 
   function initHeader() {
     try {
@@ -578,8 +579,8 @@ const archives = Object.entries(archiveCounts)
       const performSearch = () => {
         const query = searchInput.value.trim();
         if (query) {
-          // 跳转到搜索结果页
-          window.location.href = `/post/?q=${encodeURIComponent(query)}`;
+          // 使用 Astro navigate 进行平滑导航
+          navigate(`/post/?q=${encodeURIComponent(query)}`);
         }
       };
 

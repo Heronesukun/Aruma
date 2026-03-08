@@ -5,6 +5,7 @@ import { getCollection } from 'astro:content';
 import { i18n } from '../../i18n/translation';
 import PostCard from '../../components/PostCard.astro';
 import I18nKey from '../../i18n/i18nKey';
+import { siteConfig } from '../../site.config';
 
 const allPosts = (await getCollection('post')).sort((a, b) => {
 	// 优先按置顶排序
@@ -16,19 +17,27 @@ const allPosts = (await getCollection('post')).sort((a, b) => {
 });
 
 // 准备文章数据供客户端搜索使用
-const postsData = allPosts.map(post => ({
-	id: post.id,
-	title: post.data.title,
-	description: post.data.description ?? '',
-	category: post.data.category ?? '',
-	tags: post.data.tags ?? [],
-	pubDate: post.data.pubDate.toISOString(),
-	image: post.data.heroImage
-		? typeof post.data.heroImage === 'string'
-			? post.data.heroImage
-			: post.data.heroImage.src
-		: ''
-}));
+const postsData = allPosts.map(post => {
+	// 处理封面图逻辑（与 PostCard.astro 保持一致）
+	let coverImage = '';
+	if (siteConfig.randomImage && siteConfig.randomImage.enable && siteConfig.randomImage.ignoreHeroImage) {
+		coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
+	} else if (post.data.heroImage) {
+		coverImage = typeof post.data.heroImage === 'string' ? post.data.heroImage : post.data.heroImage.src;
+	} else if (siteConfig.randomImage && siteConfig.randomImage.enable) {
+		coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
+	}
+
+	return {
+		id: post.id,
+		title: post.data.title,
+		description: post.data.description ?? '',
+		category: post.data.category ?? '',
+		tags: post.data.tags ?? [],
+		pubDate: post.data.pubDate.toISOString(),
+		image: coverImage
+	};
+});
 ---
 
 <Layout title={i18n(I18nKey.archive)}>
