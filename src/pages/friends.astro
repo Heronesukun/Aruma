@@ -1,0 +1,129 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import friendsData from '../data/friends.json';
+import { i18n } from '../i18n/translation';
+import I18nKey from '../i18n/i18nKey';
+
+interface Friend {
+  name: string;
+  url: string;
+  avatar: string;
+  desc: string;
+}
+
+const friends = friendsData as Friend[];
+---
+
+<Layout title={i18n(I18nKey.friendsTitle)}>
+  <div class="article">
+    <div class="mdui-card archive-card mdui-hoverable">
+      <div class="archive-title">
+        <span>{i18n(I18nKey.friendsTitle)}</span>
+      </div>
+    </div>
+
+    <div class="friends-container">
+      {friends.map(friend => (
+        <a href={friend.url} target="_blank" class="friend-card-link">
+          <div class="mdui-card friend-card mdui-hoverable">
+            <div class="friend-avatar">
+              <img src={friend.avatar} alt={friend.name} />
+            </div>
+            <div class="friend-info">
+              <div class="friend-name">{friend.name}</div>
+              <div class="friend-desc">{friend.desc}</div>
+            </div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <Sidebar slot="sidebar" />
+</Layout>
+
+<style>
+  .friends-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .friend-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  .friend-card {
+    display: flex;
+    align-items: center;
+    padding: 24px; /* 增加内边距 */
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 7px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    height: 120px; /* 增加固定高度 */
+    box-sizing: border-box;
+  }
+
+  .friend-avatar {
+    flex-shrink: 0;
+    margin-right: 20px;
+  }
+
+  .friend-avatar img {
+    width: 72px; /* 稍微增大头像 */
+    height: 72px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: none; /* 移除边框 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* 增加投影代替边框 */
+  }
+
+  .friend-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .friend-name {
+    font-size: 20px; /* 增大名字字号 */
+    font-weight: 500;
+    margin-bottom: 6px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #333;
+  }
+
+  .friend-desc {
+    font-size: 14px; /* 增大描述字号 */
+    color: #757575;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    line-height: 1.5;
+  }
+
+  /* 暗色模式适配 */
+  :global(.mdui-theme-layout-dark) .friend-card {
+    background-color: rgba(66, 66, 66, 0.8) !important;
+  }
+
+  :global(.mdui-theme-layout-dark) .friend-name {
+    color: #fff;
+  }
+
+  :global(.mdui-theme-layout-dark) .friend-desc {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* 响应式适配 */
+  @media (max-width: 768px) {
+    .friends-container {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
