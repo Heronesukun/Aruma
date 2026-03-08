@@ -1,0 +1,85 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostCard from '../components/PostCard.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { getCollection } from 'astro:content';
+import { i18n } from '../i18n/translation';
+import I18nKey from '../i18n/i18nKey';
+
+const allPosts = await getCollection('blog');
+const posts = allPosts.sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const groupedPosts = posts.reduce((acc, post) => {
+  const year = post.data.pubDate.getFullYear();
+  if (!acc[year]) acc[year] = [];
+  acc[year].push(post);
+  return acc;
+}, {} as Record<number, typeof posts>);
+const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a);
+---
+<Layout title={i18n(I18nKey.archiveTitle)}>
+  <div class="article">
+    {years.map(year => (
+      <div class="archive-year-section" id={`year-${year}`}>
+        <div class="mdui-card archive-card mdui-hoverable">
+          <div class="archive-title">
+            <span>{i18n(I18nKey.archiveYear).replace("{year}", year.toString())}</span>
+          </div>
+        </div>
+        {groupedPosts[year].map(post => (
+          <PostCard post={post} />
+        ))}
+      </div>
+    ))}
+  </div>
+
+  <Sidebar slot="sidebar" />
+</Layout>
+
+<script>
+  const applyArchiveFilter = () => {
+    const hash = window.location.hash;
+    const sections = document.querySelectorAll('.archive-year-section');
+
+    if (!hash || !hash.startsWith('#year-')) {
+      sections.forEach(section => {
+        // @ts-ignore
+        section.style.display = '';
+      });
+      // 如果没有指定年份，强制回到顶部
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+      });
+      return;
+    }
+
+    const targetId = hash.slice(1);
+    sections.forEach(section => {
+      // @ts-ignore
+      section.style.display = section.id === targetId ? '' : 'none';
+    });
+
+    // 过滤后也滚动到顶部，因为当前年份就是内容的开始了
+    requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+    });
+  };
+
+  // 使用 astro:page-load 处理初始加载和后续跳转
+  document.addEventListener('astro:page-load', applyArchiveFilter);
+
+  // 只在 window 上绑定一次 hashchange
+  if (!window.hasArchiveHashListener) {
+    window.addEventListener('hashchange', applyArchiveFilter);
+    // @ts-ignore
+    window.hasArchiveHashListener = true;
+  }
+</script>
+
+<style>
+  .archive-year-section {
+    margin-bottom: 40px;
+  }
+</style>

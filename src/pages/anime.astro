@@ -1,0 +1,182 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Sidebar from '../components/Sidebar.astro';
+import animeData from '../data/anime.json';
+import { i18n } from '../i18n/translation';
+import I18nKey from '../i18n/i18nKey';
+
+interface Anime {
+  name: string;
+  id: string;
+  cover: string;
+  url: string;
+  type: string;
+  area: string;
+  show: string;
+  evaluate: string;
+  progress: string;
+}
+
+const animes = animeData as Anime[];
+---
+
+<Layout title={i18n(I18nKey.animeTitle)}>
+  <div class="article">
+    <div class="mdui-card archive-card mdui-hoverable">
+      <div class="archive-title">
+        <span>{i18n(I18nKey.animeTitle)}</span>
+      </div>
+    </div>
+
+    <div class="anime-container">
+      {animes.map(anime => (
+        <div class="mdui-card anime-card mdui-hoverable">
+          <div class="anime-cover">
+            <a href={anime.url} target="_blank">
+              <img src={anime.cover} alt={anime.name} />
+            </a>
+          </div>
+          <div class="anime-info">
+            <div class="anime-header">
+              <a href={anime.url} target="_blank" class="anime-name">{anime.name}</a>
+              <div class="anime-meta">
+                <span>{anime.type}</span>
+                <span class="meta-divider">|</span>
+                <span>{anime.area}</span>
+                <span class="meta-divider">|</span>
+                <span>{anime.show}</span>
+                <span class="meta-divider">|</span>
+                <span class="anime-progress">{anime.progress}</span>
+              </div>
+            </div>
+            <div class="anime-evaluate">{anime.evaluate}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <Sidebar slot="sidebar" />
+</Layout>
+
+<style>
+  .anime-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .anime-card {
+    display: flex;
+    padding: 16px;
+    background-color: rgba(255, 255, 255, 0.8) !important;
+    border-radius: 7px;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    min-height: 160px;
+    box-sizing: border-box;
+  }
+
+  .anime-cover {
+    flex-shrink: 0;
+    width: 110px;
+    height: 150px;
+    margin-right: 20px;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  .anime-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s;
+  }
+
+  .anime-card:hover .anime-cover img {
+    transform: scale(1.05);
+  }
+
+  .anime-info {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .anime-header {
+    margin-bottom: 12px;
+  }
+
+  .anime-name {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--color, #ff4081);
+    text-decoration: none;
+    margin-bottom: 6px;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .anime-meta {
+    font-size: 12px;
+    color: #757575;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .meta-divider {
+    color: #bdbdbd;
+  }
+
+  .anime-progress {
+    color: var(--color, #ff4081);
+    font-weight: 500;
+  }
+
+  .anime-evaluate {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+    overflow: hidden;
+  }
+
+  /* 暗色模式适配 */
+  :global(.mdui-theme-layout-dark) .anime-card {
+    background-color: rgba(66, 66, 66, 0.8) !important;
+  }
+
+  :global(.mdui-theme-layout-dark) .anime-meta {
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  :global(.mdui-theme-layout-dark) .anime-evaluate {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* 响应式适配 */
+  @media (max-width: 600px) {
+    .anime-card {
+      padding: 12px;
+    }
+    .anime-cover {
+      width: 90px;
+      height: 125px;
+      margin-right: 12px;
+    }
+    .anime-name {
+      font-size: 16px;
+    }
+    .anime-evaluate {
+      -webkit-line-clamp: 2;
+    }
+  }
+</style>
