@@ -1,0 +1,47 @@
+---
+import { siteConfig } from '../site.config';
+import { getCollection } from 'astro:content';
+import { i18n } from '../i18n/translation';
+import I18nKey from '../i18n/i18nKey';
+
+const posts = await getCollection('blog');
+const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+---
+
+<div class="mdui-card mdui-hoverable sidebar-info">
+  <div class="sidebar-info-img">
+    <div class="sidebar-info-bg" style={`background-image: url('${siteConfig.sidebarBg}')`}></div>
+    <div class="mdui-img-circle mdui-shadow-3" style={`background-image: url('${siteConfig.avatar}')`}></div>
+  </div>
+  <div class="sidebar-info-body">
+    <div class="sidebar-info-name">{siteConfig.author}</div>
+    <div class="sidebar-info-desc">{siteConfig.description}</div>
+  </div>
+</div>
+
+<div class="mdui-card mdui-hoverable sidebar-module">
+  <ul class="mdui-list">
+    <div class="sidebar-module-title">{i18n(I18nKey.recentReplies)}</div>
+    <li class="mdui-divider mdui-m-y-0"></li>
+    <li class="mdui-list-item mdui-ripple sidebar-module-list">
+      <div class="sidebar-reply-text">{i18n(I18nKey.noReplies)}</div>
+    </li>
+  </ul>
+</div>
+
+<div class="mdui-card mdui-hoverable sidebar-module">
+  <ul class="mdui-list">
+    <div class="sidebar-module-title">{i18n(I18nKey.tagCloud)}</div>
+    <li class="mdui-divider mdui-m-y-0"></li>
+    <div class="sidebar-tag">
+      {tags.map(tag => (
+        <a href={`/tags/${tag}`}>
+          <div class="mdui-chip">
+            <span class="mdui-chip-title">{tag}</span>
+          </div>
+        </a>
+      ))}
+    </div>
+  </ul>
+</div>
+
