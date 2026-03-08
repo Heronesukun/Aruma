@@ -1,0 +1,25 @@
+---
+import Layout from '../layouts/Layout.astro';
+import PostCard from '../components/PostCard.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort((a, b) => {
+	// 优先按置顶排序
+	const aSticky = a.data.category === '置顶' ? 1 : 0;
+	const bSticky = b.data.category === '置顶' ? 1 : 0;
+	if (aSticky !== bSticky) return bSticky - aSticky;
+	// 其次按日期排序
+	return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+});
+---
+
+<Layout>
+	<div class="article">
+		{posts.map((post) => (
+			<PostCard post={post} />
+		))}
+	</div>
+
+	<Sidebar slot="sidebar" />
+</Layout>
