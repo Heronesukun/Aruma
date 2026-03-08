@@ -32,7 +32,7 @@ const { title = siteConfig.title, description = siteConfig.description } = Astro
 				restartOnRequestAfter: false
 			};
 		</script>
-		<script is:inline src="https://cdn.jsdelivr.net/npm/pace-js@latest/pace.min.js"></script>
+		<script is:inline src="/pace.min.js"></script>
 		<style define:vars={{ backgroundImage: `url(${siteConfig.background})` }}>
 			:root {
 				--background-image: var(--backgroundImage);
