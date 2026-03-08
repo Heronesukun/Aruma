@@ -1,0 +1,1013 @@
+
+/* ----------------- 全局样式 ----------------- */
+html {
+  --color: #ff4081; /* 默认粉色主题 */
+}
+
+/* 暗色模式全局适配 */
+html.mdui-theme-layout-dark body {
+  background-color: #303030;
+  color: #fff;
+}
+
+/* 修正暗色模式背景显示问题 */
+html.mdui-theme-layout-dark body {
+  background-color: transparent !important; /* 关键：body 必须透明才能看到 fixed 的 background */
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .background {
+  opacity: 1 !important;
+  filter: none;
+}
+
+html.mdui-theme-layout-dark .index-filter {
+  background: rgba(33, 33, 33, 0.5) !important; /* 降低不透明度从 0.7 到 0.5，使背景更清晰 */
+}
+
+html.mdui-theme-layout-dark .mdui-appbar {
+  background-color: transparent !important; /* 暗色模式下顶栏依然完全透明 */
+}
+
+html.mdui-theme-layout-dark .mdui-drawer {
+  background-color: transparent; /* Remove global override, rely on scoped styles or default */
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .mdui-list-item {
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .mdui-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+html.mdui-theme-layout-dark .mdui-list-item-icon {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+html.mdui-theme-layout-dark .mdui-divider {
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+html.mdui-theme-layout-dark .mdui-chip {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .sidebar-info-name {
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .sidebar-info-desc {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+html.mdui-theme-layout-dark .sidebar-info::after {
+  background-color: rgba(66, 66, 66, 0.8);
+}
+
+html.mdui-theme-layout-dark .sidebar-module {
+  background-color: rgba(66, 66, 66, 0.8) !important;
+}
+
+html.mdui-theme-layout-dark .sidebar-module-title {
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .sidebar-module-list {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+html.mdui-theme-layout-dark .archive-year-title {
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .mdui-card-primary-title {
+  color: #fff; /* 确保卡片标题在暗色模式下也为白色 */
+}
+
+/* 暗色模式文章内容适配 */
+html.mdui-theme-layout-dark .post-card-content .mdui-card-primary-title {
+  color: #fff !important;
+}
+
+html.mdui-theme-layout-dark .post-card-content .mdui-card-primary-subtitle {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+html.mdui-theme-layout-dark .mdui-typo {
+  color: rgba(255, 255, 255, 0.87);
+}
+
+html.mdui-theme-layout-dark .mdui-typo h1,
+html.mdui-theme-layout-dark .mdui-typo h2,
+html.mdui-theme-layout-dark .mdui-typo h3,
+html.mdui-theme-layout-dark .mdui-typo h4,
+html.mdui-theme-layout-dark .mdui-typo h5,
+html.mdui-theme-layout-dark .mdui-typo h6 {
+  color: #fff;
+}
+
+html.mdui-theme-layout-dark .mdui-typo p,
+html.mdui-theme-layout-dark .mdui-typo li {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+html.mdui-theme-layout-dark .mdui-typo blockquote {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* 暗色模式下图片压暗 */
+html.mdui-theme-layout-dark .mdui-typo img,
+html.mdui-theme-layout-dark .post-card-content .mdui-card-media img {
+  filter: brightness(0.7);
+  transition: filter 0.3s;
+}
+
+html.mdui-theme-layout-dark .mdui-typo img:hover,
+html.mdui-theme-layout-dark .post-card-content .mdui-card-media img:hover {
+  filter: brightness(0.9);
+}
+
+/* 侧边栏背景和文章卡片在暗色模式下的额外遮罩 */
+html.mdui-theme-layout-dark .sidebar-info-bg::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4); /* 压暗侧边栏顶部图片 */
+  border-radius: 7px 7px 0 0;
+}
+
+html.mdui-theme-layout-dark .index-card-filter {
+  background: rgba(0, 0, 0, 0.3); /* 暗色模式下文章卡片默认带一点压暗 */
+}
+
+html.mdui-theme-layout-dark .index-img-media:hover .index-card-filter {
+  background: rgba(0, 0, 0, 0.5); /* 悬停时更暗一点 */
+}
+
+/* 覆盖 MDUI 默认的暗色背景 */
+.mdui-theme-layout-dark .mdui-hoverable:hover {
+  background-color: rgba(80, 80, 80, 0.9) !important;
+}
+
+body {
+  display: flex;
+  flex-flow: column;
+  min-height: 100vh;
+  scroll-behavior: smooth;
+  font-family: Roboto, Noto, Helvetica, Arial, sans-serif;
+  color: #333;
+}
+
+/* 链接样式 */
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.3s;
+}
+
+/* ----------------- 背景 (Background) ----------------- */
+.background {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  transition: all 0.3s;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: 50% 50%;
+  z-index: -1;
+  /* 性能优化 */
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+.index-filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* 默认无遮罩，如果需要暗色主题可以加 */
+}
+
+/* ----------------- 顶部导航 (Appbar) ----------------- */
+.mdui-appbar {
+  color: #fff;
+  text-shadow: 1px 1px 1px rgba(66, 66, 66, 0.5); /* 增加文字阴影提高可读性 */
+  background-color: transparent !important; /* 导航栏背景透明 */
+  transition: all 0.3s;
+  position: fixed; /* 强制固定 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2000;
+}
+
+/* 滚动隐藏导航栏 (Astro 中需要 JS 配合，暂时只做样式) */
+.mdui-appbar-fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2000;
+}
+
+.mdui-toolbar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.mdui-toolbar > * {
+  margin: 0 8px;
+}
+
+.mdui-toolbar .mdui-typo-title {
+  margin: 0 16px;
+  font-size: 20px;
+  font-weight: 500;
+  color: #fff;
+}
+
+.mdui-toolbar-spacer {
+  flex-grow: 1;
+}
+
+/* 搜索框 (简单实现) */
+.appbar-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.appbar-search .mdui-textfield-input {
+  color: rgba(255, 255, 255, 0.87);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.42);
+  width: 0;
+  transition: width 0.3s;
+  background: transparent;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 8px 0;
+}
+
+.appbar-search:hover .mdui-textfield-input,
+.appbar-search .mdui-textfield-input:focus {
+  width: 200px; /* 展开宽度 */
+  border-bottom-color: #fff;
+}
+
+.appbar-search ::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* 按钮图标 */
+.mdui-btn-icon {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: #fff;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.mdui-btn-icon:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ----------------- 侧边抽屉 (Drawer) ----------------- */
+.mdui-drawer {
+  width: 230px; /*更窄 */
+  max-width: 75%;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 3000;
+  transform: translateX(-105%); /* 默认隐藏 */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 10px -5px rgba(0,0,0,.2), 0 16px 24px 2px rgba(0,0,0,.14), 0 6px 30px 5px rgba(0,0,0,.12);
+  overflow-y: auto;
+}
+
+.mdui-drawer.mdui-drawer-open {
+  transform: translateX(0);
+}
+
+.mdui-list {
+  padding: 8px 0;
+  margin: 0;
+  list-style: none;
+}
+
+.mdui-list-item {
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+  height: 48px;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.87);
+  transition: background-color 0.3s;
+}
+
+.mdui-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.mdui-list-item-icon {
+  margin-right: 32px;
+  color: #757575;
+}
+
+.mdui-list-item-content {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.mdui-divider {
+  height: 1px;
+  background-color: rgba(0, 0, 0, 0.12);
+  margin: 8px 0;
+}
+
+/* ----------------- 主容器 (Main Container) ----------------- */
+.mdui-card {
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 7px; /*  圆角 */
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.mdui-theme-layout-dark .mdui-card {
+  background-color: rgba(66, 66, 66, 0.8) !important;
+}
+
+.index-container {
+  width: 100%;
+  max-width: 1150px;
+  margin: 0 auto;
+  padding-top: 44px;
+  flex: 1;
+  display: flex;
+  box-sizing: border-box;
+}
+
+/* ----------------- 文章卡片 (Post Card / Index Card) ----------------- */
+.mdui-hoverable:hover {
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+  transform: translate3d(0, -2px, 0); /* 轻微上浮 */
+}
+
+/* ----------------- 文章卡片 (Post Card / Index Card) ----------------- */
+.mdui-card {
+  background-color: #fff;
+  border-radius: 7px; /* 圆角 */
+  box-shadow: 0 2px 1px -1px rgba(0,0,0,.2), 0 1px 1px 0 rgba(0,0,0,.14), 0 1px 3px 0 rgba(0,0,0,.12);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  overflow: hidden;
+  position: relative;
+}
+
+.mdui-hoverable:hover {
+  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
+  transform: translate3d(0, -2px, 0); /* 轻微上浮 */
+}
+
+/* 文章卡片布局 */
+.index-card {
+  height: 350px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  transform: scale(1);
+  position: relative;
+  display: block; /* 使得 a 标签也是块级 */
+}
+
+/* 图片容器 */
+.index-img-media {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 背景图 (带放大效果) */
+.index-img {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: 50% 50%; /* 居中对齐 */
+  transition: transform 0.6s;
+}
+
+.index-card:hover .index-img {
+  transform: scale(1.1);
+}
+
+/* 遮罩层 - 全局覆盖 */
+.index-card-filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0); /* 默认不显示，原版靠 backdrop-filter */
+  transition: all 0.3s;
+  z-index: 1;
+}
+
+.index-img-media:hover .index-card-filter {
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* 覆盖在图片上的内容 - 底部遮罩 (Shadow Mask) */
+.mdui-card-media-covered {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16px 24px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  transition: all 0.3s;
+  z-index: 2;
+}
+
+.index-primary {
+  padding: 0 !important;
+  transition: all 0.3s;
+}
+
+.mdui-card-primary-title {
+  font-size: 24px; /* 标题调大 */
+  line-height: 1.4;
+  font-weight: 500;
+  margin-bottom: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mdui-card-primary-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  line-height: 1.6;
+}
+
+.index-info {
+  margin-bottom: 0; /* 默认不留边距 */
+  transition: all 0.3s;
+}
+
+.index-subtitle {
+  margin-top: 0;
+  font-size: 14px;
+  opacity: 0; /* 默认不显示 */
+  transform: translateY(10px); /* 减小下移距离 */
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.6;
+  max-height: 0; /* 使用 max-height 配合 transition */
+  transition: all 0.3s;
+}
+
+/* 悬停时的交互 */
+.index-card:hover .index-subtitle {
+  opacity: 0.9;
+  max-height: 50px; /* 展开描述高度 */
+  transform: translateY(0);
+  margin-top: 8px;
+}
+
+@media (min-width: 1024px) {
+  .index-primary {
+    margin-bottom: 0; /* 移除负边距，直接靠 transform 和 opacity 控制 */
+  }
+}
+
+/* 主题色文字 */
+.mdui-text-color-theme {
+  color: var(--color) !important;
+}
+
+/* 置顶标签 */
+#sticky {
+  margin-right: 4px;
+  font-weight: bold;
+}
+
+/* ----------------- 侧边栏 (Sidebar) ----------------- */
+.sidebar-info {
+  margin: 20px 0;
+  text-align: center;
+  padding-bottom: 15px; /* 减少底部空白 */
+  background-color: transparent !important;
+  position: relative;
+  z-index: 1;
+}
+
+/* 个人信息卡片的白色背景遮罩，位于头像下方 */
+.sidebar-info::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: calc(100% - 120px); /* 120px 是 banner 高度 */
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 0 0 7px 7px;
+  z-index: -1;
+}
+
+.sidebar-info-img {
+  position: relative;
+  height: 120px;
+  overflow: visible; /* 允许头像溢出 */
+}
+
+.sidebar-info-bg {
+  height: 100%;
+  background: center center no-repeat;
+  background-size: cover;
+  transition: all 0.3s;
+  border-radius: 7px 7px 0 0;
+  position: relative; /* 添加相对定位以支持暗色模式下的伪元素遮罩 */
+}
+
+.sidebar-info:hover .sidebar-info-bg {
+  transform: none; /* 移除放大效果，原版这里背景图通常不放大，或者需要更复杂的结构 */
+}
+
+.sidebar-info-img .mdui-img-circle {
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  top: 55px; /* 恢复原版位置，更靠上 */
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  background-size: cover;
+  background-position: center;
+  border: 3px solid #fff;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.sidebar-info-body {
+  text-align: center;
+  word-break: break-all;
+  width: 85%;
+  margin: 44px auto 10px auto; /* 恢复原版间距，更紧凑 */
+  font-size: 20px;
+}
+
+.sidebar-info-name {
+  font-weight: 500;
+  margin-top: 5px; /* 减少间距 */
+  color: #333;
+}
+
+.sidebar-info-desc {
+  font-size: 15px;
+  color: #757575;
+  margin-top: 3px; /* 减少间距 */
+  padding: 0 16px;
+}
+
+.sidebar-module {
+  margin-top: 20px;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 7px;
+}
+
+.sidebar-module-title {
+  text-align: center;
+  margin: 5px 0 10px 0;
+  font-weight: 500;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.sidebar-module-list {
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #666;
+  min-height: 35px;
+  height: 35px;
+}
+
+.sidebar-reply-text {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 标签云 */
+.sidebar-tag {
+  padding: 10px 10px 0 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-start; /* 标签靠左显示 */
+}
+
+.sidebar-tag .mdui-chip {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 12px;
+  color: rgba(0, 0, 0, 0.87);
+  font-size: 13px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.mdui-chip:hover {
+  background-color: #d5d5d5;
+}
+
+.mdui-chip-title {
+  white-space: nowrap;
+}
+
+/* ----------------- 文章详情页 (Post Content) ----------------- */
+.archive-card {
+  margin-top: 20px;
+  transition: all 0.3s;
+  text-align: center;
+  font-size: large;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-radius: 7px;
+  padding: 0; /* 移除 padding，由内部 title 控制 */
+}
+
+@media (max-width: 1024px) {
+  .archive-card {
+    margin-top: 10px; /* 移动端减小上边距，与首页文章卡片对齐 */
+  }
+}
+
+.archive-title {
+  padding: 10px 0; /* 依照原版，padding 在这里 */
+  margin: 0;
+}
+
+.archive-title i {
+  font-style: normal;
+  color: var(--color);
+}
+
+/* ----------------- 文章详情页 (Post Content) ----------------- */
+.post-card-content {
+  margin: 20px 0;
+  padding: 0;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
+@media (max-width: 1024px) {
+  .post-card-content {
+    margin: 10px 0; /* 移动端减小上边距，与首页文章卡片对齐 */
+  }
+}
+
+.post-header-media {
+  position: relative;
+  max-height: 450px; /* 增加详情页大图高度 */
+  overflow: hidden;
+}
+
+.post-header-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-header-filter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1); /* 基础压暗 */
+  z-index: 1;
+}
+
+.post-header-info {
+  background-color: rgba(0, 0, 0, 0.4) !important; /* 信息区域固定遮罩 */
+  padding: 20px 24px !important;
+  z-index: 2;
+}
+
+.post-header-title {
+  font-size: 28px;
+  font-weight: 500;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  color: #fff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.post-header-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.5);
+}
+
+.post-meta-divider {
+  opacity: 0.6;
+}
+
+.post-card-content .mdui-card-media {
+  max-height: 450px;
+  overflow: hidden;
+}
+
+.post-card-content .mdui-card-content {
+  padding: 16px 24px 24px;
+  font-size: 16px;
+  line-height: 1.8;
+  color: #333;
+}
+
+/* Markdown 排版样式 (mdui-typo) */
+.mdui-typo h1 {
+  font-size: 32px;
+  font-weight: 500;
+}
+
+.mdui-typo h2 {
+  font-size: 26px;
+  font-weight: 500;
+}
+
+.mdui-typo h1, .mdui-typo h2 {
+  margin-top: 1.2em;
+  border-bottom: 1px solid rgba(0, 0, 0, .25);
+  padding-bottom: 0.3em;
+  margin-bottom: 16px;
+}
+
+.mdui-theme-layout-dark .mdui-typo h1, .mdui-theme-layout-dark .mdui-typo h2 {
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.mdui-typo h1:before, .mdui-typo h2:before {
+  content: '# ';
+  color: var(--color);
+}
+
+.mdui-typo h3 {
+  font-size: 22px;
+}
+
+.mdui-typo h4 {
+  font-size: 18px;
+}
+
+.mdui-typo h5 {
+  font-size: 16px;
+}
+
+.mdui-typo h6 {
+  font-size: 14px;
+}
+
+.mdui-typo h3, .mdui-typo h4, .mdui-typo h5, .mdui-typo h6 {
+  margin-top: 1.2em;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.mdui-typo h3:before, .mdui-typo h4:before, .mdui-typo h5:before, .mdui-typo h6:before {
+  content: "";
+  border-left: 4px solid var(--color);
+  border-radius: 2px;
+  margin-right: 7px;
+  display: inline-block;
+  height: 0.8em; /* 稍微缩短高度 */
+  vertical-align: middle;
+  margin-top: -0.3em; /* 增加向上偏移量，使线条中心点在文字中线上方 */
+}
+
+.mdui-typo p {
+  margin: 0 0 1.2em;
+  line-height: 1.8;
+}
+
+.mdui-typo ul, .mdui-typo ol {
+  margin-top: 0;
+  margin-bottom: 1.2em;
+  padding-left: 2em;
+}
+
+.mdui-typo li {
+  margin-bottom: 0.5em;
+}
+
+.mdui-typo li > ul, .mdui-typo li > ol {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.mdui-typo hr {
+  margin: 2.5em 0;
+  border: none;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.mdui-theme-layout-dark .mdui-typo hr {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+.mdui-typo blockquote {
+  margin: 1.5em 0;
+  padding: 15px 20px;
+  color: #555;
+  border-left: 4px solid var(--color);
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 0 5px 5px 0;
+  font-style: italic;
+}
+
+.mdui-theme-layout-dark .mdui-typo blockquote {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #bbb;
+}
+
+.mdui-typo blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+/* 代码块复刻 */
+.post-content pre:not(.mermaid) {
+  color: #abb2bf;
+  position: relative;
+  background: #21252b;
+  border-radius: 5px;
+  margin-bottom: 24px;
+  max-width: 100%;
+  padding: 40px 16px 16px 16px; /* 增加顶部内边距 */
+  box-shadow: 0 10px 30px 0 rgb(0 0 0 / 20%);
+  overflow-x: auto;
+}
+
+.post-content pre:not(.mermaid):before {
+  content: " ";
+  position: absolute;
+  top: 15px; /* 下移一点 */
+  left: 12px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fc625d;
+  box-shadow: 20px 0 #fdbc40, 40px 0 #35cd4b;
+  z-index: 2;
+}
+
+.post-content-code-copy {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
+  z-index: 3;
+  color: #abb2bf;
+  transition: color 0.3s;
+}
+
+.post-content-code-copy:hover {
+  color: #fff;
+}
+
+.post-content-code-copy i {
+  font-size: 18px;
+}
+
+.mdui-typo code {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-family: Consolas, Monaco, 'Andale Mono', monospace;
+  font-size: 85%;
+}
+
+.mdui-theme-layout-dark .mdui-typo code {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mdui-typo img {
+  max-width: 100%;
+  border-radius: 4px;
+  display: block;
+  margin: 1.5em auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.mdui-typo a {
+  color: var(--color);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255, 64, 129, 0.3);
+  transition: all 0.3s;
+}
+
+.mdui-typo a:hover {
+  border-bottom-color: var(--color);
+}
+
+/* 进度条 (Pace) 样式复刻 */
+.pace {
+  -webkit-pointer-events: none;
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.pace-inactive {
+  display: none;
+}
+
+.pace .pace-progress {
+  background: var(--color);
+  position: fixed;
+  z-index: 9999; /* 确保在顶栏之上 */
+  top: 0;
+  right: 100%;
+  width: 100%;
+  height: 2px; /* 风格较细 */
+  transition: all 0.4s ease;
+  box-shadow: 0 0 10px var(--color), 0 0 5px var(--color); /* 增加发光效果 */
+}
+
+.mdui-card-actions {
+  padding: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* 响应式调整 */
+@media (max-width: 1024px) {
+  .index-container {
+    padding-top: 64px; /* 适配移动端导航栏 */
+  }
+
+  .index-card {
+    height: 230px; /* 移动端高度 */
+    margin: 10px 0;
+  }
+  
+  .mdui-card-primary-title {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+
+  .mdui-card-media-covered {
+    padding: 12px 16px;
+  }
+
+  .index-subtitle {
+    display: none; /* 移动端首页通常隐藏摘要以节省空间 */
+  }
+
+  .sidebar-info-body {
+    width: 90%;
+    margin: 40px auto 10px auto;
+  }
+}
+
+@media (max-width: 600px) {
+  .index-card {
+    height: 200px;
+  }
+}
