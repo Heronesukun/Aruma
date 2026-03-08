@@ -1,0 +1,69 @@
+---
+import { siteConfig } from '../site.config';
+import { i18n } from '../i18n/translation';
+import I18nKey from '../i18n/i18nKey';
+const today = new Date();
+---
+
+<footer class="footer-container mdui-typo">
+	<div class="footer-text">
+		&copy; {today.getFullYear()} {siteConfig.author}. {i18n(I18nKey.allRightsReserved)}
+		<br />
+		{i18n(I18nKey.poweredBy)} <a href="https://astro.build" target="_blank">Astro</a> & <a href="https://github.com/matsuzaka-yuki/Aruma" target="_blank">Aruma</a>
+	</div>
+	<div class="footer-social">
+		{siteConfig.social.map(link => (
+			<a href={link.url} target="_blank" class="mdui-btn mdui-btn-icon mdui-ripple" title={link.name}>
+				<i class="mdui-icon material-icons">
+					{link.icon === 'github' ? 'code' : link.icon === 'twitter' ? 'share' : 'link'}
+				</i>
+			</a>
+		))}
+	</div>
+</footer>
+
+<style>
+	.footer-container {
+		width: 100%;
+		background-color: rgba(255, 255, 255, 0.8);
+		backdrop-filter: blur(10px);
+		-webkit-backdrop-filter: blur(10px);
+		padding: 30px 0;
+		text-align: center;
+		margin-top: 40px;
+		flex-shrink: 0;
+		border-top: 1px solid rgba(0, 0, 0, 0.05);
+	}
+	:global(.mdui-theme-layout-dark) .footer-container {
+		background-color: rgba(48, 48, 48, 0.8);
+		color: rgba(255, 255, 255, 0.8);
+		border-top-color: rgba(255, 255, 255, 0.05);
+	}
+	.footer-text {
+		font-size: 14px;
+		color: #666;
+		margin-bottom: 15px;
+		letter-spacing: 0.5px;
+	}
+	:global(.mdui-theme-layout-dark) .footer-text {
+		color: rgba(255, 255, 255, 0.6);
+	}
+	.footer-social {
+		display: flex;
+		justify-content: center;
+		gap: 15px;
+	}
+	.footer-social a {
+		color: #666;
+		opacity: 0.8;
+		transition: all 0.3s;
+	}
+	:global(.mdui-theme-layout-dark) .footer-social a {
+		color: rgba(255, 255, 255, 0.7);
+	}
+	.footer-social a:hover {
+		opacity: 1;
+		color: var(--color);
+		transform: translateY(-2px);
+	}
+</style>
