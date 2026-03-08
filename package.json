@@ -9,6 +9,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/check": "^0.9.6",
     "@astrojs/mdx": "^4.3.13",
     "@astrojs/node": "^9.5.4",
     "@astrojs/rss": "^4.0.15",
@@ -19,8 +20,13 @@
     "lucide-astro": "^0.556.0",
     "mdui": "^2.1.4",
     "pagefind": "^1.4.0",
+    "qrcode": "^1.5.4",
     "sharp": "^0.34.3",
     "tailwind-merge": "^3.5.0",
-    "tailwindcss": "^4.2.1"
+    "tailwindcss": "^4.2.1",
+    "typescript": "^5.9.3"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.6"
   }
 }

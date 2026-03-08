@@ -14,7 +14,7 @@ const getSocialIcon = (name: string) => {
   return map[name] || 'link';
 };
 
-const posts = await getCollection('blog');
+const posts = await getCollection('post');
 
 const categoryCounts = posts.reduce((acc, post) => {
   const category = post.data.category?.trim();
@@ -506,8 +506,8 @@ const archives = Object.entries(archiveCounts)
         const header = item.querySelector('.mdui-collapse-item-header');
         const body = item.querySelector('.mdui-collapse-item-body');
 
-        if (header && body && !header.dataset.bound) {
-          header.dataset.bound = 'true';
+        if (header && body && !(header as HTMLElement).dataset.bound) {
+          (header as HTMLElement).dataset.bound = 'true';
           header.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = item.classList.contains('open');
@@ -559,7 +559,6 @@ const archives = Object.entries(archiveCounts)
       const searchContainer = document.getElementById('search-container');
       const openSearchBtn = document.getElementById('open-search');
       const searchInput = document.getElementById('search-input') as HTMLInputElement;
-      const titleElement = document.querySelector('.mdui-typo-title');
 
       const openSearch = () => {
         if (!searchContainer) return;
@@ -580,7 +579,7 @@ const archives = Object.entries(archiveCounts)
         const query = searchInput.value.trim();
         if (query) {
           // 跳转到搜索结果页
-          window.location.href = `/blog/?q=${encodeURIComponent(query)}`;
+          window.location.href = `/post/?q=${encodeURIComponent(query)}`;
         }
       };
 
@@ -657,7 +656,6 @@ const archives = Object.entries(archiveCounts)
   document.addEventListener('keydown', (e) => {
     if (e.key !== 'Escape') return;
     const searchContainer = document.getElementById('search-container');
-    const titleElement = document.querySelector('.mdui-typo-title');
     const drawer = document.getElementById('main-drawer');
     const overlay = document.getElementById('drawer-overlay');
 

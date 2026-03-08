@@ -10,7 +10,7 @@ import I18nKey from '../../i18n/i18nKey';
 
 const query = Astro.url.searchParams.get('q')?.trim().toLowerCase();
 
-let posts = (await getCollection('blog')).sort((a, b) => {
+let posts = (await getCollection('post')).sort((a, b) => {
 	// 优先按置顶排序
 	const aSticky = a.data.category === '置顶' ? 1 : 0;
 	const bSticky = b.data.category === '置顶' ? 1 : 0;
@@ -63,7 +63,7 @@ const title = query ? i18n(I18nKey.searchResultFor, { query }) : i18n(I18nKey.ar
 					{i18n(I18nKey.noSearchResult, { query: query ?? '' })}
 				</div>
 				<div style="text-align: center; margin-top: 20px;">
-					<a href="/blog/" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">
+					<a href="/post/" class="mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme-accent">
 						{i18n(I18nKey.viewAllPosts)}
 					</a>
 				</div>

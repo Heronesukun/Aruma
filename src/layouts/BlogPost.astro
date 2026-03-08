@@ -7,9 +7,9 @@ import { siteConfig } from '../site.config';
 import { i18n } from '../i18n/translation';
 import I18nKey from '../i18n/i18nKey';
 
-type Props = CollectionEntry<'blog'>['data'] & { id: string };
+type Props = CollectionEntry<'post'>['data'] & { id: string };
 
-const { title, description, pubDate, updatedDate, heroImage, tags, category, id } = Astro.props;
+const { title, description, pubDate, heroImage, tags, category, id } = Astro.props;
 
 // 处理封面图逻辑，保持与 PostCard 一致
 let coverImage = null;

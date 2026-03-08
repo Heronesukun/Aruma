@@ -4,7 +4,7 @@ import { getCollection } from 'astro:content';
 import { i18n } from '../i18n/translation';
 import I18nKey from '../i18n/i18nKey';
 
-const posts = await getCollection('blog');
+const posts = await getCollection('post');
 const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
 ---
 

@@ -6,7 +6,7 @@ import { getCollection } from 'astro:content';
 import { i18n } from '../i18n/translation';
 import I18nKey from '../i18n/i18nKey';
 
-const allPosts = await getCollection('blog');
+const allPosts = await getCollection('post');
 const posts = allPosts.sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
@@ -71,10 +71,9 @@ const years = Object.keys(groupedPosts).map(Number).sort((a, b) => b - a);
   document.addEventListener('astro:page-load', applyArchiveFilter);
 
   // 只在 window 上绑定一次 hashchange
-  if (!window.hasArchiveHashListener) {
+  if (!(window as any).hasArchiveHashListener) {
     window.addEventListener('hashchange', applyArchiveFilter);
-    // @ts-ignore
-    window.hasArchiveHashListener = true;
+    (window as any).hasArchiveHashListener = true;
   }
 </script>
 

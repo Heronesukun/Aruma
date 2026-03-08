@@ -7,11 +7,11 @@ import { i18n } from '../i18n/translation';
 import I18nKey from '../i18n/i18nKey';
 
 interface Props {
-  post: CollectionEntry<'blog'>;
+  post: CollectionEntry<'post'>;
   fullWidth?: boolean;
 }
 
-const { post, fullWidth = false } = Astro.props;
+const { post } = Astro.props;
 const { title, description, pubDate, heroImage, category } = post.data;
 
 // 处理封面图逻辑
@@ -27,7 +27,7 @@ if (siteConfig.randomImage && siteConfig.randomImage.enable && siteConfig.random
 }
 ---
 
-<a class="post" href={`/blog/${post.id}/`}>
+<a class="post" href={`/post/${post.id}/`}>
   <div class="mdui-card index-card mdui-hoverable">
     <div class="mdui-card-media index-img-media">
       <div class="index-img" style={`background-image: url('${coverImage}')`}></div>
