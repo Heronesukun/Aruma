@@ -9,6 +9,7 @@ export const en: Translation = {
     [Key.friends]: "Friends",
     [Key.anime]: "Anime",
     [Key.diary]: "Diary",
+    [Key.albums]: "Albums",
     [Key.other]: "Other",
     [Key.about]: "About",
     
@@ -63,4 +64,13 @@ export const en: Translation = {
     [Key.devices]: "Devices",
     [Key.devicesTitle]: "My Devices",
     [Key.devicesViewDetails]: "View Details",
+
+    // Albums page
+    [Key.albums]: "Albums",
+    [Key.albumsSubtitle]: "Capturing beautiful moments",
+    [Key.albumsPhotosCount]: "photos",
+    [Key.albumsPhotoCount]: "photo",
+    [Key.albumsEmpty]: "No albums yet",
+    [Key.albumsEmptyDesc]: "No albums have been created",
+    [Key.albumsBackToList]: "Back to albums",
 };

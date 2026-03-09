@@ -23,6 +23,7 @@ export const siteConfig: SiteConfig = {
     { name: "home", path: "/", icon: "home" },
     { type: "category", icon: "widgets" },
     { type: "archive", icon: "access_time" },
+    { name: "albums", path: "/albums", icon: "photo_album" },
     { name: "friends", path: "/friends", icon: "link" },
     { name: "anime", path: "/anime", icon: "movie" },
     { name: "diary", path: "/diary", icon: "book" },
@@ -45,7 +46,10 @@ export const siteConfig: SiteConfig = {
     enable: true,
     ignoreHeroImage: true, // 设为 true 时，即使文章设置了 heroImage 也会强制使用随机图
     url: "https://www.loliapi.com/acg/pc", // 默认使用随机二次元图片 API
-  }
+  },
+  featurePages: {
+    albums: true, // 相册页面开关
+  },
 };
 
 export const footerConfig = {

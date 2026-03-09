@@ -6,6 +6,7 @@ enum I18nKey {
     friends = "friends",
     anime = "anime",
     diary = "diary",
+    albums = "albums",
     other = "other",
     about = "about",
     
@@ -60,5 +61,13 @@ enum I18nKey {
     devices = "devices",
     devicesTitle = "devicesTitle",
     devicesViewDetails = "devicesViewDetails",
+
+    // 相册页面
+    albumsSubtitle = "albumsSubtitle",
+    albumsPhotosCount = "albumsPhotosCount",
+    albumsPhotoCount = "albumsPhotoCount",
+    albumsEmpty = "albumsEmpty",
+    albumsEmptyDesc = "albumsEmptyDesc",
+    albumsBackToList = "albumsBackToList",
 }
 export default I18nKey;

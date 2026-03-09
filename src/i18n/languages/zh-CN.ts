@@ -9,6 +9,7 @@ export const zhCN: Translation = {
     [Key.friends]: "友人帐",
     [Key.anime]: "追番",
     [Key.diary]: "日记",
+    [Key.albums]: "相册",
     [Key.other]: "其他",
     [Key.about]: "关于",
     
@@ -63,4 +64,13 @@ export const zhCN: Translation = {
     [Key.devices]: "设备",
     [Key.devicesTitle]: "我的设备",
     [Key.devicesViewDetails]: "查看详情",
+
+    // 相册页面
+    [Key.albums]: "相册",
+    [Key.albumsSubtitle]: "记录美好瞬间",
+    [Key.albumsPhotosCount]: "张照片",
+    [Key.albumsPhotoCount]: "张照片",
+    [Key.albumsEmpty]: "暂无相册",
+    [Key.albumsEmptyDesc]: "还没有创建任何相册",
+    [Key.albumsBackToList]: "返回相册列表",
 };

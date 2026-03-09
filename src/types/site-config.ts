@@ -22,6 +22,10 @@ export type RandomImageConfig = {
   url: string;
 };
 
+export type FeaturePagesConfig = {
+  albums: boolean;
+};
+
 export type FooterConfig = {
   enable: boolean;
   customHtml?: string;
@@ -41,4 +45,5 @@ export type SiteConfig = {
   social: SocialLink[];
   nav: NavItem[];
   randomImage: RandomImageConfig;
+  featurePages: FeaturePagesConfig;
 };
