@@ -1,57 +1,57 @@
 [
   {
-    "name": "Lycoris Recoil",
+    "title": "Lycoris Recoil",
     "id": "28338623",
     "cover": "/assets/anime/lkls.webp",
-    "url": "https://www.bilibili.com/bangumi/media/md28338623",
-    "type": "TV",
-    "area": "Japan",
-    "show": "12 episodes",
-    "evaluate": "Girl's gunfight",
-    "progress": "Watched episode 12"
+    "link": "https://www.bilibili.com/bangumi/media/md28338623",
+    "description": "Girl's gunfight",
+    "year": "2022",
+    "studio": "A-1 Pictures",
+    "progress": 12,
+    "totalEpisodes": 12
   },
   {
-    "name": "Yowamushi Pedal",
+    "title": "Yowamushi Pedal",
     "id": "2590",
     "cover": "/assets/anime/rynh.webp",
-    "url": "https://www.bilibili.com/bangumi/media/md2590",
-    "type": "TV",
-    "area": "Japan",
-    "show": "12 episodes",
-    "evaluate": "Girl's daily life, sweet and healing",
-    "progress": "Watched episode 8"
+    "link": "https://www.bilibili.com/bangumi/media/md2590",
+    "description": "Girl's daily life, sweet and healing",
+    "year": "2015",
+    "studio": "Nexus",
+    "progress": 8,
+    "totalEpisodes": 12
   },
   {
-    "name": "Asteroid in Love",
+    "title": "Asteroid in Love",
     "id": "28224128",
     "cover": "/assets/anime/laxxx.webp",
-    "url": "https://www.bilibili.com/bangumi/media/md28224128",
-    "type": "TV",
-    "area": "Japan",
-    "show": "12 episodes",
-    "evaluate": "Meeting girls among the stars, pure love and healing",
-    "progress": "Watched episode 5"
+    "link": "https://www.bilibili.com/bangumi/media/md28224128",
+    "description": "Meeting girls among the stars, pure love and healing",
+    "year": "2020",
+    "studio": "Doga Kobo",
+    "progress": 5,
+    "totalEpisodes": 12
   },
   {
-    "name": "Is the Order a Rabbit?",
+    "title": "Is the Order a Rabbit?",
     "id": "2762",
     "cover": "/assets/anime/tz1.webp",
-    "url": "https://www.bilibili.com/bangumi/media/md2762",
-    "type": "TV",
-    "area": "Japan",
-    "show": "12 episodes",
-    "evaluate": "A group of girls' warm daily life",
-    "progress": "Watched episode 12"
+    "link": "https://www.bilibili.com/bangumi/media/md2762",
+    "description": "A group of girls' warm daily life",
+    "year": "2014",
+    "studio": "White Fox",
+    "progress": 12,
+    "totalEpisodes": 12
   },
   {
-    "name": "The Secret of the Magic Girl",
+    "title": "The Secret of the Magic Girl",
     "id": "26625039",
     "cover": "/assets/anime/cmmn.webp",
-    "url": "https://www.bilibili.com/bangumi/media/md26625039",
-    "type": "TV",
-    "area": "Japan",
-    "show": "12 episodes",
-    "evaluate": "Muli, Muli!",
-    "progress": "Watched episode 8"
+    "link": "https://www.bilibili.com/bangumi/media/md26625039",
+    "description": "Muli, Muli!",
+    "year": "2024",
+    "studio": "C2C",
+    "progress": 8,
+    "totalEpisodes": 12
   }
 ]

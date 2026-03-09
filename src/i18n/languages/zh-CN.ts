@@ -62,11 +62,17 @@ export const zhCN: Translation = {
     [Key.devicesViewDetails]: "查看详情",
 
     // 相册页面
-    [Key.albums]: "相册",
     [Key.albumsSubtitle]: "记录美好瞬间",
     [Key.albumsPhotosCount]: "张照片",
     [Key.albumsPhotoCount]: "张照片",
     [Key.albumsEmpty]: "暂无相册",
     [Key.albumsEmptyDesc]: "还没有创建任何相册",
     [Key.albumsBackToList]: "返回相册列表",
+
+    // 追番页面
+    [Key.animeSubtitle]: "我的追番列表",
+    [Key.animeYear]: "年份",
+    [Key.animeStudio]: "制作",
+    [Key.animeEpisodes]: "集数",
+    [Key.animeEmpty]: "暂无番剧",
 };

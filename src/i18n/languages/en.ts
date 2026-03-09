@@ -62,11 +62,17 @@ export const en: Translation = {
     [Key.devicesViewDetails]: "View Details",
 
     // Albums page
-    [Key.albums]: "Albums",
     [Key.albumsSubtitle]: "Capturing beautiful moments",
     [Key.albumsPhotosCount]: "photos",
     [Key.albumsPhotoCount]: "photo",
     [Key.albumsEmpty]: "No albums yet",
     [Key.albumsEmptyDesc]: "No albums have been created",
     [Key.albumsBackToList]: "Back to albums",
+
+    // Anime page
+    [Key.animeSubtitle]: "My Anime List",
+    [Key.animeYear]: "Year",
+    [Key.animeStudio]: "Studio",
+    [Key.animeEpisodes]: "Episodes",
+    [Key.animeEmpty]: "No anime yet",
 };

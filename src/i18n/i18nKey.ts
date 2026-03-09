@@ -65,5 +65,12 @@ enum I18nKey {
     albumsEmpty = "albumsEmpty",
     albumsEmptyDesc = "albumsEmptyDesc",
     albumsBackToList = "albumsBackToList",
+
+    // 追番页面
+    animeSubtitle = "animeSubtitle",
+    animeYear = "animeYear",
+    animeStudio = "animeStudio",
+    animeEpisodes = "animeEpisodes",
+    animeEmpty = "animeEmpty",
 }
 export default I18nKey;

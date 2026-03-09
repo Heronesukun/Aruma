@@ -9,6 +9,7 @@ export const ja: Translation = {
     [Key.friends]: "友人",
     [Key.anime]: "アニメ",
     [Key.diary]: "日記",
+    [Key.albums]: "アルバム",
     [Key.other]: "その他",
     [Key.about]: "について",
 
@@ -59,4 +60,19 @@ export const ja: Translation = {
     [Key.devices]: "デバイス",
     [Key.devicesTitle]: "私のデバイス",
     [Key.devicesViewDetails]: "詳細を見る",
+
+    // アルバムページ
+    [Key.albumsSubtitle]: "美しい瞬間を記録",
+    [Key.albumsPhotosCount]: "枚の写真",
+    [Key.albumsPhotoCount]: "枚の写真",
+    [Key.albumsEmpty]: "アルバムなし",
+    [Key.albumsEmptyDesc]: "アルバムが作成されていません",
+    [Key.albumsBackToList]: "アルバム一覧に戻る",
+
+    // アニメページ
+    [Key.animeSubtitle]: "マイアニメリスト",
+    [Key.animeYear]: "年",
+    [Key.animeStudio]: "スタジオ",
+    [Key.animeEpisodes]: "エピソード",
+    [Key.animeEmpty]: "アニメなし",
 };

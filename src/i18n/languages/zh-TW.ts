@@ -9,6 +9,7 @@ export const zhTW: Translation = {
     [Key.friends]: "友人帳",
     [Key.anime]: "追番",
     [Key.diary]: "日記",
+    [Key.albums]: "相簿",
     [Key.other]: "其他",
     [Key.about]: "關於",
 
@@ -59,4 +60,19 @@ export const zhTW: Translation = {
     [Key.devices]: "設備",
     [Key.devicesTitle]: "我的設備",
     [Key.devicesViewDetails]: "查看詳情",
+
+    // 相簿頁面
+    [Key.albumsSubtitle]: "記錄美好瞬間",
+    [Key.albumsPhotosCount]: "張照片",
+    [Key.albumsPhotoCount]: "張照片",
+    [Key.albumsEmpty]: "暫無相簿",
+    [Key.albumsEmptyDesc]: "還沒有建立任何相簿",
+    [Key.albumsBackToList]: "返回相簿列表",
+
+    // 追番頁面
+    [Key.animeSubtitle]: "我的追番列表",
+    [Key.animeYear]: "年份",
+    [Key.animeStudio]: "製作",
+    [Key.animeEpisodes]: "集數",
+    [Key.animeEmpty]: "暫無番劇",
 };
