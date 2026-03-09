@@ -58,4 +58,9 @@ export const en: Translation = {
     
     // RSS
     [Key.rssSubscribe]: "RSS Feed",
+    
+    // Devices page
+    [Key.devices]: "Devices",
+    [Key.devicesTitle]: "My Devices",
+    [Key.devicesViewDetails]: "View Details",
 };

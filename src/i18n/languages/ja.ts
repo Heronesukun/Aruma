@@ -58,4 +58,9 @@ export const ja: Translation = {
 
     // RSS
     [Key.rssSubscribe]: "RSS フィード",
+    
+    // デバイスページ
+    [Key.devices]: "デバイス",
+    [Key.devicesTitle]: "私のデバイス",
+    [Key.devicesViewDetails]: "詳細を見る",
 };

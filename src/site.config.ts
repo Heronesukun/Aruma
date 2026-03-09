@@ -25,6 +25,7 @@ export const siteConfig = {
     { name: "friends", path: "/friends", icon: "link" },
     { name: "anime", path: "/anime", icon: "movie" },
     { name: "diary", path: "/diary", icon: "book" },
+    { name: "devices", path: "/devices", icon: "devices" },
     {
       name: "other",
       path: "javascript:;",

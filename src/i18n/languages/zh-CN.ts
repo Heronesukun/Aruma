@@ -58,4 +58,9 @@ export const zhCN: Translation = {
     
     // RSS
     [Key.rssSubscribe]: "RSS 订阅",
+    
+    // 设备页面
+    [Key.devices]: "设备",
+    [Key.devicesTitle]: "我的设备",
+    [Key.devicesViewDetails]: "查看详情",
 };

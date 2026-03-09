@@ -55,5 +55,10 @@ enum I18nKey {
     
     // RSS
     rssSubscribe = "rssSubscribe",
+    
+    // 设备页面
+    devices = "devices",
+    devicesTitle = "devicesTitle",
+    devicesViewDetails = "devicesViewDetails",
 }
 export default I18nKey;
