@@ -58,7 +58,7 @@ function formatTime(dateString: string): string {
           </div>
 
           {item.images && item.images.length > 0 && (
-            <div class={`diary-images ${item.images.length === 1 ? 'single' : 'grid'}`}>
+            <div class="diary-images grid">
               {item.images.map(image => (
                 <div class="image-item">
                   <img src={image} alt="diary image" loading="lazy" />
@@ -139,19 +139,10 @@ function formatTime(dateString: string): string {
     gap: 8px;
   }
 
-  .diary-images.single .image-item {
-    max-width: 100%;
-    max-height: 400px;
-  }
-
   .image-item {
     aspect-ratio: 1;
     overflow: hidden;
     border-radius: 4px;
-  }
-
-  .diary-images.single .image-item {
-    aspect-ratio: auto;
   }
 
   .image-item img {

@@ -10,5 +10,11 @@
     "content": "The weather is nice today, perfect for coding. Aruma's MDUI2 design style is really clean.",
     "date": "2025-03-07T15:45:00Z",
     "tags": ["mood", "development"]
+  },
+  {
+    "id": 3,
+    "content": "This is a test diary entry with images.",
+    "date": "2025-03-06T09:00:00Z",
+    "images": ["/assets/anime/lkls.webp"]
   }
 ]
