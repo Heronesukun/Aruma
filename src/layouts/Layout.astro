@@ -17,6 +17,23 @@ interface Props {
 }
 
 const { title = siteConfig.title, description = siteConfig.description } = Astro.props;
+
+let customFontFamily = "";
+if (siteConfig.font) {
+	const fonts: string[] = [];
+	if (siteConfig.font.asciiFont?.fontFamily) {
+		const asciiFont = siteConfig.font.asciiFont.fontFamily;
+		fonts.push(asciiFont.includes(" ") ? `"${asciiFont}"` : asciiFont);
+	}
+	if (siteConfig.font.cjkFont?.fontFamily) {
+		const cjkFont = siteConfig.font.cjkFont.fontFamily;
+		fonts.push(cjkFont.includes(" ") ? `"${cjkFont}"` : cjkFont);
+	}
+	if (fonts.length > 0) {
+		fonts.push("system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif");
+		customFontFamily = fonts.join(", ");
+	}
+}
 ---
 
 <!doctype html>
@@ -47,12 +64,12 @@ const { title = siteConfig.title, description = siteConfig.description } = Astro
 			};
 		</script>
 		<script is:inline src="/pace.min.js"></script>
-		<style define:vars={{ backgroundImage: `url(${siteConfig.background})` }}>
+		<style define:vars={{ backgroundImage: `url(${siteConfig.background})`, "custom-font-family": customFontFamily }}>
 			:root {
 				--background-image: var(--backgroundImage);
 			}
 			body {
-				font-family: Roboto, Noto, Helvetica, Arial, sans-serif;
+				font-family: var(--custom-font-family, Roboto, Noto, Helvetica, Arial, sans-serif);
 				margin: 0;
 				display: flex;
 				flex-direction: column;

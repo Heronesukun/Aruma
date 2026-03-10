@@ -48,7 +48,22 @@ export const siteConfig: SiteConfig = {
     url: "https://www.loliapi.com/acg/pc", // 默认使用随机二次元图片 API
   },
   featurePages: {
-    albums: true, // 相册页面开关
+    albums: true,
+  },
+
+  font: {
+    asciiFont: {
+      fontFamily: "ZenMaruGothic-Medium",
+      fontWeight: "400",
+      localFonts: ["ZenMaruGothic-Medium.ttf"],
+      enableCompress: true,
+    },
+    cjkFont: {
+      fontFamily: "zk",
+      fontWeight: "400",
+      localFonts: ["zk.ttf"],
+      enableCompress: true,
+    },
   },
 };
 

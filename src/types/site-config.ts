@@ -31,6 +31,18 @@ export type FooterConfig = {
   customHtml?: string;
 };
 
+export type FontCategoryConfig = {
+  fontFamily: string;
+  fontWeight: string | number;
+  localFonts: string[];
+  enableCompress: boolean;
+};
+
+export type FontConfig = {
+  asciiFont: FontCategoryConfig;
+  cjkFont: FontCategoryConfig;
+};
+
 export type SiteConfig = {
   title: string;
   description: string;
@@ -46,4 +58,5 @@ export type SiteConfig = {
   nav: NavItem[];
   randomImage: RandomImageConfig;
   featurePages: FeaturePagesConfig;
+  font?: FontConfig;
 };

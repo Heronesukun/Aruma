@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build && pagefind --site dist",
+    "build": "astro build && pagefind --site dist && node scripts/compress-fonts.js",
     "preview": "astro preview",
     "astro": "astro"
   },
@@ -28,6 +28,12 @@
     "typescript": "^5.9.3"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.5.6"
+    "@types/qrcode": "^1.5.6",
+    "fontmin": "^1.1.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "ttf2woff2": "4.0.5"
+    }
   }
 }

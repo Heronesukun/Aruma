@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Atkinson", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: var(--custom-font-family, "Atkinson"), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 :root {
@@ -25,6 +25,24 @@
   font-family: "Atkinson";
   src: url("/fonts/atkinson-bold.woff") format("woff");
   font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "ZenMaruGothic-Medium";
+  /* src: url("/fonts/ZenMaruGothic-Medium.woff2") format("woff2"), */
+  src: url("/fonts/ZenMaruGothic-Medium.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "zk";
+  /* src: url("/fonts/zk.woff2") format("woff2"), */
+  src: url("/fonts/zk.ttf") format("truetype");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
