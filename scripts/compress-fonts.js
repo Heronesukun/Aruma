@@ -11,7 +11,7 @@ async function getConfig() {
 	const configContent = fs.readFileSync(configPath, "utf-8");
 
 	const langMatch = configContent.match(/lang:\s*["']([^"']+)["']/);
-	const lang = langMatch ? langMatch[1].replace("-", "_") : "zh_CN";
+	const lang = langMatch ? langMatch[1] : "zh-CN";
 
 	const fontStartMatch = configContent.match(/font:\s*\{/);
 	if (!fontStartMatch) {
@@ -251,8 +251,24 @@ async function collectText() {
 		});
 	}
 
-	const i18nFile = path.join(__dirname, `../src/i18n/languages/${lang}.ts`);
-	if (fs.existsSync(i18nFile)) {
+	function findI18nFile(langCode) {
+		const i18nDir = path.join(__dirname, "../src/i18n/languages");
+		if (!fs.existsSync(i18nDir)) return null;
+
+		const normalizedLang = langCode.toLowerCase().replace(/-/g, "-");
+		const files = fs.readdirSync(i18nDir);
+
+		for (const file of files) {
+			const fileLang = file.replace(".ts", "").toLowerCase();
+			if (fileLang === normalizedLang || fileLang === normalizedLang.replace("-", "_")) {
+				return path.join(i18nDir, file);
+			}
+		}
+		return null;
+	}
+
+	const i18nFile = findI18nFile(lang);
+	if (i18nFile) {
 		const content = fs.readFileSync(i18nFile, "utf-8");
 
 		const patterns = [/"([^"\\]|\\.|\\n|\\t)*"/g, /'([^'\\]|\\.|\\n|\\t)*'/g, /`([^`\\]|\\.|\\n|\\t)*`/g];
