@@ -7,7 +7,7 @@ import { siteConfig } from '../site.config';
 import { i18n } from '../i18n/translation';
 import I18nKey from '../i18n/i18nKey';
 
-type Props = CollectionEntry<'post'>['data'] & { id: string };
+type Props = Omit<CollectionEntry<'post'>['data'], 'pinned'> & { id: string; pinned?: boolean };
 
 const { title, description, pubDate, heroImage, tags, category, id } = Astro.props;
 
@@ -59,7 +59,7 @@ if (siteConfig.randomImage && siteConfig.randomImage.enable && siteConfig.random
 				<slot />
 			</div>
 
-			<script define:vars={{ copyCodeText: i18n(I18nKey.copyCode), copySuccessText: i18n(I18nKey.copySuccess) }}>
+			<script is:inline define:vars={{ copyCodeText: i18n(I18nKey.copyCode), copySuccessText: i18n(I18nKey.copySuccess) }}>
 				function initCodeCopy() {
 					const preBlocks = document.querySelectorAll('.post-content pre:not(.mermaid)');
 					

@@ -4,8 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import PhotoSwipe from '../components/PhotoSwipe.astro';
 import { siteConfig } from '../site.config';
-// @ts-ignore - ViewTransitions deprecated but still required for page transitions
-import { ViewTransitions } from 'astro:transitions';
+import { ClientRouter } from 'astro:transitions';
 import 'mdui/mdui.css';
 import '../styles/material-icons.css';
 import 'mdui';
@@ -54,7 +53,7 @@ if (siteConfig.font) {
 			})();
 		</script>
 		<BaseHead title={title} description={description} />
-		<ViewTransitions />
+		<ClientRouter />
 		<script is:inline>
 			window.paceOptions = {
 				ajax: false, // 禁用 AJAX 监听，仅通过 Astro 钩子手动触发

@@ -158,7 +158,7 @@ const archives = Object.entries(archiveCounts)
             {/* @ts-ignore */}
             {item.children.map(child => (
                <a href={child.path} class="mdui-list-item mdui-ripple">
-                 <div class="mdui-list-item-content">{I18nKey[child.name.toLowerCase() as keyof typeof I18nKey] ? i18n(I18nKey[child.name.toLowerCase() as keyof typeof I18nKey]) : child.name}</div>
+                 <div class="mdui-list-item-content">{I18nKey[child.name?.toLowerCase() as keyof typeof I18nKey] ? i18n(I18nKey[child.name?.toLowerCase() as keyof typeof I18nKey]) : child.name}</div>
                </a>
             ))}
           </div>

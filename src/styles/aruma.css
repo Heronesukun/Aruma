@@ -389,10 +389,6 @@ a {
 }
 
 /* ----------------- 文章卡片 (Post Card / Index Card) ----------------- */
-.mdui-hoverable:hover {
-  box-shadow: 0 5px 5px -3px rgba(0,0,0,.2), 0 8px 10px 1px rgba(0,0,0,.14), 0 3px 14px 2px rgba(0,0,0,.12);
-  transform: translate3d(0, -2px, 0);
-}
 
 /* 文章卡片布局 */
 .index-card {

@@ -1,5 +1,4 @@
 ---
-import PhotoSwipe from 'photoswipe';
 import 'photoswipe/style.css';
 ---
 
@@ -35,7 +34,7 @@ function initPhotoSwipe() {
         for (let i = 0; i < pswp.getNumItems(); i++) {
           const bullet = document.createElement('button');
           bullet.className = 'pswp__bullet';
-          bullet.addEventListener('click', (e) => {
+          bullet.addEventListener('click', () => {
             pswp.goTo(i);
           });
           bullets.appendChild(bullet);
@@ -52,23 +51,6 @@ function initPhotoSwipe() {
   });
 
   lightbox.init();
-
-  function openPhotoSwipe(items: any[], index: number) {
-    lightbox.loadAndOpen(index, {
-      gallery: document.querySelector('.pswp') as HTMLElement,
-    }, items);
-  }
-
-  function getGalleryItems(container: Element): any[] {
-    const images = container.querySelectorAll('img');
-    return Array.from(images).map((img) => ({
-      src: img.src,
-      width: img.naturalWidth || img.width || 800,
-      height: img.naturalHeight || img.height || 600,
-      alt: img.alt || '',
-      element: img,
-    }));
-  }
 
   function openPhotoSwipeSingle(img: HTMLImageElement) {
     const item = {

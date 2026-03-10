@@ -1,7 +1,3 @@
-import avatarImage from '../assets/home/logo.webp';
-import backgroundImage from '../assets/home/bg.webp';
-import sidebarImage from '../assets/home/sidebar.webp';
-
 export type SocialLink = {
   name: string;
   url: string;

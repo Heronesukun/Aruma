@@ -24,7 +24,7 @@ interface Props {
 	album: AlbumGroup;
 }
 
-const { album } = await Astro.props;
+const { album } = Astro.props;
 
 if (!album) {
 	return Astro.redirect("/404/");
