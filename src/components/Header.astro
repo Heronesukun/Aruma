@@ -530,7 +530,11 @@ const archives = Object.entries(archiveCounts)
             } else {
               item.classList.add('open');
               // @ts-ignore
-              body.style.maxHeight = body.scrollHeight + 'px';
+              // 使用 requestAnimationFrame 优化重排
+              requestAnimationFrame(() => {
+                // @ts-ignore
+                body.style.maxHeight = body.scrollHeight + 'px';
+              });
             }
           });
         }

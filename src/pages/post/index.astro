@@ -131,7 +131,13 @@ const postsData = allPosts.map((post) => {
 			<a class="post animation-fadein" href="/post/${post.id}/">
 				<div class="mdui-card index-card mdui-hoverable">
 					<div class="mdui-card-media index-img-media">
-						<div class="index-img" style="background-image: url('${coverImage}')"></div>
+						<img
+							class="index-img"
+							src="${coverImage}"
+							alt="${escapeHtml(post.title)}"
+							loading="lazy"
+							decoding="async"
+						/>
 						<div class="index-card-filter"></div>
 						<div class="mdui-card-media-covered">
 							<div class="mdui-card-primary index-primary">

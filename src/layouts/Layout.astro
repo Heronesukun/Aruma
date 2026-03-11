@@ -52,6 +52,17 @@ if (siteConfig.font) {
 <html lang={siteConfig.lang}>
 	<head>
 		{
+			/* 预加载首屏关键图片 */
+		}
+		<link
+			rel="preload"
+			as="image"
+			href={siteConfig.background}
+			fetchpriority="high"
+		/>
+		<link rel="preload" as="image" href={siteConfig.avatar} />
+		<link rel="preload" as="image" href={siteConfig.sidebarBg} />
+		{
 			/* 阻塞式主题脚本 - 必须在任何样式加载之前执行，防止 FOUC (Flash of Unstyled Content) */
 		}
 		<script is:inline>
@@ -81,7 +92,7 @@ if (siteConfig.font) {
 				restartOnRequestAfter: false,
 			};
 		</script>
-		<script is:inline src="/pace.min.js"></script>
+		<script is:inline src="/pace.min.js" defer></script>
 		<style
 			define:vars={{
 				backgroundImage: `url(${siteConfig.background})`,

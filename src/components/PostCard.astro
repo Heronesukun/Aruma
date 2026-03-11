@@ -34,11 +34,13 @@ if (
 <a class="post" href={`/post/${post.id}/`}>
 	<div class="mdui-card index-card mdui-hoverable">
 		<div class="mdui-card-media index-img-media">
-			<div
+			<img
 				class="index-img"
-				style={`background-image: url('${coverImage}')`}
-			>
-			</div>
+				src={coverImage}
+				alt={title}
+				loading="lazy"
+				decoding="async"
+			/>
 			<div class="index-card-filter"></div>
 			<div class="mdui-card-media-covered">
 				<div class="mdui-card-primary index-primary">
