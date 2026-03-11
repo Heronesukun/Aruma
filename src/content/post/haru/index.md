@@ -8,7 +8,7 @@ author: 拾音
 draft: false
 category: 纪念 
 date: 2025-02-04
-image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2026-01/VRChat_2026-01-11_19-49-20.094_3840x2160.webp
+image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2026-01/VRChat_2026-01-11_19-49-20.094_3840x2160.webp"
 ---
 
 ## 立春

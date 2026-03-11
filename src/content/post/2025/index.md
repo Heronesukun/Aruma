@@ -8,7 +8,7 @@ author: 拾音
 draft: false
 category: 纪念 
 date: 2025-01-31
-image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-12/VRChat_2025-12-24_22-41-00.722_3840x2160.webp
+image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-12/VRChat_2025-12-24_22-41-00.722_3840x2160.webp"
 ---
 
 ## 在虚拟世界邂逅不同的朋友

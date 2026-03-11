@@ -8,7 +8,7 @@ author: 拾音
 draft: false
 category: 纪念 
 date: 2025-11-14
-image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-10_21-56-58.378_3840x2160.webp
+image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-10_21-56-58.378_3840x2160.webp"
 ---
 
 ## 戒戒你好
