@@ -1,10 +1,10 @@
 ---
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
-import '../styles/global.css';
-import type { ImageMetadata } from 'astro';
-import FallbackImage from '../assets/blog-placeholder-1.jpg';
-import { SITE_TITLE } from '../consts';
+import "../styles/global.css";
+import type { ImageMetadata } from "astro";
+import FallbackImage from "../assets/blog-placeholder-1.jpg";
+import { SITE_TITLE } from "../consts";
 
 interface Props {
 	title: string;
@@ -15,7 +15,12 @@ interface Props {
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
-const { title, description, image = FallbackImage, hasMath = false } = Astro.props;
+const {
+	title,
+	description,
+	image = FallbackImage,
+	hasMath = false,
+} = Astro.props;
 ---
 
 <!-- Global Metadata -->
@@ -28,25 +33,63 @@ const { title, description, image = FallbackImage, hasMath = false } = Astro.pro
 	rel="alternate"
 	type="application/rss+xml"
 	title={SITE_TITLE}
-	href={new URL('rss.xml', Astro.site)}
+	href={new URL("rss.xml", Astro.site)}
 />
 <meta name="generator" content={Astro.generator} />
 
 <!-- Font preloads -->
-<link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin />
-<link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin />
+<link
+	rel="preload"
+	href="/fonts/atkinson-regular.woff"
+	as="font"
+	type="font/woff"
+	crossorigin
+/>
+<link
+	rel="preload"
+	href="/fonts/atkinson-bold.woff"
+	as="font"
+	type="font/woff"
+	crossorigin
+/>
 
 <!-- KaTeX CSS and fonts (only load when page has math formulas) -->
-{hasMath && (
-	<>
-		<link rel="preload" href="/_astro/katex.min.css" as="style" />
-		<link rel="stylesheet" href="/_astro/katex.min.css" />
-		<link rel="preload" href="/_astro/katex-fonts/KaTeX_Main-Regular.B22Nviop.woff2" as="font" type="font/woff2" crossorigin />
-		<link rel="preload" href="/_astro/katex-fonts/KaTeX_Main-Bold.Cx986IdX.woff2" as="font" type="font/woff2" crossorigin />
-		<link rel="preload" href="/_astro/katex-fonts/KaTeX_Main-Italic.NWA7e6Wa.woff2" as="font" type="font/woff2" crossorigin />
-		<link rel="preload" href="/_astro/katex-fonts/KaTeX_Math-Italic.t53AETM-.woff2" as="font" type="font/woff2" crossorigin />
-	</>
-)}
+{
+	hasMath && (
+		<>
+			<link rel="preload" href="/_astro/katex.min.css" as="style" />
+			<link rel="stylesheet" href="/_astro/katex.min.css" />
+			<link
+				rel="preload"
+				href="/_astro/katex-fonts/KaTeX_Main-Regular.B22Nviop.woff2"
+				as="font"
+				type="font/woff2"
+				crossorigin
+			/>
+			<link
+				rel="preload"
+				href="/_astro/katex-fonts/KaTeX_Main-Bold.Cx986IdX.woff2"
+				as="font"
+				type="font/woff2"
+				crossorigin
+			/>
+			<link
+				rel="preload"
+				href="/_astro/katex-fonts/KaTeX_Main-Italic.NWA7e6Wa.woff2"
+				as="font"
+				type="font/woff2"
+				crossorigin
+			/>
+			<link
+				rel="preload"
+				href="/_astro/katex-fonts/KaTeX_Math-Italic.t53AETM-.woff2"
+				as="font"
+				type="font/woff2"
+				crossorigin
+			/>
+		</>
+	)
+}
 
 <!-- Canonical URL -->
 <link rel="canonical" href={canonicalURL} />

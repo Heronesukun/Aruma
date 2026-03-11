@@ -1,12 +1,12 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Sidebar from '../../components/Sidebar.astro';
-import { siteConfig } from '../../site.config';
-import { i18n } from '../../i18n/translation';
-import I18nKey from '../../i18n/i18nKey';
-import { scanAlbums } from '../../utils/album-scanner';
-import AlbumCard from '../../components/cards/AlbumCard.astro';
-import PageGrid from '../../components/layouts/PageGrid.astro';
+import Layout from "../../layouts/Layout.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { siteConfig } from "../../site.config";
+import { i18n } from "../../i18n/translation";
+import I18nKey from "../../i18n/i18nKey";
+import { scanAlbums } from "../../utils/album-scanner";
+import AlbumCard from "../../components/cards/AlbumCard.astro";
+import PageGrid from "../../components/layouts/PageGrid.astro";
 
 // 检查相册页面是否启用
 if (!siteConfig.featurePages.albums) {
@@ -18,65 +18,75 @@ const albumsData = await scanAlbums();
 ---
 
 <Layout title={i18n(I18nKey.albums)}>
-  <div class="article">
-    <div class="mdui-card archive-card mdui-hoverable">
-      <div class="archive-title">
-        <span>{i18n(I18nKey.albums)}</span>
-      </div>
-    </div>
+	<div class="article">
+		<div class="mdui-card archive-card mdui-hoverable">
+			<div class="archive-title">
+				<span>{i18n(I18nKey.albums)}</span>
+			</div>
+		</div>
 
-    <PageGrid columns={2}>
-      {albumsData.map(album => (
-        <AlbumCard
-          id={album.id}
-          title={album.title}
-          description={album.description}
-          cover={album.cover}
-          photos={album.photos.length}
-          date={album.date}
-          location={album.location}
-          tags={album.tags}
-        />
-      ))}
-    </PageGrid>
+		<PageGrid columns={2}>
+			{
+				albumsData.map((album) => (
+					<AlbumCard
+						id={album.id}
+						title={album.title}
+						description={album.description}
+						cover={album.cover}
+						photos={album.photos.length}
+						date={album.date}
+						location={album.location}
+						tags={album.tags}
+					/>
+				))
+			}
+		</PageGrid>
 
-    {albumsData.length === 0 && (
-      <div class="albums-empty text-center py-16 px-5 text-gray-500 animate-fade-in">
-        <i class="mdui-icon material-icons text-6xl w-16 h-16 mb-4 opacity-50">photo_album</i>
-        <h3 class="text-xl font-medium mb-2 text-gray-600 dark:text-white/70">{i18n(I18nKey.albumsEmpty)}</h3>
-        <p class="text-sm">{i18n(I18nKey.albumsEmptyDesc)}</p>
-      </div>
-    )}
-  </div>
+		{
+			albumsData.length === 0 && (
+				<div class="albums-empty text-center py-16 px-5 text-gray-500 animate-fade-in">
+					<i class="mdui-icon material-icons text-6xl w-16 h-16 mb-4 opacity-50">
+						photo_album
+					</i>
+					<h3 class="text-xl font-medium mb-2 text-gray-600 dark:text-white/70">
+						{i18n(I18nKey.albumsEmpty)}
+					</h3>
+					<p class="text-sm">{i18n(I18nKey.albumsEmptyDesc)}</p>
+				</div>
+			)
+		}
+	</div>
 
-  <Sidebar slot="sidebar" />
+	<Sidebar slot="sidebar" />
 </Layout>
 
 <style>
-  .archive-card {
-    margin-top: 20px;
-    transition: box-shadow 0.3s, transform 0.3s;
-    text-align: center;
-    font-size: large;
-    background-color: var(--archive-card-bg);
-    border-radius: 7px;
-    padding: 0;
-  }
+	.archive-card {
+		margin-top: 20px;
+		transition:
+			box-shadow 0.3s,
+			transform 0.3s;
+		text-align: center;
+		font-size: large;
+		background-color: var(--archive-card-bg);
+		border-radius: 7px;
+		padding: 0;
+	}
 
-  .archive-title {
-    padding: 10px 0;
-    margin: 0;
-  }
+	.archive-title {
+		padding: 10px 0;
+		margin: 0;
+	}
 
-  .archive-title span {
-    font-weight: 500;
-  }
+	.archive-title span {
+		font-weight: 500;
+	}
 
-  :global(.mdui-theme-layout-dark) .archive-card {
-    background-color: rgba(66, 66, 66, 0.8);
-  }
+	:global(.mdui-theme-layout-dark) .archive-card {
+		background-color: rgba(66, 66, 66, 0.8);
+	}
 
-  :global(.mdui-theme-layout-dark) .archive-title {
-    color: #fff;
-  }
+	:global(.mdui-theme-layout-dark) .archive-title {
+		color: #fff;
+	}
 </style>

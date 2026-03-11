@@ -1,58 +1,58 @@
 export type SocialLink = {
-  name: string;
-  url: string;
-  icon: string;
+	name: string;
+	url: string;
+	icon: string;
 };
 
 export type NavItem = {
-  name?: string;
-  path?: string;
-  type?: string;
-  icon?: string;
-  children?: NavItem[];
+	name?: string;
+	path?: string;
+	type?: string;
+	icon?: string;
+	children?: NavItem[];
 };
 
 export type RandomImageConfig = {
-  enable: boolean;
-  ignoreHeroImage: boolean;
-  url: string;
+	enable: boolean;
+	ignoreHeroImage: boolean;
+	url: string;
 };
 
 export type FeaturePagesConfig = {
-  albums: boolean;
+	albums: boolean;
 };
 
 export type FooterConfig = {
-  enable: boolean;
-  customHtml?: string;
+	enable: boolean;
+	customHtml?: string;
 };
 
 export type FontCategoryConfig = {
-  fontFamily: string;
-  fontWeight: string | number;
-  localFonts: string[];
-  enableCompress: boolean;
+	fontFamily: string;
+	fontWeight: string | number;
+	localFonts: string[];
+	enableCompress: boolean;
 };
 
 export type FontConfig = {
-  asciiFont: FontCategoryConfig;
-  cjkFont: FontCategoryConfig;
+	asciiFont: FontCategoryConfig;
+	cjkFont: FontCategoryConfig;
 };
 
 export type SiteConfig = {
-  title: string;
-  description: string;
-  author: string;
-  lang: string;
-  avatar: string;
-  background: string;
-  sidebarBg: string;
-  postBackground: string;
-  sidebarBackground: string;
-  glassmorphism: boolean;
-  social: SocialLink[];
-  nav: NavItem[];
-  randomImage: RandomImageConfig;
-  featurePages: FeaturePagesConfig;
-  font?: FontConfig;
+	title: string;
+	description: string;
+	author: string;
+	lang: string;
+	avatar: string;
+	background: string;
+	sidebarBg: string;
+	postBackground: string;
+	sidebarBackground: string;
+	glassmorphism: boolean;
+	social: SocialLink[];
+	nav: NavItem[];
+	randomImage: RandomImageConfig;
+	featurePages: FeaturePagesConfig;
+	font?: FontConfig;
 };

@@ -1,70 +1,74 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Sidebar from '../components/Sidebar.astro';
-import friendsData from '../data/friends.json';
-import { i18n } from '../i18n/translation';
-import I18nKey from '../i18n/i18nKey';
-import FriendCard from '../components/cards/FriendCard.astro';
-import PageGrid from '../components/layouts/PageGrid.astro';
+import Layout from "../layouts/Layout.astro";
+import Sidebar from "../components/Sidebar.astro";
+import friendsData from "../data/friends.json";
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
+import FriendCard from "../components/cards/FriendCard.astro";
+import PageGrid from "../components/layouts/PageGrid.astro";
 
 interface Friend {
-  name: string;
-  url: string;
-  avatar: string;
-  desc: string;
+	name: string;
+	url: string;
+	avatar: string;
+	desc: string;
 }
 
 const friends = friendsData as Friend[];
 ---
 
 <Layout title={i18n(I18nKey.friendsTitle)}>
-  <div class="article">
-    <div class="mdui-card archive-card mdui-hoverable">
-      <div class="archive-title">
-        <span>{i18n(I18nKey.friendsTitle)}</span>
-      </div>
-    </div>
+	<div class="article">
+		<div class="mdui-card archive-card mdui-hoverable">
+			<div class="archive-title">
+				<span>{i18n(I18nKey.friendsTitle)}</span>
+			</div>
+		</div>
 
-    <PageGrid columns={2}>
-      {friends.map(friend => (
-        <FriendCard
-          name={friend.name}
-          url={friend.url}
-          avatar={friend.avatar}
-          desc={friend.desc}
-        />
-      ))}
-    </PageGrid>
-  </div>
+		<PageGrid columns={2}>
+			{
+				friends.map((friend) => (
+					<FriendCard
+						name={friend.name}
+						url={friend.url}
+						avatar={friend.avatar}
+						desc={friend.desc}
+					/>
+				))
+			}
+		</PageGrid>
+	</div>
 
-  <Sidebar slot="sidebar" />
+	<Sidebar slot="sidebar" />
 </Layout>
 
 <style>
-  .archive-card {
-    margin-top: 20px;
-    transition: box-shadow 0.3s, transform 0.3s;
-    text-align: center;
-    font-size: large;
-    background-color: var(--archive-card-bg);
-    border-radius: 7px;
-    padding: 0;
-  }
+	.archive-card {
+		margin-top: 20px;
+		transition:
+			box-shadow 0.3s,
+			transform 0.3s;
+		text-align: center;
+		font-size: large;
+		background-color: var(--archive-card-bg);
+		border-radius: 7px;
+		padding: 0;
+	}
 
-  .archive-title {
-    padding: 10px 0;
-    margin: 0;
-  }
+	.archive-title {
+		padding: 10px 0;
+		margin: 0;
+	}
 
-  .archive-title span {
-    font-weight: 500;
-  }
+	.archive-title span {
+		font-weight: 500;
+	}
 
-  :global(.mdui-theme-layout-dark) .archive-card {
-    background-color: rgba(66, 66, 66, 0.8);
-  }
+	:global(.mdui-theme-layout-dark) .archive-card {
+		background-color: rgba(66, 66, 66, 0.8);
+	}
 
-  :global(.mdui-theme-layout-dark) .archive-title {
-    color: #fff;
-  }
+	:global(.mdui-theme-layout-dark) .archive-title {
+		color: #fff;
+	}
 </style>

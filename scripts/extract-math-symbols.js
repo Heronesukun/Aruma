@@ -1,6 +1,6 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -27,7 +27,7 @@ function readFilesRecursively(dir, fileList = [], extensions = []) {
 
 function extractMathFormulas(content) {
   const formulas = [];
-  
+
   const patterns = [
     /\$\$([\s\S]*?)\$\$/g,
     /\$([^$]+?)\$/g,
@@ -48,24 +48,24 @@ function extractMathFormulas(content) {
 
 function extractMathSymbols(text) {
   const symbolSet = new Set();
-  
+
   const mathRanges = [
-    [0x0020, 0x007F],
-    [0x00A0, 0x00FF],
-    [0x0370, 0x03FF],
-    [0x2000, 0x206F],
-    [0x2070, 0x209F],
-    [0x2150, 0x218F],
-    [0x2190, 0x21FF],
-    [0x2200, 0x22FF],
-    [0x2300, 0x23FF],
-    [0x25A0, 0x25FF],
-    [0x27C0, 0x27EF],
-    [0x2900, 0x297F],
-    [0x2980, 0x29FF],
-    [0x2A00, 0x2AFF],
-    [0x2B00, 0x2BFF],
-    [0x1D400, 0x1D7FF],
+    [0x0020, 0x007f],
+    [0x00a0, 0x00ff],
+    [0x0370, 0x03ff],
+    [0x2000, 0x206f],
+    [0x2070, 0x209f],
+    [0x2150, 0x218f],
+    [0x2190, 0x21ff],
+    [0x2200, 0x22ff],
+    [0x2300, 0x23ff],
+    [0x25a0, 0x25ff],
+    [0x27c0, 0x27ef],
+    [0x2900, 0x297f],
+    [0x2980, 0x29ff],
+    [0x2a00, 0x2aff],
+    [0x2b00, 0x2bff],
+    [0x1d400, 0x1d7ff],
   ];
 
   for (const char of text) {
@@ -78,7 +78,8 @@ function extractMathSymbols(text) {
     }
   }
 
-  const commonSymbols = '∑∏∫∂∇√∞±×÷≤≥≠≡≈∈∉⊂⊃∪∩∧∨¬∀∃∅∴∵∠⊥∥∟⊙⊕⊗⊖⊘⊤⊥⊢⊣⊨⊩⊪⊫⊬⊭⊮⊯⌈⌉⌊⌋⟨⟩⃗';
+  const commonSymbols =
+    "∑∏∫∂∇√∞±×÷≤≥≠≡≈∈∉⊂⊃∪∩∧∨¬∀∃∅∴∵∠⊥∥∟⊙⊕⊗⊖⊘⊤⊥⊢⊣⊨⊩⊪⊫⊬⊭⊮⊯⌈⌉⌊⌋⟨⟩⃗";
   for (const char of commonSymbols) {
     symbolSet.add(char);
   }
@@ -87,60 +88,60 @@ function extractMathSymbols(text) {
     symbolSet.add(String(i));
   }
 
-  const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   for (const char of alphabet) {
     symbolSet.add(char);
   }
 
-  const greek = 'αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ';
+  const greek = "αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ";
   for (const char of greek) {
     symbolSet.add(char);
   }
 
-  return Array.from(symbolSet).sort().join('');
+  return Array.from(symbolSet).sort().join("");
 }
 
 async function extractMathSymbolsFromContent() {
-  const contentDir = path.join(__dirname, '../src/content');
-  
+  const contentDir = path.join(__dirname, "../src/content");
+
   if (!fs.existsSync(contentDir)) {
-    console.log('Content directory does not exist:', contentDir);
-    return '';
+    console.log("Content directory does not exist:", contentDir);
+    return "";
   }
 
-  const contentFiles = readFilesRecursively(contentDir, [], ['.md', '.mdx']);
-  
-  let allMathText = '';
+  const contentFiles = readFilesRecursively(contentDir, [], [".md", ".mdx"]);
+
+  let allMathText = "";
   let filesWithMath = 0;
 
   contentFiles.forEach((file) => {
-    const content = fs.readFileSync(file, 'utf-8');
+    const content = fs.readFileSync(file, "utf-8");
     const formulas = extractMathFormulas(content);
-    
+
     if (formulas.length > 0) {
       filesWithMath++;
-      allMathText += formulas.join(' ');
+      allMathText += formulas.join(" ");
     }
   });
 
   console.log(`Scanned ${contentFiles.length} files`);
   console.log(`Found ${filesWithMath} files with math formulas`);
 
-  if (allMathText.trim() === '') {
-    console.log('No math formulas found, using default symbol set');
-    return extractMathSymbols('');
+  if (allMathText.trim() === "") {
+    console.log("No math formulas found, using default symbol set");
+    return extractMathSymbols("");
   }
 
   const symbols = extractMathSymbols(allMathText);
   console.log(`Extracted ${symbols.length} unique math symbols`);
 
-  const outputDir = path.join(__dirname, '../.astro');
+  const outputDir = path.join(__dirname, "../.astro");
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  const outputPath = path.join(outputDir, 'math-symbols.txt');
-  fs.writeFileSync(outputPath, symbols, 'utf-8');
+  const outputPath = path.join(outputDir, "math-symbols.txt");
+  fs.writeFileSync(outputPath, symbols, "utf-8");
   console.log(`Math symbols saved to: ${outputPath}`);
 
   return symbols;
@@ -148,10 +149,10 @@ async function extractMathSymbolsFromContent() {
 
 extractMathSymbolsFromContent()
   .then((symbols) => {
-    console.log('\nMath symbol extraction complete!');
+    console.log("\nMath symbol extraction complete!");
     console.log(`Total symbols: ${symbols.length}`);
   })
   .catch((error) => {
-    console.error('Math symbol extraction failed:', error);
+    console.error("Math symbol extraction failed:", error);
     process.exit(1);
   });

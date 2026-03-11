@@ -1,76 +1,83 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Sidebar from '../../components/Sidebar.astro';
-import { getCollection } from 'astro:content';
-import { i18n } from '../../i18n/translation';
-import I18nKey from '../../i18n/i18nKey';
-import CategoryCard from '../../components/cards/CategoryCard.astro';
-import PageGrid from '../../components/layouts/PageGrid.astro';
+import Layout from "../../layouts/Layout.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { getCollection } from "astro:content";
+import { i18n } from "../../i18n/translation";
+import I18nKey from "../../i18n/i18nKey";
+import CategoryCard from "../../components/cards/CategoryCard.astro";
+import PageGrid from "../../components/layouts/PageGrid.astro";
 
-const posts = await getCollection('post');
-const categoryCounts = posts.reduce((acc, post) => {
-  const category = post.data.category?.trim();
-  if (!category) return acc;
-  acc[category] = (acc[category] || 0) + 1;
-  return acc;
-}, {} as Record<string, number>);
+const posts = await getCollection("post");
+const categoryCounts = posts.reduce(
+	(acc, post) => {
+		const category = post.data.category?.trim();
+		if (!category) return acc;
+		acc[category] = (acc[category] || 0) + 1;
+		return acc;
+	},
+	{} as Record<string, number>,
+);
 
 const categories = Object.entries(categoryCounts)
-  .map(([name, count]) => ({
-    name,
-    count,
-    slug: encodeURIComponent(name)
-  }))
-  .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, 'zh'));
+	.map(([name, count]) => ({
+		name,
+		count,
+		slug: encodeURIComponent(name),
+	}))
+	.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "zh"));
 ---
 
 <Layout title={i18n(I18nKey.categoryTitle)}>
-  <div class="article">
-    <div class="mdui-card archive-card mdui-hoverable">
-      <div class="archive-title">
-        <span>{i18n(I18nKey.categoryTitle)}</span>
-      </div>
-    </div>
+	<div class="article">
+		<div class="mdui-card archive-card mdui-hoverable">
+			<div class="archive-title">
+				<span>{i18n(I18nKey.categoryTitle)}</span>
+			</div>
+		</div>
 
-    <PageGrid columns={2}>
-      {categories.map(category => (
-        <CategoryCard
-          name={category.name}
-          count={category.count}
-          slug={category.slug}
-        />
-      ))}
-    </PageGrid>
-  </div>
+		<PageGrid columns={2}>
+			{
+				categories.map((category) => (
+					<CategoryCard
+						name={category.name}
+						count={category.count}
+						slug={category.slug}
+					/>
+				))
+			}
+		</PageGrid>
+	</div>
 
-  <Sidebar slot="sidebar" />
+	<Sidebar slot="sidebar" />
 </Layout>
 
 <style>
-  .archive-card {
-    margin-top: 20px;
-    transition: box-shadow 0.3s, transform 0.3s;
-    text-align: center;
-    font-size: large;
-    background-color: var(--archive-card-bg);
-    border-radius: 7px;
-    padding: 0;
-  }
+	.archive-card {
+		margin-top: 20px;
+		transition:
+			box-shadow 0.3s,
+			transform 0.3s;
+		text-align: center;
+		font-size: large;
+		background-color: var(--archive-card-bg);
+		border-radius: 7px;
+		padding: 0;
+	}
 
-  .archive-title {
-    padding: 10px 0;
-    margin: 0;
-  }
+	.archive-title {
+		padding: 10px 0;
+		margin: 0;
+	}
 
-  .archive-title span {
-    font-weight: 500;
-  }
+	.archive-title span {
+		font-weight: 500;
+	}
 
-  :global(.mdui-theme-layout-dark) .archive-card {
-    background-color: rgba(66, 66, 66, 0.8);
-  }
+	:global(.mdui-theme-layout-dark) .archive-card {
+		background-color: rgba(66, 66, 66, 0.8);
+	}
 
-  :global(.mdui-theme-layout-dark) .archive-title {
-    color: #fff;
-  }
+	:global(.mdui-theme-layout-dark) .archive-title {
+		color: #fff;
+	}
 </style>

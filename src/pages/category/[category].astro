@@ -1,44 +1,50 @@
 ---
 export const prerender = true;
 
-import Layout from '../../layouts/Layout.astro';
-import PostCard from '../../components/PostCard.astro';
-import Sidebar from '../../components/Sidebar.astro';
-import { getCollection } from 'astro:content';
-import { i18n } from '../../i18n/translation';
-import I18nKey from '../../i18n/i18nKey';
+import Layout from "../../layouts/Layout.astro";
+import PostCard from "../../components/PostCard.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { getCollection } from "astro:content";
+import { i18n } from "../../i18n/translation";
+import I18nKey from "../../i18n/i18nKey";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('post');
-  const categories = [...new Set(posts.map(post => post.data.category).filter(Boolean))];
+	const posts = await getCollection("post");
+	const categories = [
+		...new Set(posts.map((post) => post.data.category).filter(Boolean)),
+	];
 
-  return categories.map(category => ({
-    params: { category: String(category) },
-    props: { posts: posts.filter(post => post.data.category === category), category }
-  }));
+	return categories.map((category) => ({
+		params: { category: String(category) },
+		props: {
+			posts: posts.filter((post) => post.data.category === category),
+			category,
+		},
+	}));
 }
 
 const { category } = Astro.props;
 const { posts } = Astro.props;
-const name = category ? String(category) : decodeURIComponent(Astro.params.category || '');
+const name = category
+	? String(category)
+	: decodeURIComponent(Astro.params.category || "");
 
 const sortedPosts = (posts || []).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
 <Layout title={i18n(I18nKey.categoryWith).replace("{name}", name)}>
-  <div class="article">
-    <div class="mdui-card archive-card mdui-hoverable">
-      <div class="archive-title">
-        <span>{i18n(I18nKey.categoryWith).replace("{name}", name)}</span>
-      </div>
-    </div>
+	<div class="article">
+		<div class="mdui-card archive-card mdui-hoverable">
+			<div class="archive-title">
+				<span>{i18n(I18nKey.categoryWith).replace("{name}", name)}</span
+				>
+			</div>
+		</div>
 
-    {sortedPosts.map((post) => (
-      <PostCard post={post} />
-    ))}
-  </div>
+		{sortedPosts.map((post) => <PostCard post={post} />)}
+	</div>
 
-  <Sidebar slot="sidebar" />
+	<Sidebar slot="sidebar" />
 </Layout>

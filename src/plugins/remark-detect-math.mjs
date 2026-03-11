@@ -1,17 +1,17 @@
-import { visit } from 'unist-util-visit';
+import { visit } from "unist-util-visit";
 
 export function remarkDetectMath() {
-  return (tree, file) => {
-    let hasMath = false;
+	return (tree, file) => {
+		let hasMath = false;
 
-    visit(tree, 'math', () => {
-      hasMath = true;
-    });
+		visit(tree, "math", () => {
+			hasMath = true;
+		});
 
-    visit(tree, 'inlineMath', () => {
-      hasMath = true;
-    });
+		visit(tree, "inlineMath", () => {
+			hasMath = true;
+		});
 
-    file.data.hasMath = hasMath;
-  };
+		file.data.hasMath = hasMath;
+	};
 }

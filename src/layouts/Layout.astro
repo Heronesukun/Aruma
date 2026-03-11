@@ -1,15 +1,15 @@
 ---
-import BaseHead from '../components/BaseHead.astro';
-import Header from '../components/Header.astro';
-import Footer from '../components/Footer.astro';
-import PhotoSwipe from '../components/PhotoSwipe.astro';
-import { siteConfig } from '../site.config';
-import { ClientRouter } from 'astro:transitions';
-import 'mdui/mdui.css';
-import '../styles/material-icons.css';
-import 'mdui';
-import '../styles/aruma.css';
-import '../styles/albums.css';
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import PhotoSwipe from "../components/PhotoSwipe.astro";
+import { siteConfig } from "../site.config";
+import { ClientRouter } from "astro:transitions";
+import "mdui/mdui.css";
+import "../styles/material-icons.css";
+import "mdui";
+import "../styles/aruma.css";
+import "../styles/albums.css";
 
 interface Props {
 	title?: string;
@@ -17,7 +17,11 @@ interface Props {
 	hasMath?: boolean;
 }
 
-const { title = siteConfig.title, description = siteConfig.description, hasMath = false } = Astro.props;
+const {
+	title = siteConfig.title,
+	description = siteConfig.description,
+	hasMath = false,
+} = Astro.props;
 
 let customFontFamily = "";
 if (siteConfig.font) {
@@ -31,7 +35,14 @@ if (siteConfig.font) {
 		fonts.push(cjkFont.includes(" ") ? `"${cjkFont}"` : cjkFont);
 	}
 	if (fonts.length > 0) {
-		fonts.push("system-ui", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "Roboto", "sans-serif");
+		fonts.push(
+			"system-ui",
+			"-apple-system",
+			"BlinkMacSystemFont",
+			"'Segoe UI'",
+			"Roboto",
+			"sans-serif",
+		);
 		customFontFamily = fonts.join(", ");
 	}
 }
@@ -40,16 +51,22 @@ if (siteConfig.font) {
 <!doctype html>
 <html lang={siteConfig.lang}>
 	<head>
-		{/* 阻塞式主题脚本 - 必须在任何样式加载之前执行，防止 FOUC (Flash of Unstyled Content) */}
+		{
+			/* 阻塞式主题脚本 - 必须在任何样式加载之前执行，防止 FOUC (Flash of Unstyled Content) */
+		}
 		<script is:inline>
-			(function() {
-				const theme = localStorage.getItem('theme');
+			(function () {
+				const theme = localStorage.getItem("theme");
 				// 默认暗色模式：theme === 'dark' 或 theme 为 null/undefined
-				const isDark = theme === 'dark' || theme === null;
+				const isDark = theme === "dark" || theme === null;
 				if (isDark) {
-					document.documentElement.classList.add('mdui-theme-layout-dark');
+					document.documentElement.classList.add(
+						"mdui-theme-layout-dark",
+					);
 				} else {
-					document.documentElement.classList.remove('mdui-theme-layout-dark');
+					document.documentElement.classList.remove(
+						"mdui-theme-layout-dark",
+					);
 				}
 			})();
 		</script>
@@ -61,16 +78,28 @@ if (siteConfig.font) {
 				document: true,
 				eventLag: false,
 				restartOnPushState: false,
-				restartOnRequestAfter: false
+				restartOnRequestAfter: false,
 			};
 		</script>
 		<script is:inline src="/pace.min.js"></script>
-		<style define:vars={{ backgroundImage: `url(${siteConfig.background})`, "custom-font-family": customFontFamily }}>
+		<style
+			define:vars={{
+				backgroundImage: `url(${siteConfig.background})`,
+				"custom-font-family": customFontFamily,
+			}}
+		>
 			:root {
 				--background-image: var(--backgroundImage);
 			}
 			body {
-				font-family: var(--custom-font-family, Roboto, Noto, Helvetica, Arial, sans-serif);
+				font-family: var(
+					--custom-font-family,
+					Roboto,
+					Noto,
+					Helvetica,
+					Arial,
+					sans-serif
+				);
 				margin: 0;
 				display: flex;
 				flex-direction: column;
@@ -115,29 +144,37 @@ if (siteConfig.font) {
 		</style>
 		<script is:inline>
 			const getTheme = () => {
-				const theme = localStorage.getItem('theme');
-				return theme === 'dark' || !theme;
+				const theme = localStorage.getItem("theme");
+				return theme === "dark" || !theme;
 			};
 
 			const setTheme = () => {
 				if (getTheme()) {
-					document.documentElement.classList.add('mdui-theme-layout-dark');
+					document.documentElement.classList.add(
+						"mdui-theme-layout-dark",
+					);
 				} else {
-					document.documentElement.classList.remove('mdui-theme-layout-dark');
+					document.documentElement.classList.remove(
+						"mdui-theme-layout-dark",
+					);
 				}
 			};
 
-		// Initial setup
-		setTheme();
+			// Initial setup
+			setTheme();
 
-		// Re-apply theme before View Transitions navigation to prevent FOUC
-		document.addEventListener('astro:before-swap', (event) => {
-			if (getTheme()) {
-				event.newDocument.documentElement.classList.add('mdui-theme-layout-dark');
-			} else {
-				event.newDocument.documentElement.classList.remove('mdui-theme-layout-dark');
-			}
-		});
+			// Re-apply theme before View Transitions navigation to prevent FOUC
+			document.addEventListener("astro:before-swap", (event) => {
+				if (getTheme()) {
+					event.newDocument.documentElement.classList.add(
+						"mdui-theme-layout-dark",
+					);
+				} else {
+					event.newDocument.documentElement.classList.remove(
+						"mdui-theme-layout-dark",
+					);
+				}
+			});
 		</script>
 	</head>
 	<body class="mdui-theme-primary-pink mdui-theme-accent-pink">
@@ -154,24 +191,24 @@ if (siteConfig.font) {
 		<Footer />
 		<PhotoSwipe />
 		<script>
-			import 'mdui';
+			import "mdui";
 
 			// KaTeX CSS 懒加载 - 只有当页面包含数学公式时才加载样式
 			function loadKatexCSS() {
-				if (document.querySelector('.katex')) {
-					import('katex/dist/katex.css');
+				if (document.querySelector(".katex")) {
+					import("katex/dist/katex.css");
 				}
 			}
 
 			// 页面加载时检查
-			if (document.readyState === 'loading') {
-				document.addEventListener('DOMContentLoaded', loadKatexCSS);
+			if (document.readyState === "loading") {
+				document.addEventListener("DOMContentLoaded", loadKatexCSS);
 			} else {
 				loadKatexCSS();
 			}
 
 			// Astro View Transitions 页面切换后重新检查
-			document.addEventListener('astro:page-load', loadKatexCSS);
+			document.addEventListener("astro:page-load", loadKatexCSS);
 		</script>
 	</body>
 </html>

@@ -1,114 +1,169 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import Layout from './Layout.astro';
-import FormattedDate from '../components/FormattedDate.astro';
-import Sidebar from '../components/Sidebar.astro';
-import { siteConfig } from '../site.config';
-import { i18n } from '../i18n/translation';
-import I18nKey from '../i18n/i18nKey';
+import type { CollectionEntry } from "astro:content";
+import Layout from "./Layout.astro";
+import FormattedDate from "../components/FormattedDate.astro";
+import Sidebar from "../components/Sidebar.astro";
+import { siteConfig } from "../site.config";
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
 
-type Props = Omit<CollectionEntry<'post'>['data'], 'pinned'> & { id: string; pinned?: boolean; hasMath?: boolean };
+type Props = Omit<CollectionEntry<"post">["data"], "pinned"> & {
+	id: string;
+	pinned?: boolean;
+	hasMath?: boolean;
+};
 
-const { title, description, pubDate, heroImage, tags, category, id, hasMath = false } = Astro.props;
+const {
+	title,
+	description,
+	pubDate,
+	heroImage,
+	tags,
+	category,
+	id,
+	hasMath = false,
+} = Astro.props;
 
 // 处理封面图逻辑，保持与 PostCard 一致
 let coverImage = null;
-if (siteConfig.randomImage && siteConfig.randomImage.enable && siteConfig.randomImage.ignoreHeroImage) {
-  coverImage = `${siteConfig.randomImage.url}?v=${id}`;
+if (
+	siteConfig.randomImage &&
+	siteConfig.randomImage.enable &&
+	siteConfig.randomImage.ignoreHeroImage
+) {
+	coverImage = `${siteConfig.randomImage.url}?v=${id}`;
 } else if (heroImage) {
-  coverImage = typeof heroImage === 'string' ? heroImage : heroImage.src;
+	coverImage = typeof heroImage === "string" ? heroImage : heroImage.src;
 } else if (siteConfig.randomImage && siteConfig.randomImage.enable) {
-  coverImage = `${siteConfig.randomImage.url}?v=${id}`;
+	coverImage = `${siteConfig.randomImage.url}?v=${id}`;
 }
 ---
 
 <Layout title={title} description={description} hasMath={hasMath}>
 	<div class="article">
 		<article class="mdui-card post-card-content mdui-hoverable">
-			{coverImage && (
-				<div class="mdui-card-media post-header-media">
-					<img width={1020} height={510} src={coverImage} alt="" />
-					<div class="post-header-filter"></div>
-					<div class="mdui-card-media-covered post-header-info">
-						<div class="post-header-primary">
-							<div class="post-header-title">{title}</div>
-							<div class="post-header-subtitle">
-								<span class="post-meta-item">{i18n(I18nKey.views).replace("{count}", "3125")}</span>
-								<span class="post-meta-divider">|</span>
-								<FormattedDate date={pubDate} />
-								<span class="post-meta-divider">|</span>
-								<span class="post-meta-item">{i18n(I18nKey.readingTime).replace("{minutes}", "6")}</span>
-								{category && (
-									<>
-										<span class="post-meta-divider">|</span>
-										<span class="post-meta-item">{i18n(I18nKey.categoryLabel)}{category}</span>
-									</>
-								)}
-								{tags && tags.length > 0 && (
-									<>
-										<span class="post-meta-divider">|</span>
-										<span class="post-meta-item">{i18n(I18nKey.tagsLabel)}{tags.join(', ')}</span>
-									</>
-								)}
+			{
+				coverImage && (
+					<div class="mdui-card-media post-header-media">
+						<img
+							width={1020}
+							height={510}
+							src={coverImage}
+							alt=""
+						/>
+						<div class="post-header-filter" />
+						<div class="mdui-card-media-covered post-header-info">
+							<div class="post-header-primary">
+								<div class="post-header-title">{title}</div>
+								<div class="post-header-subtitle">
+									<span class="post-meta-item">
+										{i18n(I18nKey.views).replace(
+											"{count}",
+											"3125",
+										)}
+									</span>
+									<span class="post-meta-divider">|</span>
+									<FormattedDate date={pubDate} />
+									<span class="post-meta-divider">|</span>
+									<span class="post-meta-item">
+										{i18n(I18nKey.readingTime).replace(
+											"{minutes}",
+											"6",
+										)}
+									</span>
+									{category && (
+										<>
+											<span class="post-meta-divider">
+												|
+											</span>
+											<span class="post-meta-item">
+												{i18n(I18nKey.categoryLabel)}
+												{category}
+											</span>
+										</>
+									)}
+									{tags && tags.length > 0 && (
+										<>
+											<span class="post-meta-divider">
+												|
+											</span>
+											<span class="post-meta-item">
+												{i18n(I18nKey.tagsLabel)}
+												{tags.join(", ")}
+											</span>
+										</>
+									)}
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			)}
+				)
+			}
 			<div class="mdui-card-content mdui-typo post-content">
 				<slot />
 			</div>
 
-			<script is:inline define:vars={{ copyCodeText: i18n(I18nKey.copyCode), copySuccessText: i18n(I18nKey.copySuccess) }}>
+			<script
+				is:inline
+				define:vars={{
+					copyCodeText: i18n(I18nKey.copyCode),
+					copySuccessText: i18n(I18nKey.copySuccess),
+				}}
+			>
 				function initCodeCopy() {
-					const preBlocks = document.querySelectorAll('.post-content pre:not(.mermaid)');
-					
+					const preBlocks = document.querySelectorAll(
+						".post-content pre:not(.mermaid)",
+					);
+
 					preBlocks.forEach((pre) => {
 						// 避免重复初始化
-						if (pre.querySelector('.post-content-code-copy')) return;
+						if (pre.querySelector(".post-content-code-copy"))
+							return;
 
 						// 创建复制按钮
-						const copyBtn = document.createElement('div');
-						copyBtn.className = 'post-content-code-copy';
-						copyBtn.innerHTML = '<i class="mdui-icon material-icons">content_copy</i>';
+						const copyBtn = document.createElement("div");
+						copyBtn.className = "post-content-code-copy";
+						copyBtn.innerHTML =
+							'<i class="mdui-icon material-icons">content_copy</i>';
 						copyBtn.title = copyCodeText;
 
 						pre.appendChild(copyBtn);
 
-						copyBtn.addEventListener('click', async () => {
-							const code = pre.querySelector('code');
+						copyBtn.addEventListener("click", async () => {
+							const code = pre.querySelector("code");
 							const text = code ? code.innerText : pre.innerText;
 
 							try {
 								await navigator.clipboard.writeText(text);
-								
+
 								// 成功反馈
-								const icon = copyBtn.querySelector('i');
+								const icon = copyBtn.querySelector("i");
 								if (icon) {
-									icon.innerText = 'check';
+									icon.innerText = "check";
 									setTimeout(() => {
-										if (icon) icon.innerText = 'content_copy';
+										if (icon)
+											icon.innerText = "content_copy";
 									}, 2000);
 								}
-								
+
 								// 如果有 mdui 可以弹出 snackbar
 								// @ts-ignore
 								if (window.mdui && window.mdui.snackbar) {
 									// @ts-ignore
 									window.mdui.snackbar({
 										message: copySuccessText,
-										position: 'top'
+										position: "top",
 									});
 								}
 							} catch (err) {
-								console.error('Failed to copy: ', err);
+								console.error("Failed to copy: ", err);
 							}
 						});
 					});
 				}
 
 				// 适配 Astro View Transitions
-				document.addEventListener('astro:page-load', initCodeCopy);
+				document.addEventListener("astro:page-load", initCodeCopy);
 			</script>
 		</article>
 	</div>

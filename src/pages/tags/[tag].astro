@@ -1,43 +1,41 @@
 ---
 export const prerender = true;
 
-import Layout from '../../layouts/Layout.astro';
-import PostCard from '../../components/PostCard.astro';
-import Sidebar from '../../components/Sidebar.astro';
-import { getCollection } from 'astro:content';
-import { i18n } from '../../i18n/translation';
-import I18nKey from '../../i18n/i18nKey';
+import Layout from "../../layouts/Layout.astro";
+import PostCard from "../../components/PostCard.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { getCollection } from "astro:content";
+import { i18n } from "../../i18n/translation";
+import I18nKey from "../../i18n/i18nKey";
 
 export async function getStaticPaths() {
-  const posts = await getCollection('post');
-  const tags = [...new Set(posts.flatMap(post => post.data.tags || []))];
+	const posts = await getCollection("post");
+	const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))];
 
-  return tags.map(tag => ({
-    params: { tag },
-    props: { posts: posts.filter(post => post.data.tags?.includes(tag)) }
-  }));
+	return tags.map((tag) => ({
+		params: { tag },
+		props: { posts: posts.filter((post) => post.data.tags?.includes(tag)) },
+	}));
 }
 
 const { tag } = Astro.params;
 const { posts } = Astro.props;
 
 const sortedPosts = (posts || []).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
 
 <Layout title={i18n(I18nKey.tagWith).replace("{tag}", tag)}>
-  <div class="article">
-    <div class="mdui-card archive-card mdui-hoverable">
-      <div class="archive-title">
-        <span>{i18n(I18nKey.tagWith).replace("{tag}", tag)}</span>
-      </div>
-    </div>
+	<div class="article">
+		<div class="mdui-card archive-card mdui-hoverable">
+			<div class="archive-title">
+				<span>{i18n(I18nKey.tagWith).replace("{tag}", tag)}</span>
+			</div>
+		</div>
 
-    {sortedPosts.map((post) => (
-      <PostCard post={post} />
-    ))}
-  </div>
+		{sortedPosts.map((post) => <PostCard post={post} />)}
+	</div>
 
-  <Sidebar slot="sidebar" />
+	<Sidebar slot="sidebar" />
 </Layout>
