@@ -9,7 +9,7 @@ interface Props {
   tags?: string[];
 }
 
-const { id, content, date, images = [], tags = [] } = Astro.props;
+const { content, date, images = [], tags = [] } = Astro.props;
 
 function formatTime(dateString: string): string {
   const now = new Date();
@@ -53,12 +53,7 @@ function formatTime(dateString: string): string {
       <div class="grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-2">
         {images.map((image, index) => (
           <div class="image-item aspect-square overflow-hidden rounded-md">
-            <img
-              src={image}
-              alt={`diary image ${index}`}
-              loading="lazy"
-              class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-            />
+            <img src={image} alt={`diary image ${index}`} loading="lazy" class="w-full h-full object-cover transition-transform duration-300 hover:scale-105" />
           </div>
         ))}
       </div>
