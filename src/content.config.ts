@@ -9,14 +9,19 @@ const post = defineCollection({
 		z.object({
 			title: z.string(),
 			description: z.string(),
-			// Transform string to Date object
-			pubDate: z.coerce.date(),
+			// Transform string to Date object (support both pubDate and published/date)
+			pubDate: z.coerce.date().optional(),
+			published: z.coerce.date().optional(),
+			date: z.coerce.date().optional(),
 			updatedDate: z.coerce.date().optional(),
 			heroImage: image().optional(),
+			image: z.string().optional(),
 			tags: z.array(z.string()).optional(),
 			category: z.string().optional(),
+			author: z.string().optional(),
 			pinned: z.boolean().optional().default(false),
 			priority: z.number().optional(),
+			draft: z.boolean().optional().default(false),
 		}),
 });
 
