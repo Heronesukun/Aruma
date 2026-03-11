@@ -16,6 +16,7 @@ export type RandomImageConfig = {
 	enable: boolean;
 	ignoreHeroImage: boolean;
 	url: string;
+	optimizeApiImage?: boolean; // 是否优化此 API 的图片（默认 false，保持原样）
 };
 
 export type FeaturePagesConfig = {
@@ -39,6 +40,22 @@ export type FontConfig = {
 	cjkFont: FontCategoryConfig;
 };
 
+export type ImageOptimizationConfig = {
+	enable: boolean; // 总开关（默认 false）
+	apiDomains: string[]; // API 域名排除列表
+	quality: number; // 图片质量 (1-100)
+	formats: ('webp' | 'avif')[]; // 输出格式
+	lazyLoading: {
+		enable: boolean;
+		threshold: string; // 例：'300px'
+	};
+	preload: {
+		enable: boolean;
+		criticalImages?: number; // 首屏关键图片数量（默认 3）
+		as?: 'image' | 'fetch'; // 预加载类型
+	};
+};
+
 export type SiteConfig = {
 	title: string;
 	description: string;
@@ -55,4 +72,5 @@ export type SiteConfig = {
 	randomImage: RandomImageConfig;
 	featurePages: FeaturePagesConfig;
 	font?: FontConfig;
+	imageOptimization?: ImageOptimizationConfig; // 图片优化配置
 };

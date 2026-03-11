@@ -19,6 +19,16 @@ export default defineConfig({
   output: 'static',
   integrations: [mdx(), sitemap()],
 
+  // 图片优化配置
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp',
+      config: {
+        limitInputPixels: false,
+      },
+    },
+  },
+
   markdown: {
     remarkPlugins: [remarkMath, remarkDirective, parseDirectiveNode, remarkDetectMath],
     rehypePlugins: [
