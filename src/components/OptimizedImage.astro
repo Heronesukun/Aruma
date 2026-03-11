@@ -1,44 +1,49 @@
 ---
-import { shouldOptimizeImage, getLazyLoadingConfig } from '../utils/image-utils';
-import { Image } from 'astro:assets';
+import {
+	shouldOptimizeImage,
+	getLazyLoadingConfig,
+} from "../utils/image-utils";
+import { Image } from "astro:assets";
 
 const {
-  src,
-  alt,
-  width = 800,
-  height,
-  class: className = '',
-  loading: explicitLoading,
-  fetchpriority,
-  widths,
-  quality,
+	src,
+	alt,
+	width = 800,
+	height,
+	class: className = "",
+	loading: explicitLoading,
+	fetchpriority,
+	widths,
+	quality,
 } = Astro.props;
 
 const optimize = shouldOptimizeImage(src);
 const lazyConfig = getLazyLoadingConfig();
-const loading = explicitLoading || (lazyConfig.enable ? 'lazy' : undefined);
+const loading = explicitLoading || (lazyConfig.enable ? "lazy" : undefined);
 ---
 
-{optimize ? (
-  <Image
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    loading={loading}
-    fetchpriority={fetchpriority}
-    class={className}
-    widths={widths || [400, 800, 1200]}
-    quality={quality || 80}
-  />
-) : (
-  <img
-    src={src}
-    alt={alt}
-    width={width}
-    height={height}
-    loading={loading}
-    fetchpriority={fetchpriority}
-    class={className}
-  />
-)}
+{
+	optimize ? (
+		<Image
+			src={src}
+			alt={alt}
+			width={width}
+			height={height}
+			loading={loading}
+			fetchpriority={fetchpriority}
+			class={className}
+			widths={widths || [400, 800, 1200]}
+			quality={quality || 80}
+		/>
+	) : (
+		<img
+			src={src}
+			alt={alt}
+			width={width}
+			height={height}
+			loading={loading}
+			fetchpriority={fetchpriority}
+			class={className}
+		/>
+	)
+}

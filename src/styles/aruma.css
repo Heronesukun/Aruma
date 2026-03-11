@@ -636,6 +636,228 @@ a {
   text-overflow: ellipsis;
 }
 
+.sidebar-reply-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.sidebar-reply-author {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  margin-bottom: 4px;
+}
+
+.sidebar-reply-content {
+  font-size: 13px;
+  color: #555;
+  margin-bottom: 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.sidebar-reply-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #999;
+}
+
+html.mdui-theme-layout-dark .sidebar-reply-author {
+  color: #aaa;
+}
+
+html.mdui-theme-layout-dark .sidebar-reply-content {
+  color: #bbb;
+}
+
+.tag-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* ----------------- 抽屉导航栏 (Drawer) ----------------- */
+.drawer {
+  background: var(--drawer-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-right: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+}
+
+.drawer-profile {
+  padding: 20px 0 10px;
+  text-align: center;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.drawer-avatar,
+.drawer-social {
+  position: relative;
+  z-index: 1;
+}
+
+.drawer-avatar img {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  border: 3px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s;
+  object-fit: cover;
+}
+
+html.mdui-theme-layout-dark .drawer-avatar img {
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.drawer-avatar img:hover {
+  transform: rotate(360deg);
+}
+
+.drawer-social {
+  margin-top: 12px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-icon {
+  color: #000;
+  transition: all 0.3s;
+}
+
+.social-icon:hover {
+  color: var(--color);
+  transform: scale(1.1);
+}
+
+html.mdui-theme-layout-dark .social-icon {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.drawer .mdui-list-item {
+  color: #000;
+  transition:
+    background-color 0.25s ease,
+    transform 0.2s ease;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.drawer .mdui-list-item-icon {
+  color: #000;
+}
+
+html.mdui-theme-layout-dark .drawer .mdui-list-item,
+html.mdui-theme-layout-dark .drawer .mdui-list-item-icon {
+  color: inherit;
+}
+
+.drawer .mdui-list-item:hover {
+  background-color: rgba(0, 0, 0, 0.06);
+}
+
+.drawer .mdui-list-item:active {
+  transform: scale(0.98);
+}
+
+html.mdui-theme-layout-dark .drawer .mdui-list-item:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.drawer-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  backdrop-filter: blur(2px);
+}
+
+.drawer-overlay.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mdui-collapse-item-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease;
+  padding: 0;
+  margin: 0;
+}
+
+.mdui-collapse-item-arrow {
+  transition: transform 0.3s;
+}
+
+.mdui-collapse-item.open .mdui-collapse-item-arrow {
+  transform: rotate(180deg);
+}
+
+.mdui-collapse-item-body .mdui-list-item {
+  padding-left: 56px;
+  font-size: 14px;
+  height: 40px;
+}
+
+.mdui-collapse-item-body .mdui-list-item-content {
+  opacity: 0.8;
+}
+
+.drawer-count {
+  margin-left: auto;
+  background: rgba(0, 0, 0, 0.08);
+  color: #000;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  min-width: 18px;
+  text-align: center;
+}
+
+html.mdui-theme-layout-dark .drawer-count {
+  background: rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.drawer-rss {
+  width: 100%;
+}
+
+.drawer-bottom {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+html.mdui-theme-layout-dark .drawer {
+  border-right-color: rgba(255, 255, 255, 0.05);
+}
+
+html.mdui-theme-layout-dark .drawer-bottom {
+  border-top-color: rgba(255, 255, 255, 0.05);
+}
+
 /* 标签云 */
 .sidebar-tag {
   padding: 10px 10px 0 10px;

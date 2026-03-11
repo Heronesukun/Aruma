@@ -44,7 +44,7 @@ export type ImageOptimizationConfig = {
 	enable: boolean; // 总开关（默认 false）
 	apiDomains: string[]; // API 域名排除列表
 	quality: number; // 图片质量 (1-100)
-	formats: ('webp' | 'avif')[]; // 输出格式
+	formats: ("webp" | "avif")[]; // 输出格式
 	lazyLoading: {
 		enable: boolean;
 		threshold: string; // 例：'300px'
@@ -52,7 +52,7 @@ export type ImageOptimizationConfig = {
 	preload: {
 		enable: boolean;
 		criticalImages?: number; // 首屏关键图片数量（默认 3）
-		as?: 'image' | 'fetch'; // 预加载类型
+		as?: "image" | "fetch"; // 预加载类型
 	};
 };
 

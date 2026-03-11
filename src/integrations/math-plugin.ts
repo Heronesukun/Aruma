@@ -9,7 +9,7 @@ export function mathPlugin(): AstroIntegration {
 					markdown: {
 						remarkPlugins: [
 							() => {
-								return (tree, file) => {
+								return (tree: any, file: any) => {
 									let hasMath = false;
 
 									function visit(node: any) {

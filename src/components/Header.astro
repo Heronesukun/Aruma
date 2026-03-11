@@ -3,16 +3,7 @@ import { siteConfig } from '../site.config';
 import { getCollection } from 'astro:content';
 import { i18n } from '../i18n/translation';
 import I18nKey from '../i18n/i18nKey';
-
-// Helper to map social icons
-const getSocialIcon = (name: string) => {
-  const map: Record<string, string> = {
-    GitHub: 'code',
-    Twitter: 'share',
-    Email: 'email',
-  };
-  return map[name] || 'link';
-};
+import DrawerProfile from './svelte/DrawerProfile.svelte';
 
 const posts = await getCollection('post');
 
@@ -76,18 +67,7 @@ const archives = Object.entries(archiveCounts)
 <div id="drawer-overlay" class="drawer-overlay"></div>
 
 <div class="mdui-drawer mdui-drawer-close mdui-drawer-full-height drawer" id="main-drawer">
-  <div class="drawer-profile">
-    <div class="drawer-avatar">
-      <img src={siteConfig.avatar} alt="Avatar"/>
-    </div>
-    <div class="drawer-social">
-      {siteConfig.social.map(s => (
-        <a href={s.url} target="_blank" class="social-icon" title={s.name}>
-          <i class="mdui-icon material-icons">{getSocialIcon(s.name)}</i>
-        </a>
-      ))}
-    </div>
-  </div>
+  <DrawerProfile social={siteConfig.social} client:load />
 
   <div class="mdui-divider"></div>
 
