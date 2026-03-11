@@ -1,13 +1,13 @@
 ---
 title: 我喜欢你，你喜欢我
 published: 2025-12-05
+pubDate: 2025-12-05
 pinned: false
 description: 且当是无病呻吟比较好？
 tags: [caprice, Blogging]
 author: 拾音
 draft: false
 category: 随想 
-date: 2025-11-26
 image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-01_01-29-56.891_3840x2160.webp"
 ---
 

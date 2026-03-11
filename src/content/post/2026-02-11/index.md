@@ -1,13 +1,13 @@
 ---
 title: NapCat + NoneBot + DeepSeek 二次元猫娘机器人完整部署
 published: 2026-02-11
+pubDate: 2026-02-11
 pinned: false
 description: 使用 NapCat Docker、NoneBot 框架、DeepSeek AI 和 MiniMax VLM 打造会聊天的二次元猫娘机器人
 tags: [NapCat, NoneBot, DeepSeek, QQ机器人, AI, 猫娘]
 author: 拾音
 draft: false
 category: 技术
-date: 2026-02-11
 image: /images/cat-meme-demo.jpg
 ---
 

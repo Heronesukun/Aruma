@@ -1,13 +1,13 @@
 ---
 title: 致我喜爱的一切
 published: 2026-01-31
+pubDate: 2026-01-31
 pinned: false
 description: 今年也真是辛苦我了呢！
 tags: [commemorate, Blogging]
 author: 拾音
 draft: false
 category: 纪念 
-date: 2025-01-31
 image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-12/VRChat_2025-12-24_22-41-00.722_3840x2160.webp"
 ---
 

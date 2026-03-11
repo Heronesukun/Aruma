@@ -1,13 +1,13 @@
 ---
 title: NapCat Docker + NoneBot 部署历险记
 published: 2026-02-10
+pubDate: 2026-02-10
 pinned: false
 description: 从反复扫码到最终成功，NapCat Docker 与 NoneBot 完整配置指南
 tags: [NapCat, NoneBot, Docker, QQ机器人, WebSocket]
 author: 拾音
 draft: false
 category: 技术
-date: 2026-02-10
 image: ""
 ---
 

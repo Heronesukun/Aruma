@@ -1,13 +1,13 @@
 ---
 title: 在VPS上部署Mk.IX即时通讯系统
 published: 2026-02-09
+pubDate: 2026-02-09
 pinned: false
 description: 从零开始搭建属于自己的IM系统，集成Telegram和QQ机器人
 tags: [VPS, Linux, IM, Docker]
 author: 拾音
 draft: false
 category: 技术 
-date: 2026-02-09
 image: ""
 ---
 

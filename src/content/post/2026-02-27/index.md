@@ -1,13 +1,13 @@
 ---
 title: Mizuki 项目集成 Live2D Cubism 5 看板娘指南
 published: 2026-02-27
+pubDate: 2026-02-27
 pinned: false
 description: 通过集成Live2D-widget项目，实现在mizuki中添加Cubism 5的live2d模型形象
 tags: [Live2D, Cubism, Live2D-widget, 配置指南]
 author: 拾音
 draft: false
 category: 技术
-date: 2026-02-27
 image: "https://github.com/Heronesukun/image-hosting/blob/master/Image_1763022988392.png"
 ---
 

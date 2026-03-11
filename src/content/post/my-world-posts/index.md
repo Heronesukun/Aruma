@@ -1,13 +1,13 @@
 ---
 title: 建站纪念
 published: 2025-11-04
+pubDate: 2025-11-04
 pinned: true
 description: 从零开始摸鱼建站生活
 tags: [commemorate, Blogging]
 author: 拾音
 draft: false
 category: 纪念 
-date: 2025-11-04
 image: "./Expecation.png"
 ---
 

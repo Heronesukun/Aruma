@@ -1,13 +1,13 @@
 ---
 title: 立冬
 published: 2025-11-06
+pubDate: 2025-11-06
 pinned: false
 description: 暗自悲秋
 tags: [commemorate, Blogging]
 author: 拾音
 draft: false
 category: 纪念 
-date: 2025-11-06
 image: "./hitori.png"
 ---
 
