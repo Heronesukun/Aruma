@@ -8,7 +8,7 @@ tags: [NapCat, NoneBot, DeepSeek, QQ机器人, AI, 猫娘]
 author: 拾音
 draft: false
 category: 技术
-heroImage: /images/cat-meme-demo.jpg
+heroImage: https://raw.githubusercontent.com/Heronesukun/image-hosting/master/cat-meme-demo.jpg
 ---
 
 ## 前言
@@ -94,7 +94,7 @@ def get_session_key(event: MessageEvent) -> str:
 
 **MiniMax VLM 测试成功** (输入图片为下方示例):
 
-![动漫猫耳少女在废墟工厂自拍](/images/cat-meme-demo.jpg)
+![动漫猫耳少女在废墟工厂自拍](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/cat-meme-demo.jpg)
 
 **识别结果**:
 > 这张图片展示了两个可爱的动漫猫耳少女在废弃的工业遗迹中自拍。
