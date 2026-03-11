@@ -14,7 +14,7 @@ import { parseDirectiveNode } from './src/plugins/remark-directive-rehype.mjs';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://aruma.mysqil.com',
+  site: 'https://neri.heronesukun.com',
   output: 'static',
   integrations: [mdx(), sitemap()],
 
