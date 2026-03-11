@@ -27,7 +27,7 @@ image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-
 
 *踏上赌桌的那一刻起，这场失败就是注定的了*
 
-![转折点](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_00-01-47.983_3840x2160.webp
+![转折点](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_00-01-47.983_3840x2160.webp)
 
 摸牌，看牌，投注，加注，每一个行动都在刺激着我的多巴胺，见好就收？我做不到，见好牌我就**梭哈**，我要一波赢个大的！如果手上是烂牌怎么办？当然是**梭哈**，只要把其他人吓走，场上的筹码就都是我的，**梭哈**是一种智慧，但事实上这不过是我赌瘾大的借口，小筹码的加注刺激不了我，我有，也只有**梭哈**了。
 正如曼波降临人世带来了哈基米和欧码自立，达布达布与悠哒悠哒也自此分离了，这不是疯子的梦呓，因为有了**梭哈**我自此可以看见属于我自己的<del>jm</del>天堂<del>(这是真天堂)</del>与地狱
@@ -36,12 +36,12 @@ image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-
 
 *如果要说谁是神的话，那只能是他了吧*
 
-![神之一脚](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_01-04-14.740_1920x1080.webp
+![神之一脚](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_01-04-14.740_1920x1080.webp)
 
 超绝小猫收藏家，神秘拼好猫代言人，经常使用超自然手段飞天入地，对于开了的态度是扣扣信誉分得了：[夏神](123summertime.top)
 他是一座大山，一座我无法逾越的大山！与他战斗的时候，往往是“夏神节节败退”，“夏神陷入苦战”，“夏神昏招频出”，“夏神赢下场上所有筹码”
 
-![胜者结算画面](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_00-22-01.198_3840x2160.webp
+![胜者结算画面](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_00-22-01.198_3840x2160.webp)
 
 我曾三度梭哈，第一次，我将本金尽数散尽，两对没能高过三条，本金尽失，但我没有气馁<del>(不要在这种地方坚持不懈啊喂)</del>；领取了救济金后，我发起了那堂吉诃德般的冲锋，顶着**大凶**的debuff我仍然要继续冲锋，但很显然，我又一次摔得粉碎，顺子确实很大，但葫芦更大，我自以为能敌过他，但我的筹码先发起了背叛，他们自己离开的我的领域，我又一次身无分文了。
 
@@ -58,7 +58,7 @@ image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-
 使你所得的胜过所求。”*
 
 <del>人话：我V你2000，再陪我玩玩</del>
-![这次可别再寄了哦](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_01-18-25.516_3840x2160.webp
+![这次可别再寄了哦](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_01-18-25.516_3840x2160.webp)
 
 不出所料梭哈的时候没唬住对方，现在资金量800$，嘻嘻我一定要活下去，等下次我一定要再夺回属于我的一切（这条裤子都是借来的，连借来的底裤都要赔出去吗？真是没救了喵）
 
@@ -66,9 +66,9 @@ image: "https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-
 
 结局已经是可以预见的，最终的拾音肯定是要摔得粉碎了，如果可以的话，你能穿越时间，回去拯救那个还没有被德州扑克浸染的拾音吗？
 
-![寄了](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_00-21-16.537_3840x2160.webp
+![寄了](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/VRChat_2025-11-14_00-21-16.537_3840x2160.webp)
 
 *没救了喵，珍爱生命，远离赌博喵*
 
 补一张最终热舞赎身的照片，这不是蛮开心的嘛，算不算是恶堕了呢？
-![烧舞](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/shaowu.webp
+![烧舞](https://raw.githubusercontent.com/Heronesukun/image-hosting/master/2025-11/shaowu.webp)
