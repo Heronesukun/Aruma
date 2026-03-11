@@ -2,14 +2,15 @@
 
 本目录包含了 Aruma 项目的开发规范文档，## 规范列表
 
-### 1. [禁止使用 ViewTransitions](./01-no-view-transitions.md)
+### 1. [ViewTransitions 使用规范](./01-no-view-transitions.md)
 
-**原因**：ViewTransitions 会造成主题闪白色，因为 Astro 的 ViewTransitions 是全局作用域的。
+**说明**：ViewTransitions **可以使用**，但必须正确配置以防止主题闪白。
 
 **关键点**：
-- 不使用 `<ClientRouter />`
-- 使用 Pace.js 替代
-- 保持主题切换流畅
+- 必须配置 `astro:before-swap` 事件处理主题
+- 必须禁用 ViewTransitions 默认动画
+- 必须设置全局背景色防止闪白
+- 可使用自定义动画实现页面进入效果
 
 ### 2. [禁止使用 !important CSS](./02-no-important-css.md)
 
@@ -45,7 +46,8 @@
 
 在提交代码前，请确保：
 
-- [ ] 没有使用 ViewTransitions
+- [ ] ViewTransitions 已正确配置（主题处理、背景色、动画禁用）
+- [ ] 页面切换时没有闪白现象
 - [ ] CSS 中没有 `!important`
 - [ ] MDUI 主题系统没有被 Tailwind 覆盖
 - [ ] 所有用户可见的字符串都使用了 i18n
