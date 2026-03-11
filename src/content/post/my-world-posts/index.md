@@ -8,7 +8,7 @@ tags: [commemorate, Blogging]
 author: 拾音
 draft: false
 category: 纪念 
-image: "./Expecation.png"
+heroImage: "./Expecation.png"
 ---
 
 ## 意义是人来探索的

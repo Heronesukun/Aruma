@@ -8,7 +8,7 @@ tags: [NapCat, NoneBot, Docker, QQ机器人, WebSocket]
 author: 拾音
 draft: false
 category: 技术
-image: ""
+heroImage: ""
 ---
 
 ## 前言

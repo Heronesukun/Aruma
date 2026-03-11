@@ -8,7 +8,7 @@ tags: [NapCat, NoneBot, DeepSeek, QQ机器人, AI, 猫娘]
 author: 拾音
 draft: false
 category: 技术
-image: /images/cat-meme-demo.jpg
+heroImage: /images/cat-meme-demo.jpg
 ---
 
 ## 前言

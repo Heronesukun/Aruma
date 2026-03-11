@@ -8,7 +8,7 @@ tags: [VPS, Linux, IM, Docker]
 author: 拾音
 draft: false
 category: 技术 
-image: ""
+heroImage: ""
 ---
 
 ## 前言

@@ -8,7 +8,7 @@ tags: [Live2D, Cubism, Live2D-widget, 配置指南]
 author: 拾音
 draft: false
 category: 技术
-image: "https://github.com/Heronesukun/image-hosting/blob/master/Image_1763022988392.png"
+heroImage: "https://github.com/Heronesukun/image-hosting/blob/master/Image_1763022988392.png"
 ---
 
 # Mizuki 项目集成 Live2D Cubism 5 看板娘指南

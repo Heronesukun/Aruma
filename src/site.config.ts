@@ -44,7 +44,7 @@ export const siteConfig: SiteConfig = {
 
   randomImage: {
     enable: true,
-    ignoreHeroImage: true, // 设为 true 时，即使文章设置了 heroImage 也会强制使用随机图
+    ignoreHeroImage: false, // 设为 false 时，有封面图的使用自己的封面，没有的则使用随机图
     url: "https://www.loliapi.com/acg/pc", // 默认使用随机二次元图片 API
   },
   featurePages: {

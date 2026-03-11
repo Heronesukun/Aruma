@@ -8,7 +8,7 @@ tags: [commemorate, Blogging]
 author: 拾音
 draft: false
 category: 纪念 
-image: "./hitori.png"
+heroImage: "./hitori.png"
 ---
 
 ## 我终于度过了一个漫无止境的夏天

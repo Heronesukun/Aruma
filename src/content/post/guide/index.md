@@ -3,7 +3,7 @@ title: Simple Guides for Mizuki
 published: 2024-04-01
 pubDate: 2024-04-01
 description: "How to use this blog template."
-image: "./cover.webp"
+heroImage: "./cover.webp"
 tags: ["Mizuki", "Blogging", "Customization"]
 category: Guides
 draft: true
@@ -19,7 +19,7 @@ This blog template is built with [Astro](https://astro.build/). For the things t
 ---
 title: My First Blog Post
 description: This is the first post of my new Astro blog.
-image: ./cover.jpg
+heroImage: ./cover.jpg
 tags: [Foo, Bar]
 category: Front-end
 draft: false
