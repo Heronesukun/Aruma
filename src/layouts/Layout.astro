@@ -2,6 +2,7 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import MusicPlayer from "../components/svelte/MusicPlayer.svelte";
 import { siteConfig } from "../site.config";
 import { ClientRouter } from "astro:transitions";
 import "mdui/mdui.css";
@@ -10,6 +11,7 @@ import "mdui/components/dropdown.js";
 import "mdui/components/icon.js";
 import "../styles/aruma.css";
 import "../styles/albums.css";
+import "../styles/music-player.css";
 
 interface Props {
 	title?: string;
@@ -198,6 +200,15 @@ if (siteConfig.font) {
 			</aside>
 		</div>
 		<Footer />
+		{
+			siteConfig.musicPlayer?.enable && (
+				<MusicPlayer
+					client:idle
+					transition:persist
+					transition:name="music-player"
+				/>
+			)
+		}
 		<script>
 			import "mdui/components/dropdown.js";
 			import "mdui/components/icon.js";
