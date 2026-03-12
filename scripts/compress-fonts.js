@@ -178,6 +178,152 @@ function getAsciiCharset() {
   return Array.from(chars).sort().join("");
 }
 
+async function fetchMetingPlaylistText() {
+  try {
+    const configPath = path.join(__dirname, "../src/site.config.ts");
+    const configContent = fs.readFileSync(configPath, "utf-8");
+
+    const enableMatch = configContent.match(
+      /musicPlayer:\s*\{[\s\S]*?enable:\s*(true|false)/,
+    );
+    if (!enableMatch || enableMatch[1] === "false") {
+      console.log(
+        "Music player disabled, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+
+    const musicConfigMatch = configContent.match(
+      /musicPlayer:\s*\{([\s\S]*?)\}/,
+    );
+
+    let meting_api, meting_id, meting_server, meting_type;
+
+    if (!musicConfigMatch) {
+      console.log(
+        "Music player config not found, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+
+    const configStr = musicConfigMatch[1];
+
+    const modeMatch = configStr.match(/mode:\s*["']([^"']+)["']/);
+    const mode = modeMatch ? modeMatch[1] : null;
+
+    if (mode !== "meting") {
+      console.log(
+        'Music player mode is not "meting", skipping API text collection',
+      );
+      return new Set();
+    }
+
+    const apiMatch = configStr.match(/meting_api:\s*["']([^"']+)["']/);
+    if (!apiMatch) {
+      console.log(
+        "meting_api not configured, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+    meting_api = apiMatch[1];
+
+    const idMatch = configStr.match(/id:\s*["']([^"']+)["']/);
+    if (!idMatch) {
+      console.log(
+        "id not configured, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+    meting_id = idMatch[1];
+
+    const serverMatch = configStr.match(/server:\s*["']([^"']+)["']/);
+    meting_server = serverMatch ? serverMatch[1] : "netease";
+
+    const typeMatch = configStr.match(/type:\s*["']([^"']+)["']/);
+    meting_type = typeMatch ? typeMatch[1] : "playlist";
+
+    const apiUrl = meting_api
+      .replace(":server", meting_server)
+      .replace(":type", meting_type)
+      .replace(":id", meting_id)
+      .replace(":auth", "")
+      .replace(":r", Date.now().toString());
+
+    console.log("Fetching music playlist from Meting API...");
+    console.log(`  URL: ${apiUrl}`);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    const textSet = new Set();
+
+    try {
+      const response = await fetch(apiUrl, {
+        signal: controller.signal,
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        },
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const playlist = await response.json();
+
+      if (!Array.isArray(playlist)) {
+        throw new Error("API response is not an array");
+      }
+
+      console.log(
+        `Successfully fetched ${playlist.length} songs from Meting API`,
+      );
+
+      let songCount = 0;
+      playlist.forEach((song) => {
+        const title = song.name ?? song.title ?? "";
+        const artist = song.artist ?? song.author ?? "";
+
+        if (title.trim() || artist.trim()) {
+          songCount++;
+
+          for (const char of title) {
+            textSet.add(char);
+          }
+
+          for (const char of artist) {
+            textSet.add(char);
+          }
+        }
+      });
+      if (songCount === 0) {
+        console.log("No valid song data found in API response");
+      }
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError.name === "AbortError") {
+        console.log(
+          "Meting API request timeout (10s), skipping music text collection",
+        );
+      } else {
+        console.log(
+          `Failed to fetch Meting API data: ${fetchError.message}, skipping music text collection`,
+        );
+      }
+    }
+
+    return textSet;
+  } catch (error) {
+    console.log(
+      `Error processing Meting API config: ${error.message}, skipping music text collection`,
+    );
+    return new Set();
+  }
+}
+
 async function collectText() {
   const { lang } = await getConfig();
 
@@ -360,6 +506,18 @@ async function collectText() {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   for (const char of alphabet) {
     textSet.add(char);
+  }
+
+  const metingTextSet = await fetchMetingPlaylistText();
+
+  for (const char of metingTextSet) {
+    textSet.add(char);
+  }
+
+  if (metingTextSet.size > 0) {
+    console.log(
+      `Added ${metingTextSet.size} unique characters from music playlist`,
+    );
   }
 
   return Array.from(textSet).sort().join("");
