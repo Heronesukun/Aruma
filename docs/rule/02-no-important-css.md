@@ -1,33 +1,45 @@
-# 禁止使用 !important CSS
+# CSS !important 使用规范
 
-## 原因
+## 基本原则
 
-项目中**严禁使用 `!important` 级别的 CSS**，原因如下：
+项目中**应尽量避免使用 `!important` 级别的 CSS**，原因如下：
 
 1. **破坏样式优先级**：`!important` 会打破 CSS 的自然级联规则
 2. **难以维护**：一旦使用 `!important`，后续修改将不得不使用更多的 `!important`
 3. **与 MDUI 冲突**：MDUI 组件库有自己的样式系统，使用 `!important` 可能导致不可预期的样式冲突
 4. **Tailwind CSS 不兼容**：Tailwind 的原子类设计基于正常的 CSS 优先级，`!important` 会破坏这种设计
 
-## 问题表现
+## 允许使用 !important 的例外情况
 
-使用 `!important` 会导致：
-- 样式覆盖困难
-- 代码维护成本增加
-- 与第三方库（MDUI、Tailwind）产生冲突
-- 团队协作时样式冲突频发
+### Twikoo 评论区样式
+
+在 `src/styles/twikoo.css` 文件中**允许使用 `!important`**。
+
+**理由**：
+1. **第三方库动态注入**：Twikoo 是第三方评论系统，其样式通过 JavaScript 动态注入到页面
+2. **选择器优先级高**：Twikoo 内部样式使用了较高的选择器优先级，常规 CSS 无法覆盖
+3. **隔离性好**：Twikoo 样式文件独立，`!important` 的影响范围仅限于评论区，不会影响其他组件
+4. **无其他替代方案**：由于无法控制 Twikoo 的样式注入时机和方式，`!important` 是唯一可靠的覆盖方式
+
+```css
+/* ✅ 允许：在 twikoo.css 中覆盖 Twikoo 默认样式 */
+.tk-loading {
+  display: flex !important;
+  justify-content: center !important;
+}
+```
 
 ## 错误示例
 
 ```css
-/* ❌ 错误：使用 !important */
+/* ❌ 错误：在普通组件样式中使用 !important */
 .album-card {
   background-color: white !important;
   color: black !important;
 }
 
 .dark .album-card {
-  background-color: black !important;  /* 不得不继续使用 !important */
+  background-color: black !important;
 }
 ```
 
@@ -150,10 +162,11 @@ Tailwind CSS v4 提供了 `!` 前缀来添加 `!important`：
 
 在代码审查时，确保：
 
-- [ ] CSS 文件中没有 `!important`
-- [ ] `<style>` 标签中没有 `!important`
+- [ ] 普通业务 CSS 文件中没有 `!important`
+- [ ] `<style>` 标签中没有 `!important`（Twikoo 组件除外）
 - [ ] Tailwind 类中没有 `!` 前缀（除非有充分理由）
 - [ ] 样式优先级合理，易于理解和维护
+- [ ] `twikoo.css` 中的 `!important` 使用合理且必要
 
 ## 替代方案优先级
 
@@ -161,12 +174,13 @@ Tailwind CSS v4 提供了 `!` 前缀来添加 `!important`：
 2. **次选**：使用 CSS 变量
 3. **再次**：提高选择器优先级
 4. **最后**：使用作用域样式
-5. **避免**：使用 `!important`
+5. **避免**：使用 `!important`（Twikoo 样式除外）
 
 ## 相关文件
 
 - `src/styles/global.css` - 全局样式
 - `src/styles/aruma.css` - 自定义样式
+- `src/styles/twikoo.css` - Twikoo 评论区样式（允许 !important）
 - `src/styles/tailwind-extensions.css` - Tailwind 扩展
 
 ## 参考资料
