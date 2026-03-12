@@ -56,6 +56,17 @@ export type ImageOptimizationConfig = {
 	};
 };
 
+export type TwikooConfig = {
+	envId: string;
+	region?: string;
+	lang?: string;
+};
+
+export type CommentConfig = {
+	enable: boolean;
+	twikoo?: TwikooConfig;
+};
+
 export type SiteConfig = {
 	title: string;
 	description: string;
@@ -72,5 +83,6 @@ export type SiteConfig = {
 	randomImage: RandomImageConfig;
 	featurePages: FeaturePagesConfig;
 	font?: FontConfig;
-	imageOptimization?: ImageOptimizationConfig; // 图片优化配置
+	imageOptimization?: ImageOptimizationConfig;
+	comment?: CommentConfig;
 };

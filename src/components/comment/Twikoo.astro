@@ -1,0 +1,60 @@
+---
+import { siteConfig } from "../../site.config";
+
+interface Props {
+	path: string;
+}
+
+const commentConfig = siteConfig.comment;
+const config = {
+	...commentConfig?.twikoo,
+	el: "#tcomment",
+	path: Astro.props.path,
+};
+---
+
+<div id="tcomment"></div>
+<script is:inline src="/assets/js/twikoo.all.min.js"></script>
+<script is:inline define:vars={{ config }}>
+  function getCurrentPath() {
+    const pathname = window.location.pathname;
+    return pathname.endsWith('/') && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
+  }
+  
+  function createTwikooConfig() {
+    return {
+      ...config,
+      path: getCurrentPath(),
+      el: '#tcomment'
+    };
+  }
+  
+  function initTwikoo() {
+    if (typeof twikoo !== 'undefined') {
+      const commentEl = document.getElementById('tcomment');
+      if (commentEl) {
+        commentEl.innerHTML = '';
+        
+        const dynamicConfig = createTwikooConfig();
+        console.log('[Twikoo] 初始化配置:', dynamicConfig);
+        
+        twikoo.init(dynamicConfig).then(() => {
+          console.log('[Twikoo] 初始化完成');
+        }).catch((error) => {
+          console.error('[Twikoo] 初始化失败:', error);
+        });
+      }
+    } else {
+      setTimeout(initTwikoo, 500);
+    }
+  }
+  
+  document.addEventListener('DOMContentLoaded', initTwikoo);
+  
+  document.addEventListener('astro:page-load', function() {
+    const commentEl = document.getElementById('tcomment');
+    if (commentEl) {
+      initTwikoo();
+    }
+  });
+</script>

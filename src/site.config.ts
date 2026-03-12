@@ -87,6 +87,15 @@ export const siteConfig: SiteConfig = {
 			enableCompress: true,
 		},
 	},
+
+	// 评论配置
+	comment: {
+		enable: false,
+		twikoo: {
+			envId: "https://twikoo.vercel.com/",
+			lang: "zh-CN",
+		},
+	},
 };
 
 export const footerConfig = {
