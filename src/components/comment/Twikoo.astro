@@ -11,6 +11,7 @@ const commentConfig = siteConfig.comment;
 const lang = siteConfig.lang || "zh-CN";
 const translation = getTranslation(lang);
 const commentPlaceholder = translation[I18nKey.commentPlaceholder];
+const kaomojiText = translation[I18nKey.kaomoji];
 
 const twikooLangMap: Record<string, string> = {
 	"zh-CN": "zh-CN",
@@ -33,7 +34,7 @@ const masterTag = commentConfig?.twikoo?.masterTag || "博主";
 
 <div id="tcomment" style={`--master-tag: "${masterTag}";`}></div>
 <script is:inline src="/assets/js/twikoo.all.min.js"></script>
-<script is:inline define:vars={{ config, commentPlaceholder }}>
+<script is:inline define:vars={{ config, commentPlaceholder, kaomojiText }}>
   function getCurrentPath() {
     const pathname = window.location.pathname;
     return pathname.endsWith('/') && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
@@ -59,7 +60,6 @@ const masterTag = commentConfig?.twikoo?.masterTag || "博主";
         twikoo.init(dynamicConfig).then(() => {
           console.log('[Twikoo] 初始化完成');
           
-          // 设置评论输入框 placeholder
           setTimeout(() => {
             const textarea = document.querySelector('.tk-input textarea');
             if (textarea) {
@@ -82,6 +82,12 @@ const masterTag = commentConfig?.twikoo?.masterTag || "博主";
               }
               textarea.addEventListener('input', updatePreviewBtn);
               updatePreviewBtn();
+            }
+            
+            // 颜文字国际化
+            const kaomojiPackage = document.querySelector('.OwO-packages li:first-child span');
+            if (kaomojiPackage && kaomojiPackage.textContent === '颜文字') {
+              kaomojiPackage.textContent = kaomojiText;
             }
           }, 500);
         }).catch((error) => {
