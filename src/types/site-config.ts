@@ -68,6 +68,15 @@ export type CommentConfig = {
 	twikoo?: TwikooConfig;
 };
 
+export type MusicPlayerConfig = {
+	enable: boolean; // 是否启用音乐播放器
+	mode: "meting" | "local"; // 播放器模式
+	meting_api: string; // Meting API 地址
+	id: string; // 歌单 ID
+	server: string; // 音乐源服务器 (netease/tencent/kugou 等)
+	type: string; // 播单类型 (playlist/album/artist 等)
+};
+
 export type SiteConfig = {
 	title: string;
 	description: string;
@@ -86,4 +95,5 @@ export type SiteConfig = {
 	font?: FontConfig;
 	imageOptimization?: ImageOptimizationConfig;
 	comment?: CommentConfig;
+	musicPlayer?: MusicPlayerConfig; // 音乐播放器配置
 };

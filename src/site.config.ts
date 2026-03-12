@@ -90,11 +90,22 @@ export const siteConfig: SiteConfig = {
 
 	// 评论配置
 	comment: {
-		enable: false,
+		enable: false, 
 		twikoo: {
-			envId: "https://twikoo.vercel.com/",
-			masterTag: "博主", //设置成你Twikoo里面站长的标识名字，用于获取认证图标，注意要区分语言
+			envId: "https://twikoo.vercel.app/",
+			masterTag: "博主", //设置成你 Twikoo 里面站长的标识名字，用于获取认证图标，注意要区分语言
 		},
+	},
+
+	// 音乐播放器配置
+	musicPlayer: {
+		enable: true, // 启用音乐播放器
+		mode: "local" as const, // 使用 Meting API 模式
+		meting_api:
+			"https://meting.mysqil.com/api?server=:server&type=:type&id=:id&auth=:auth&r=:r",
+		id: "14164869977", // 默认歌单 ID
+		server: "netease" as const, // 网易云音乐
+		type: "playlist" as const, // 播单类型
 	},
 };
 
