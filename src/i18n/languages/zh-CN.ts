@@ -76,6 +76,15 @@ export const zhCN: Translation = {
 	[Key.animeStudio]: "制作",
 	[Key.animeEpisodes]: "集数",
 	[Key.animeEmpty]: "暂无番剧",
+	[Key.totalAnime]: "总番剧数",
+	[Key.local]: "本地",
+	[Key.all]: "全部",
+	[Key.watching]: "观看中",
+	[Key.completed]: "已完成",
+	[Key.planned]: "计划看",
+	[Key.animeStatusOnHold]: "搁置",
+	[Key.animeStatusDropped]: "抛弃",
+	[Key.searchAnime]: "搜索番剧...",
 
 	// 评论区
 	[Key.commentPlaceholder]:

@@ -77,6 +77,13 @@ export const ja: Translation = {
 	[Key.animeStudio]: "スタジオ",
 	[Key.animeEpisodes]: "エピソード",
 	[Key.animeEmpty]: "アニメのデータはありません",
+	[Key.totalAnime]: "合計アニメ数",
+	[Key.local]: "ローカル",
+	[Key.all]: "すべて",
+	[Key.watching]: "視聴中",
+	[Key.completed]: "視聴済み",
+	[Key.planned]: "視聴予定",
+	[Key.searchAnime]: "アニメを検索...",
 
 	// コメントエリア
 	[Key.commentPlaceholder]: "こちらにメッセージを残してください～",

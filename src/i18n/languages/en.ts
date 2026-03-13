@@ -76,6 +76,15 @@ export const en: Translation = {
 	[Key.animeStudio]: "Studio",
 	[Key.animeEpisodes]: "Episodes",
 	[Key.animeEmpty]: "No anime yet",
+	[Key.totalAnime]: "Total Anime",
+	[Key.local]: "Local",
+	[Key.all]: "All",
+	[Key.watching]: "Watching",
+	[Key.completed]: "Completed",
+	[Key.planned]: "Plan to Watch",
+	[Key.animeStatusOnHold]: "On Hold",
+	[Key.animeStatusDropped]: "Dropped",
+	[Key.searchAnime]: "Search anime...",
 
 	// Comment section
 	[Key.commentPlaceholder]: "Leave your message here~",

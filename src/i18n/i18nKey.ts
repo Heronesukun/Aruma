@@ -73,6 +73,15 @@ enum I18nKey {
 	animeStudio = "animeStudio",
 	animeEpisodes = "animeEpisodes",
 	animeEmpty = "animeEmpty",
+	totalAnime = "totalAnime",
+	local = "local",
+	all = "all",
+	watching = "watching",
+	completed = "completed",
+	planned = "planned",
+	animeStatusOnHold = "animeStatusOnHold",
+	animeStatusDropped = "animeStatusDropped",
+	searchAnime = "searchAnime",
 
 	// 评论区
 	commentPlaceholder = "commentPlaceholder",

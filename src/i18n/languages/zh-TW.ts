@@ -76,6 +76,15 @@ export const zhTW: Translation = {
 	[Key.animeStudio]: "製作",
 	[Key.animeEpisodes]: "集數",
 	[Key.animeEmpty]: "暫無番劇",
+	[Key.totalAnime]: "總番劇數",
+	[Key.local]: "本地",
+	[Key.all]: "全部",
+	[Key.watching]: "觀看中",
+	[Key.completed]: "已完成",
+	[Key.planned]: "計劃看",
+	[Key.animeStatusOnHold]: "擱置",
+	[Key.animeStatusDropped]: "拋棄",
+	[Key.searchAnime]: "搜尋番劇...",
 
 	// 評論區
 	[Key.commentPlaceholder]:
