@@ -1,0 +1,443 @@
+/* ==================== 音乐播放器样式 ==================== */
+
+/* ==================== 1. CSS 变量 ==================== */
+:root {
+  --music-player-primary: var(--color, #ff4081);
+  --music-player-bg: rgba(255, 255, 255, 0.85);
+  --music-player-text: rgba(0, 0, 0, 0.87);
+  --music-player-text-secondary: rgba(0, 0, 0, 0.6);
+  --music-player-text-meta: rgba(0, 0, 0, 0.5);
+  --music-player-divider: rgba(0, 0, 0, 0.12);
+  --music-player-btn-bg: rgba(0, 0, 0, 0.06);
+  --music-player-btn-hover: rgba(0, 0, 0, 0.1);
+  --music-player-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+  --music-player-width: 20rem;
+  --music-player-mini-width: 17.5rem;
+  --music-player-mobile-width: 20rem;
+  --music-player-position: 1rem;
+  --music-player-control-gap: 0.5rem;
+  --music-player-orb-size: 3rem;
+}
+
+html.mdui-theme-layout-dark {
+  --music-player-primary: var(--color, #ff4081);
+  --music-player-bg: rgba(66, 66, 66, 0.85);
+  --music-player-text: rgba(255, 255, 255, 0.87);
+  --music-player-text-secondary: rgba(255, 255, 255, 0.7);
+  --music-player-text-meta: rgba(255, 255, 255, 0.5);
+  --music-player-divider: rgba(255, 255, 255, 0.12);
+  --music-player-btn-bg: rgba(255, 255, 255, 0.08);
+  --music-player-btn-hover: rgba(255, 255, 255, 0.12);
+  --music-player-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* ==================== 2. 动画定义 ==================== */
+@keyframes mp-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mp-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes mp-music-wave {
+  0%,
+  100% {
+    transform: scaleY(0.5);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes mp-slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ==================== 3. 基础样式 ==================== */
+.music-player {
+  max-width: var(--music-player-width);
+  user-select: none;
+  font-family: inherit;
+  position: fixed;
+  bottom: var(--music-player-position);
+  right: var(--music-player-position);
+  z-index: 50;
+  transition: all 0.3s ease-in-out;
+}
+
+.music-player.expanded {
+  right: var(--music-player-position);
+}
+
+/* ==================== 4. 隐藏状态小圆球 ==================== */
+.orb-player {
+  position: relative;
+  width: var(--music-player-orb-size);
+  height: var(--music-player-orb-size);
+  background: var(--music-player-primary);
+  border-radius: 50%;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  cursor: pointer;
+  box-shadow: var(--music-player-shadow);
+  transition: all 0.5s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orb-player::before {
+  content: "";
+  position: absolute;
+  inset: -0.125rem;
+  background: linear-gradient(45deg, var(--music-player-primary), transparent, var(--music-player-primary));
+  border-radius: 50%;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.orb-player:hover::before {
+  opacity: 0.3;
+  animation: mp-rotate 2s linear infinite;
+}
+
+.orb-player .animate-pulse {
+  animation: mp-music-wave 1.5s ease-in-out infinite;
+}
+
+.orb-player:hover {
+  transform: scale(1.1);
+}
+
+.orb-player:active {
+  transform: scale(0.95);
+}
+
+/* ==================== 5. 迷你播放器 ==================== */
+.mini-player {
+  width: var(--music-player-mini-width);
+  background: var(--music-player-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--music-player-shadow);
+  border-radius: 1rem;
+  padding: 0.75rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+/* ==================== 6. 展开播放器 ==================== */
+.expanded-player {
+  width: var(--music-player-width);
+  background: var(--music-player-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--music-player-shadow);
+  border-radius: 1rem;
+  padding: 1rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transition: all 0.5s ease-in-out;
+}
+
+/* ==================== 7. 封面容器 ==================== */
+.cover-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: mp-rotate 3s linear infinite;
+  animation-play-state: paused;
+  transition: transform 0.3s;
+}
+
+.cover-container img.spinning {
+  animation-play-state: running;
+}
+
+.cover-container .animate-pulse {
+  animation: mp-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==================== 8. 按钮样式 ==================== */
+.btn-plain,
+.btn-regular {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: transparent;
+  color: var(--music-player-text);
+}
+
+.btn-plain:hover {
+  background: var(--music-player-btn-hover);
+}
+
+.btn-regular {
+  background: var(--music-player-btn-bg);
+}
+
+.btn-regular:hover {
+  background: var(--music-player-btn-hover);
+}
+
+/* 主题色按钮视觉反馈 */
+button.bg-\[var\(--music-player-primary\)\] {
+  box-shadow: 0 0 0 2px var(--music-player-primary);
+  border: none;
+}
+
+/* ==================== 9. 进度条 ==================== */
+.progress-bar,
+.bottom-controls > div:nth-child(2) {
+  background: var(--music-player-btn-bg);
+  transition: all 0.2s ease;
+}
+
+.progress-bar:hover,
+.bottom-controls > div:hover {
+  transform: scaleY(1.2);
+}
+
+.progress-bar .h-full,
+.bottom-controls > div:nth-child(2) .h-full {
+  background: var(--music-player-primary);
+  transition: all 0.1s;
+}
+
+/* ==================== 10. 播放列表面板 ==================== */
+.playlist-panel {
+  background: var(--music-player-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--music-player-shadow);
+  border-radius: 1rem;
+  overflow: hidden;
+  width: var(--music-player-width);
+  box-sizing: border-box;
+  position: absolute;
+  bottom: 17rem;
+  right: 0;
+  z-index: 50;
+}
+
+.playlist-header {
+  border-bottom: 1px solid var(--music-player-divider);
+  color: var(--music-player-text);
+}
+
+.playlist-content {
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.playlist-item {
+  transition: all 0.2s;
+  color: var(--music-player-text);
+}
+
+.playlist-item:hover {
+  background: var(--music-player-btn-hover);
+}
+
+.playlist-item.is-active {
+  background: transparent;
+  color: var(--music-player-primary);
+}
+
+.playlist-item.is-active .mp-text-primary,
+.playlist-item.is-active .mp-text-secondary,
+.playlist-item.is-active .mp-text-meta {
+  color: var(--music-player-primary);
+}
+
+/* ==================== 11. 滚动条隐藏 ==================== */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* ==================== 12. 动画工具类 ==================== */
+.animate-slide-up {
+  animation: mp-slide-up 0.3s ease-out;
+}
+
+.animate-pulse {
+  animation: mp-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==================== 13. 文字颜色工具类 ==================== */
+.mp-text-primary {
+  color: var(--music-player-text);
+}
+
+.mp-text-secondary {
+  color: var(--music-player-text-secondary);
+}
+
+.mp-text-meta {
+  color: var(--music-player-text-meta);
+}
+
+/* ==================== 14. 背景颜色工具类 ==================== */
+.mp-bg-btn {
+  background: var(--music-player-btn-bg);
+}
+
+.mp-bg-btn-hover {
+  background: var(--music-player-btn-hover);
+}
+
+/* ==================== 15. 边框颜色工具类 ==================== */
+.mp-border-divider {
+  border-color: var(--music-player-divider);
+}
+
+/* ==================== 16. 主题色工具类 ==================== */
+.text-\[var\(--music-player-primary\)\] {
+  color: var(--music-player-primary);
+}
+
+.bg-\[var\(--music-player-primary\)\] {
+  background-color: var(--music-player-primary);
+}
+
+/* ==================== 17. 响应式设计 ==================== */
+@media (max-width: 768px) {
+  :root {
+    --music-player-width: 17.5rem;
+    --music-player-mini-width: 17.5rem;
+    --music-player-mobile-width: 17.5rem;
+    --music-player-position: 0.5rem;
+    --music-player-control-gap: 0.5rem;
+  }
+
+  .music-player {
+    max-width: var(--music-player-width);
+    bottom: var(--music-player-position);
+    right: var(--music-player-position);
+  }
+
+  .music-player.expanded {
+    max-width: var(--music-player-width);
+    right: var(--music-player-position);
+  }
+
+  .mini-player {
+    width: var(--music-player-mini-width);
+  }
+
+  .expanded-player {
+    width: var(--music-player-width);
+  }
+
+  .playlist-panel {
+    width: var(--music-player-width);
+    bottom: 17rem;
+    right: 0;
+    left: auto;
+    max-height: 20rem;
+  }
+
+  .playlist-content {
+    max-height: 16rem;
+  }
+
+  .controls {
+    gap: 0.5rem;
+  }
+
+  .controls button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .controls button:nth-child(3) {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .music-player {
+    max-width: var(--music-player-mobile-width);
+  }
+
+  .song-title {
+    font-size: 14px;
+  }
+
+  .song-artist {
+    font-size: 12px;
+  }
+
+  .controls {
+    gap: 0.375rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .controls button {
+    width: 32px;
+    height: 32px;
+  }
+
+  .controls button:nth-child(3) {
+    width: 40px;
+    height: 40px;
+  }
+
+  .playlist-item {
+    padding: 8px 12px;
+  }
+
+  .playlist-item .w-10 {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .music-player button,
+  .playlist-item {
+    min-height: 44px;
+  }
+
+  .progress-section > div,
+  .bottom-controls > div:nth-child(2) {
+    height: 12px;
+  }
+}

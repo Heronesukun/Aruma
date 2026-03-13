@@ -1,11 +1,12 @@
 ---
-import Layout from '../../../layouts/Layout.astro';
-import Sidebar from '../../../components/Sidebar.astro';
-import { siteConfig } from '../../../site.config';
-import { i18n } from '../../../i18n/translation';
-import I18nKey from '../../../i18n/i18nKey';
-import type { AlbumGroup, Photo } from '../../../types/album';
-import { scanAlbums } from '../../../utils/album-scanner';
+import Layout from "../../../layouts/Layout.astro";
+import Sidebar from "../../../components/Sidebar.astro";
+import PhotoSwipe from "../../../components/PhotoSwipe.astro";
+import { siteConfig } from "../../../site.config";
+import { i18n } from "../../../i18n/translation";
+import I18nKey from "../../../i18n/i18nKey";
+import type { AlbumGroup, Photo } from "../../../types/album";
+import { scanAlbums } from "../../../utils/album-scanner";
 
 // 检查相册页面是否启用
 if (!siteConfig.featurePages.albums) {
@@ -32,272 +33,294 @@ if (!album) {
 ---
 
 <Layout title={album.title}>
-  <div class="article">
-    <div class="album-detail-header">
-      <div class="album-info-header">
-        <a href="/albums/" class="back-to-list">
-          <i class="mdui-icon material-icons">arrow_back</i>
-          {i18n(I18nKey.albumsBackToList)}
-        </a>
-        <h1 class="album-detail-title">{album.title}</h1>
-        {album.description && (
-          <p class="album-detail-description">{album.description}</p>
-        )}
-        <div class="album-detail-meta">
-          <span class="album-detail-count">
-            <i class="mdui-icon material-icons">photo</i>
-            {album.photos.length} {album.photos.length > 1 ? i18n(I18nKey.albumsPhotosCount) : i18n(I18nKey.albumsPhotoCount)}
-          </span>
-          <time class="album-detail-date">
-            <i class="mdui-icon material-icons">event</i>
-            {new Date(album.date).toLocaleDateString('zh-CN')}
-          </time>
-          {album.location && (
-            <span class="album-detail-location">
-              <i class="mdui-icon material-icons">location_on</i>
-              {album.location}
-            </span>
-          )}
-        </div>
-        {album.tags && album.tags.length > 0 && (
-          <div class="album-detail-tags">
-            {album.tags.map((tag: string) => (
-              <span class="album-detail-tag">{tag}</span>
-            ))}
-          </div>
-        )}
-        
-        <div
-          class={`photo-gallery ${album.layout === 'masonry' ? 'masonry-layout' : 'grid-layout'}`}
-          data-layout={album.layout || 'grid'}
-          data-columns={album.columns || 3}
-        >
-          {album.photos.map((photo: Photo, index: number) => (
-            <figure class="photo-item" data-index={index}>
-              <div class="photo-container">
-                <img
-                  src={photo.src}
-                  alt={photo.alt || photo.title || `Photo ${index + 1}`}
-                  loading="lazy"
-                  class="photo-image"
-                />
-              </div>
-            </figure>
-          ))}
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="article">
+		<div class="album-detail-header">
+			<div class="album-info-header">
+				<a href="/albums/" class="back-to-list">
+					<i class="mdui-icon material-icons">arrow_back</i>
+					{i18n(I18nKey.albumsBackToList)}
+				</a>
+				<h1 class="album-detail-title">{album.title}</h1>
+				{
+					album.description && (
+						<p class="album-detail-description">
+							{album.description}
+						</p>
+					)
+				}
+				<div class="album-detail-meta">
+					<span class="album-detail-count">
+						<i class="mdui-icon material-icons">photo</i>
+						{album.photos.length}
+						{
+							album.photos.length > 1
+								? i18n(I18nKey.albumsPhotosCount)
+								: i18n(I18nKey.albumsPhotoCount)
+						}
+					</span>
+					<time class="album-detail-date">
+						<i class="mdui-icon material-icons">event</i>
+						{new Date(album.date).toLocaleDateString("zh-CN")}
+					</time>
+					{
+						album.location && (
+							<span class="album-detail-location">
+								<i class="mdui-icon material-icons">
+									location_on
+								</i>
+								{album.location}
+							</span>
+						)
+					}
+				</div>
+				{
+					album.tags && album.tags.length > 0 && (
+						<div class="album-detail-tags">
+							{album.tags.map((tag: string) => (
+								<span class="album-detail-tag">{tag}</span>
+							))}
+						</div>
+					)
+				}
 
-  <Sidebar slot="sidebar" />
+				<div
+					class={`photo-gallery ${album.layout === "masonry" ? "masonry-layout" : "grid-layout"}`}
+					data-layout={album.layout || "grid"}
+					data-columns={album.columns || 3}
+				>
+					{
+						album.photos.map((photo: Photo, index: number) => (
+							<figure class="photo-item" data-index={index}>
+								<div class="photo-container">
+									<img
+										src={photo.src}
+										alt={
+											photo.alt ||
+											photo.title ||
+											`Photo ${index + 1}`
+										}
+										loading="lazy"
+										class="photo-image"
+									/>
+								</div>
+							</figure>
+						))
+					}
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<PhotoSwipe />
+	<Sidebar slot="sidebar" />
 </Layout>
 
 <style>
-  .album-detail-header {
-    margin-bottom: 24px;
-  }
+	.album-detail-header {
+		margin-bottom: 24px;
+	}
 
-  .back-to-list {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    color: #757575;
-    text-decoration: none;
-    font-size: 14px;
-    margin-bottom: 16px;
-    transition: color 0.2s ease;
-  }
+	.back-to-list {
+		display: inline-flex;
+		align-items: center;
+		gap: 4px;
+		color: #757575;
+		text-decoration: none;
+		font-size: 14px;
+		margin-bottom: 16px;
+		transition: color 0.2s ease;
+	}
 
-  .back-to-list:hover {
-    color: var(--color);
-  }
+	.back-to-list:hover {
+		color: var(--color);
+	}
 
-  .back-to-list .mdui-icon {
-    font-size: 18px;
-    width: 18px;
-    height: 18px;
-  }
+	.back-to-list .mdui-icon {
+		font-size: 18px;
+		width: 18px;
+		height: 18px;
+	}
 
-  .album-info-header {
-    background-color: rgba(255, 255, 255, 0.8);
-    border-radius: 7px;
-    padding: 24px;
-  }
+	.album-info-header {
+		background-color: rgba(255, 255, 255, 0.8);
+		border-radius: 7px;
+		padding: 24px;
+	}
 
-  .album-detail-title {
-    font-size: 28px;
-    font-weight: 500;
-    margin: 0 0 12px 0;
-    color: #333;
-  }
+	.album-detail-title {
+		font-size: 28px;
+		font-weight: 500;
+		margin: 0 0 12px 0;
+		color: #333;
+	}
 
-  .album-detail-description {
-    font-size: 15px;
-    color: #757575;
-    margin: 0 0 16px 0;
-    line-height: 1.6;
-  }
+	.album-detail-description {
+		font-size: 15px;
+		color: #757575;
+		margin: 0 0 16px 0;
+		line-height: 1.6;
+	}
 
-  .album-detail-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    font-size: 14px;
-    color: #999;
-  }
+	.album-detail-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 20px;
+		font-size: 14px;
+		color: #999;
+	}
 
-  .album-detail-meta > span {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+	.album-detail-meta > span {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
 
-  .album-detail-meta .mdui-icon {
-    font-size: 16px;
-    width: 16px;
-    height: 16px;
-  }
+	.album-detail-meta .mdui-icon {
+		font-size: 16px;
+		width: 16px;
+		height: 16px;
+	}
 
-  .album-detail-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 16px;
-  }
+	.album-detail-tags {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 8px;
+		margin-top: 16px;
+	}
 
-  .album-detail-tag {
-    display: inline-block;
-    padding: 5px 14px;
-    background-color: rgba(255, 64, 129, 0.08);
-    color: var(--color);
-    border-radius: 16px;
-    font-size: 13px;
-    transition: all 0.2s ease;
-  }
+	.album-detail-tag {
+		display: inline-block;
+		padding: 5px 14px;
+		background-color: rgba(255, 64, 129, 0.08);
+		color: var(--color);
+		border-radius: 16px;
+		font-size: 13px;
+		transition: all 0.2s ease;
+	}
 
-  .album-detail-tag:hover {
-    background-color: rgba(255, 64, 129, 0.15);
-  }
+	.album-detail-tag:hover {
+		background-color: rgba(255, 64, 129, 0.15);
+	}
 
-  /* Photo Gallery */
-  .photo-gallery {
-    margin-top: 20px;
-  }
+	/* Photo Gallery */
+	.photo-gallery {
+		margin-top: 20px;
+	}
 
-  .grid-layout {
-    display: grid;
-    gap: 16px;
-  }
+	.grid-layout {
+		display: grid;
+		gap: 16px;
+	}
 
-  .grid-layout[data-columns="2"] {
-    grid-template-columns: repeat(2, 1fr);
-  }
+	.grid-layout[data-columns="2"] {
+		grid-template-columns: repeat(2, 1fr);
+	}
 
-  .grid-layout[data-columns="3"] {
-    grid-template-columns: repeat(3, 1fr);
-  }
+	.grid-layout[data-columns="3"] {
+		grid-template-columns: repeat(3, 1fr);
+	}
 
-  .grid-layout[data-columns="4"] {
-    grid-template-columns: repeat(4, 1fr);
-  }
+	.grid-layout[data-columns="4"] {
+		grid-template-columns: repeat(4, 1fr);
+	}
 
-  .masonry-layout {
-    columns: 2;
-    column-gap: 16px;
-  }
+	.masonry-layout {
+		columns: 2;
+		column-gap: 16px;
+	}
 
-  @media (min-width: 768px) {
-    .masonry-layout {
-      columns: 3;
-    }
-  }
+	@media (min-width: 768px) {
+		.masonry-layout {
+			columns: 3;
+		}
+	}
 
-  @media (min-width: 1280px) {
-    .masonry-layout[data-columns="4"] {
-      columns: 4;
-    }
-  }
+	@media (min-width: 1280px) {
+		.masonry-layout[data-columns="4"] {
+			columns: 4;
+		}
+	}
 
-  .photo-item {
-    break-inside: avoid;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-    border-radius: 7px;
-    background-color: rgba(255, 255, 255, 0.8);
-  }
+	.photo-item {
+		break-inside: avoid;
+		margin-bottom: 16px;
+		position: relative;
+		overflow: hidden;
+		border-radius: 7px;
+		background-color: rgba(255, 255, 255, 0.8);
+	}
 
-  .photo-container {
-    position: relative;
-    overflow: hidden;
-    border-radius: 7px;
-  }
+	.photo-container {
+		position: relative;
+		overflow: hidden;
+		border-radius: 7px;
+	}
 
-  .photo-image {
-    width: 100%;
-    height: auto;
-    display: block;
-    transition: transform 0.3s ease;
-  }
+	.photo-image {
+		width: 100%;
+		height: auto;
+		display: block;
+		transition: transform 0.3s ease;
+	}
 
-  .photo-item:hover .photo-image {
-    transform: scale(1.05);
-  }
+	.photo-item:hover .photo-image {
+		transform: scale(1.05);
+	}
 
-  /* 暗色模式适配 */
-  :global(.mdui-theme-layout-dark) .album-info-header {
-    background-color: rgba(66, 66, 66, 0.8);
-  }
+	/* 暗色模式适配 */
+	:global(.mdui-theme-layout-dark) .album-info-header {
+		background-color: rgba(66, 66, 66, 0.8);
+	}
 
-  :global(.mdui-theme-layout-dark) .album-detail-title {
-    color: #fff;
-  }
+	:global(.mdui-theme-layout-dark) .album-detail-title {
+		color: #fff;
+	}
 
-  :global(.mdui-theme-layout-dark) .album-detail-description {
-    color: rgba(255, 255, 255, 0.7);
-  }
+	:global(.mdui-theme-layout-dark) .album-detail-description {
+		color: rgba(255, 255, 255, 0.7);
+	}
 
-  :global(.mdui-theme-layout-dark) .back-to-list {
-    color: rgba(255, 255, 255, 0.7);
-  }
+	:global(.mdui-theme-layout-dark) .back-to-list {
+		color: rgba(255, 255, 255, 0.7);
+	}
 
-  :global(.mdui-theme-layout-dark) .photo-item {
-    background-color: rgba(66, 66, 66, 0.8);
-  }
+	:global(.mdui-theme-layout-dark) .photo-item {
+		background-color: rgba(66, 66, 66, 0.8);
+	}
 
-  /* 响应式适配 */
-  @media (max-width: 1024px) {
-    .grid-layout[data-columns="3"],
-    .grid-layout[data-columns="4"] {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
+	/* 响应式适配 */
+	@media (max-width: 1024px) {
+		.grid-layout[data-columns="3"],
+		.grid-layout[data-columns="4"] {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
 
-  @media (max-width: 600px) {
-    .album-info-header {
-      padding: 16px;
-    }
+	@media (max-width: 600px) {
+		.album-info-header {
+			padding: 16px;
+		}
 
-    .grid-layout {
-      grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
-    }
+		.grid-layout {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+		}
 
-    .masonry-layout {
-      columns: 2;
-      column-gap: 10px;
-    }
+		.masonry-layout {
+			columns: 2;
+			column-gap: 10px;
+		}
 
-    .photo-item {
-      margin-bottom: 10px;
-    }
+		.photo-item {
+			margin-bottom: 10px;
+		}
 
-    .album-detail-title {
-      font-size: 22px;
-    }
+		.album-detail-title {
+			font-size: 22px;
+		}
 
-    .album-detail-meta {
-      gap: 12px;
-    }
-  }
+		.album-detail-meta {
+			gap: 12px;
+		}
+	}
 </style>

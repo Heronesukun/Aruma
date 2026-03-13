@@ -7,471 +7,672 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function getConfig() {
-	const configPath = path.join(__dirname, "../src/site.config.ts");
-	const configContent = fs.readFileSync(configPath, "utf-8");
+  const configPath = path.join(__dirname, "../src/site.config.ts");
+  const configContent = fs.readFileSync(configPath, "utf-8");
 
-	const langMatch = configContent.match(/lang:\s*["']([^"']+)["']/);
-	const lang = langMatch ? langMatch[1] : "zh-CN";
+  const langMatch = configContent.match(/lang:\s*["']([^"']+)["']/);
+  const lang = langMatch ? langMatch[1] : "zh-CN";
 
-	const fontStartMatch = configContent.match(/font:\s*\{/);
-	if (!fontStartMatch) {
-		console.log("No font config found, skipping font compression");
-		return { lang, fonts: [] };
-	}
+  const fontStartMatch = configContent.match(/font:\s*\{/);
+  if (!fontStartMatch) {
+    console.log("No font config found, skipping font compression");
+    return { lang, fonts: [] };
+  }
 
-	const fontStartIndex = fontStartMatch.index;
-	let braceCount = 0;
-	let i = fontStartIndex + fontStartMatch[0].length - 1;
-	let fontEndIndex = -1;
+  const fontStartIndex = fontStartMatch.index;
+  let braceCount = 0;
+  let i = fontStartIndex + fontStartMatch[0].length - 1;
+  let fontEndIndex = -1;
 
-	for (; i < configContent.length; i++) {
-		if (configContent[i] === "{") {
-			braceCount++;
-		} else if (configContent[i] === "}") {
-			braceCount--;
-			if (braceCount === 0) {
-				fontEndIndex = i;
-				break;
-			}
-		}
-	}
+  for (; i < configContent.length; i++) {
+    if (configContent[i] === "{") {
+      braceCount++;
+    } else if (configContent[i] === "}") {
+      braceCount--;
+      if (braceCount === 0) {
+        fontEndIndex = i;
+        break;
+      }
+    }
+  }
 
-	if (fontEndIndex === -1) {
-		console.log("No font config found, skipping font compression");
-		return { lang, fonts: [] };
-	}
+  if (fontEndIndex === -1) {
+    console.log("No font config found, skipping font compression");
+    return { lang, fonts: [] };
+  }
 
-	const fontConfigStr = configContent.substring(fontStartIndex, fontEndIndex + 1);
-	const fonts = [];
+  const fontConfigStr = configContent.substring(
+    fontStartIndex,
+    fontEndIndex + 1,
+  );
+  const fonts = [];
 
-	const fontTypes = ["asciiFont", "cjkFont"];
+  const fontTypes = ["asciiFont", "cjkFont"];
 
-	for (const fontType of fontTypes) {
-		const regex = new RegExp(`${fontType}:\\s*\\{([\\s\\S]*?)\\}`, "m");
-		const match = fontConfigStr.match(regex);
+  for (const fontType of fontTypes) {
+    const regex = new RegExp(`${fontType}:\\s*\\{([\\s\\S]*?)\\}`, "m");
+    const match = fontConfigStr.match(regex);
 
-		if (match) {
-			const fontConfig = match[1];
+    if (match) {
+      const fontConfig = match[1];
 
-			const compressMatch = fontConfig.match(/enableCompress:\s*(true|false)/);
-			const enableCompress = compressMatch ? compressMatch[1] === "true" : false;
+      const compressMatch = fontConfig.match(/enableCompress:\s*(true|false)/);
+      const enableCompress = compressMatch
+        ? compressMatch[1] === "true"
+        : false;
 
-			const localFontsMatch = fontConfig.match(/localFonts:\s*\[(.*?)\]/s);
-			let localFonts = [];
+      const localFontsMatch = fontConfig.match(/localFonts:\s*\[(.*?)\]/s);
+      let localFonts = [];
 
-			if (localFontsMatch?.[1].trim()) {
-				const fontsStr = localFontsMatch[1];
-				localFonts = fontsStr.match(/["']([^"']+)["']/g)?.map((s) => s.replace(/["']/g, "")) || [];
-			}
+      if (localFontsMatch?.[1].trim()) {
+        const fontsStr = localFontsMatch[1];
+        localFonts =
+          fontsStr
+            .match(/["']([^"']+)["']/g)
+            ?.map((s) => s.replace(/["']/g, "")) || [];
+      }
 
-			if (enableCompress && localFonts.length > 0) {
-				fonts.push({
-					type: fontType,
-					files: localFonts,
-					enableCompress,
-				});
-			}
-		}
-	}
+      if (enableCompress && localFonts.length > 0) {
+        fonts.push({
+          type: fontType,
+          files: localFonts,
+          enableCompress,
+        });
+      }
+    }
+  }
 
-	return { lang, fonts };
+  return { lang, fonts };
 }
 
 function readFilesRecursively(dir, fileList = []) {
-	if (!fs.existsSync(dir)) return fileList;
-	const files = fs.readdirSync(dir);
+  if (!fs.existsSync(dir)) return fileList;
+  const files = fs.readdirSync(dir);
 
-	files.forEach((file) => {
-		const filePath = path.join(dir, file);
-		const stat = fs.statSync(filePath);
+  files.forEach((file) => {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
 
-		if (stat.isDirectory()) {
-			readFilesRecursively(filePath, fileList);
-		} else {
-			fileList.push(filePath);
-		}
-	});
+    if (stat.isDirectory()) {
+      readFilesRecursively(filePath, fileList);
+    } else {
+      fileList.push(filePath);
+    }
+  });
 
-	return fileList;
+  return fileList;
 }
 
 function extractText(content, ext) {
-	let text = content;
-	let frontmatterText = "";
+  let text = content;
+  let frontmatterText = "";
 
-	if (ext === ".md" || ext === ".mdx") {
-		const frontmatterMatch = content.match(/^---[\s\S]*?---/m);
-		if (frontmatterMatch) {
-			const frontmatter = frontmatterMatch[0];
+  if (ext === ".md" || ext === ".mdx") {
+    const frontmatterMatch = content.match(/^---[\s\S]*?---/m);
+    if (frontmatterMatch) {
+      const frontmatter = frontmatterMatch[0];
 
-			const unquotedMatches = frontmatter.match(/^\s*\w+:\s*([^'"\n]+)$/gm);
-			if (unquotedMatches) {
-				unquotedMatches.forEach((match) => {
-					const value = match.replace(/^\s*\w+:\s*/, "").trim();
-					if (!value.match(/^(true|false|\d{4}-\d{2}-\d{2}|\d+)$/)) {
-						frontmatterText += `${value} `;
-					}
-				});
-			}
+      const unquotedMatches = frontmatter.match(/^\s*\w+:\s*([^'"\n]+)$/gm);
+      if (unquotedMatches) {
+        unquotedMatches.forEach((match) => {
+          const value = match.replace(/^\s*\w+:\s*/, "").trim();
+          if (!value.match(/^(true|false|\d{4}-\d{2}-\d{2}|\d+)$/)) {
+            frontmatterText += `${value} `;
+          }
+        });
+      }
 
-			const quotedMatches = frontmatter.match(/:\s*['"]([^'"]+)['"]/g);
-			if (quotedMatches) {
-				quotedMatches.forEach((match) => {
-					const value = match.replace(/:\s*['"]([^'"]+)['"]/, "$1");
-					frontmatterText += `${value} `;
-				});
-			}
+      const quotedMatches = frontmatter.match(/:\s*['"]([^'"]+)['"]/g);
+      if (quotedMatches) {
+        quotedMatches.forEach((match) => {
+          const value = match.replace(/:\s*['"]([^'"]+)['"]/, "$1");
+          frontmatterText += `${value} `;
+        });
+      }
 
-			const listMatches = frontmatter.match(/^\s*-\s*([^\n]+)$/gm);
-			if (listMatches) {
-				listMatches.forEach((match) => {
-					const value = match.replace(/^\s*-\s*/, "").trim();
-					frontmatterText += `${value} `;
-				});
-			}
-		}
+      const listMatches = frontmatter.match(/^\s*-\s*([^\n]+)$/gm);
+      if (listMatches) {
+        listMatches.forEach((match) => {
+          const value = match.replace(/^\s*-\s*/, "").trim();
+          frontmatterText += `${value} `;
+        });
+      }
+    }
 
-		text = text.replace(/^---[\s\S]*?---\s*/m, "");
-		text = text.replace(/```[\s\S]*?```/g, "");
-		text = text.replace(/`[^`]+`/g, "");
-	}
+    text = text.replace(/^---[\s\S]*?---\s*/m, "");
+    text = text.replace(/```[\s\S]*?```/g, "");
+    text = text.replace(/`[^`]+`/g, "");
+  }
 
-	text = text.replace(/<[^>]*>/g, " ");
-	text = text.replace(/[#*_~`[\]()]/g, " ");
-	text = text.replace(/https?:\/\/[^\s]+/g, "");
-	text = text.replace(/\s+/g, " ").trim();
+  text = text.replace(/<[^>]*>/g, " ");
+  text = text.replace(/[#*_~`[\]()]/g, " ");
+  text = text.replace(/https?:\/\/[^\s]+/g, "");
+  text = text.replace(/\s+/g, " ").trim();
 
-	const finalText = `${frontmatterText} ${text}`.trim();
+  const finalText = `${frontmatterText} ${text}`.trim();
 
-	return finalText;
+  return finalText;
 }
 
 function getAsciiCharset() {
-	const chars = new Set();
+  const chars = new Set();
 
-	for (let i = 32; i <= 126; i++) {
-		chars.add(String.fromCharCode(i));
-	}
+  for (let i = 32; i <= 126; i++) {
+    chars.add(String.fromCharCode(i));
+  }
 
-	const common = ' !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~';
-	for (const char of common) {
-		chars.add(char);
-	}
+  const common = " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~";
+  for (const char of common) {
+    chars.add(char);
+  }
 
-	for (let i = 0; i <= 9; i++) {
-		chars.add(String(i));
-	}
+  for (let i = 0; i <= 9; i++) {
+    chars.add(String(i));
+  }
 
-	const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	for (const char of alphabet) {
-		chars.add(char);
-	}
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  for (const char of alphabet) {
+    chars.add(char);
+  }
 
-	return Array.from(chars).sort().join("");
+  return Array.from(chars).sort().join("");
+}
+
+async function fetchMetingPlaylistText() {
+  try {
+    const configPath = path.join(__dirname, "../src/site.config.ts");
+    const configContent = fs.readFileSync(configPath, "utf-8");
+
+    const enableMatch = configContent.match(
+      /musicPlayer:\s*\{[\s\S]*?enable:\s*(true|false)/,
+    );
+    if (!enableMatch || enableMatch[1] === "false") {
+      console.log(
+        "Music player disabled, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+
+    const musicConfigMatch = configContent.match(
+      /musicPlayer:\s*\{([\s\S]*?)\}/,
+    );
+
+    let meting_api, meting_id, meting_server, meting_type;
+
+    if (!musicConfigMatch) {
+      console.log(
+        "Music player config not found, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+
+    const configStr = musicConfigMatch[1];
+
+    const modeMatch = configStr.match(/mode:\s*["']([^"']+)["']/);
+    const mode = modeMatch ? modeMatch[1] : null;
+
+    if (mode !== "meting") {
+      console.log(
+        'Music player mode is not "meting", skipping API text collection',
+      );
+      return new Set();
+    }
+
+    const apiMatch = configStr.match(/meting_api:\s*["']([^"']+)["']/);
+    if (!apiMatch) {
+      console.log(
+        "meting_api not configured, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+    meting_api = apiMatch[1];
+
+    const idMatch = configStr.match(/id:\s*["']([^"']+)["']/);
+    if (!idMatch) {
+      console.log(
+        "id not configured, skipping Meting API text collection",
+      );
+      return new Set();
+    }
+    meting_id = idMatch[1];
+
+    const serverMatch = configStr.match(/server:\s*["']([^"']+)["']/);
+    meting_server = serverMatch ? serverMatch[1] : "netease";
+
+    const typeMatch = configStr.match(/type:\s*["']([^"']+)["']/);
+    meting_type = typeMatch ? typeMatch[1] : "playlist";
+
+    const apiUrl = meting_api
+      .replace(":server", meting_server)
+      .replace(":type", meting_type)
+      .replace(":id", meting_id)
+      .replace(":auth", "")
+      .replace(":r", Date.now().toString());
+
+    console.log("Fetching music playlist from Meting API...");
+    console.log(`  URL: ${apiUrl}`);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+
+    const textSet = new Set();
+
+    try {
+      const response = await fetch(apiUrl, {
+        signal: controller.signal,
+        headers: {
+          "User-Agent":
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+        },
+      });
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const playlist = await response.json();
+
+      if (!Array.isArray(playlist)) {
+        throw new Error("API response is not an array");
+      }
+
+      console.log(
+        `Successfully fetched ${playlist.length} songs from Meting API`,
+      );
+
+      let songCount = 0;
+      playlist.forEach((song) => {
+        const title = song.name ?? song.title ?? "";
+        const artist = song.artist ?? song.author ?? "";
+
+        if (title.trim() || artist.trim()) {
+          songCount++;
+
+          for (const char of title) {
+            textSet.add(char);
+          }
+
+          for (const char of artist) {
+            textSet.add(char);
+          }
+        }
+      });
+      if (songCount === 0) {
+        console.log("No valid song data found in API response");
+      }
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+
+      if (fetchError.name === "AbortError") {
+        console.log(
+          "Meting API request timeout (10s), skipping music text collection",
+        );
+      } else {
+        console.log(
+          `Failed to fetch Meting API data: ${fetchError.message}, skipping music text collection`,
+        );
+      }
+    }
+
+    return textSet;
+  } catch (error) {
+    console.log(
+      `Error processing Meting API config: ${error.message}, skipping music text collection`,
+    );
+    return new Set();
+  }
 }
 
 async function collectText() {
-	const { lang } = await getConfig();
+  const { lang } = await getConfig();
 
-	const textSet = new Set();
+  const textSet = new Set();
 
-	const dataDir = path.join(__dirname, "../src/data");
-	const dataFiles = readFilesRecursively(dataDir);
+  const dataDir = path.join(__dirname, "../src/data");
+  const dataFiles = readFilesRecursively(dataDir);
 
-	dataFiles.forEach((file) => {
-		if (file.endsWith(".ts") || file.endsWith(".js")) {
-			const content = fs.readFileSync(file, "utf-8");
+  dataFiles.forEach((file) => {
+    if (file.endsWith(".ts") || file.endsWith(".js")) {
+      const content = fs.readFileSync(file, "utf-8");
 
-			const patterns = [
-				/"([^"\\]|\\.|\\n|\\t)*"/g,
-				/'([^'\\]|\\.|\\n|\\t)*'/g,
-				/`([^`\\]|\\.|\\n|\\t)*`/g,
-			];
+      const patterns = [
+        /"([^"\\]|\\.|\\n|\\t)*"/g,
+        /'([^'\\]|\\.|\\n|\\t)*'/g,
+        /`([^`\\]|\\.|\\n|\\t)*`/g,
+      ];
 
-			patterns.forEach((pattern) => {
-				const matches = content.match(pattern);
-				if (matches) {
-					matches.forEach((match) => {
-						let text = match;
+      patterns.forEach((pattern) => {
+        const matches = content.match(pattern);
+        if (matches) {
+          matches.forEach((match) => {
+            let text = match;
 
-						if (
-							(text.startsWith('"') && text.endsWith('"')) ||
-							(text.startsWith("'") && text.endsWith("'")) ||
-							(text.startsWith("`") && text.endsWith("`"))
-						) {
-							text = text.slice(1, -1);
-						}
+            if (
+              (text.startsWith('"') && text.endsWith('"')) ||
+              (text.startsWith("'") && text.endsWith("'")) ||
+              (text.startsWith("`") && text.endsWith("`"))
+            ) {
+              text = text.slice(1, -1);
+            }
 
-						text = text
-							.replace(/\\n/g, "\n")
-							.replace(/\\t/g, "\t")
-							.replace(/\\"/g, '"')
-							.replace(/\\'/g, "'");
+            text = text
+              .replace(/\\n/g, "\n")
+              .replace(/\\t/g, "\t")
+              .replace(/\\"/g, '"')
+              .replace(/\\'/g, "'");
 
-						for (const char of text) {
-							textSet.add(char);
-						}
-					});
-				}
-			});
-		}
-	});
+            for (const char of text) {
+              textSet.add(char);
+            }
+          });
+        }
+      });
+    }
+  });
 
-	const configFile = path.join(__dirname, "../src/site.config.ts");
-	if (fs.existsSync(configFile)) {
-		const content = fs.readFileSync(configFile, "utf-8");
+  const configFile = path.join(__dirname, "../src/site.config.ts");
+  if (fs.existsSync(configFile)) {
+    const content = fs.readFileSync(configFile, "utf-8");
 
-		const patterns = [/"([^"\\]|\\.|\\n|\\t)*"/g, /'([^'\\]|\\.|\\n|\\t)*'/g, /`([^`\\]|\\.|\\n|\\t)*`/g];
+    const patterns = [
+      /"([^"\\]|\\.|\\n|\\t)*"/g,
+      /'([^'\\]|\\.|\\n|\\t)*'/g,
+      /`([^`\\]|\\.|\\n|\\t)*`/g,
+    ];
 
-		patterns.forEach((pattern) => {
-			const matches = content.match(pattern);
-			if (matches) {
-				matches.forEach((match) => {
-					let text = match;
+    patterns.forEach((pattern) => {
+      const matches = content.match(pattern);
+      if (matches) {
+        matches.forEach((match) => {
+          let text = match;
 
-					if (
-						(text.startsWith('"') && text.endsWith('"')) ||
-						(text.startsWith("'") && text.endsWith("'")) ||
-						(text.startsWith("`") && text.endsWith("`"))
-					) {
-						text = text.slice(1, -1);
-					}
+          if (
+            (text.startsWith('"') && text.endsWith('"')) ||
+            (text.startsWith("'") && text.endsWith("'")) ||
+            (text.startsWith("`") && text.endsWith("`"))
+          ) {
+            text = text.slice(1, -1);
+          }
 
-					text = text
-						.replace(/\\n/g, "\n")
-						.replace(/\\t/g, "\t")
-						.replace(/\\"/g, '"')
-						.replace(/\\'/g, "'");
+          text = text
+            .replace(/\\n/g, "\n")
+            .replace(/\\t/g, "\t")
+            .replace(/\\"/g, '"')
+            .replace(/\\'/g, "'");
 
-					for (const char of text) {
-						textSet.add(char);
-					}
-				});
-			}
-		});
-	}
+          for (const char of text) {
+            textSet.add(char);
+          }
+        });
+      }
+    });
+  }
 
-	function findI18nFile(langCode) {
-		const i18nDir = path.join(__dirname, "../src/i18n/languages");
-		if (!fs.existsSync(i18nDir)) return null;
+  function findI18nFile(langCode) {
+    const i18nDir = path.join(__dirname, "../src/i18n/languages");
+    if (!fs.existsSync(i18nDir)) return null;
 
-		const normalizedLang = langCode.toLowerCase().replace(/-/g, "-");
-		const files = fs.readdirSync(i18nDir);
+    const normalizedLang = langCode.toLowerCase().replace(/-/g, "-");
+    const files = fs.readdirSync(i18nDir);
 
-		for (const file of files) {
-			const fileLang = file.replace(".ts", "").toLowerCase();
-			if (fileLang === normalizedLang || fileLang === normalizedLang.replace("-", "_")) {
-				return path.join(i18nDir, file);
-			}
-		}
-		return null;
-	}
+    for (const file of files) {
+      const fileLang = file.replace(".ts", "").toLowerCase();
+      if (
+        fileLang === normalizedLang ||
+        fileLang === normalizedLang.replace("-", "_")
+      ) {
+        return path.join(i18nDir, file);
+      }
+    }
+    return null;
+  }
 
-	const i18nFile = findI18nFile(lang);
-	if (i18nFile) {
-		const content = fs.readFileSync(i18nFile, "utf-8");
+  const i18nFile = findI18nFile(lang);
+  if (i18nFile) {
+    const content = fs.readFileSync(i18nFile, "utf-8");
 
-		const patterns = [/"([^"\\]|\\.|\\n|\\t)*"/g, /'([^'\\]|\\.|\\n|\\t)*'/g, /`([^`\\]|\\.|\\n|\\t)*`/g];
+    const patterns = [
+      /"([^"\\]|\\.|\\n|\\t)*"/g,
+      /'([^'\\]|\\.|\\n|\\t)*'/g,
+      /`([^`\\]|\\.|\\n|\\t)*`/g,
+    ];
 
-		patterns.forEach((pattern) => {
-			const matches = content.match(pattern);
-			if (matches) {
-				matches.forEach((match) => {
-					let text = match;
+    patterns.forEach((pattern) => {
+      const matches = content.match(pattern);
+      if (matches) {
+        matches.forEach((match) => {
+          let text = match;
 
-					if (
-						(text.startsWith('"') && text.endsWith('"')) ||
-						(text.startsWith("'") && text.endsWith("'")) ||
-						(text.startsWith("`") && text.endsWith("`"))
-					) {
-						text = text.slice(1, -1);
-					}
+          if (
+            (text.startsWith('"') && text.endsWith('"')) ||
+            (text.startsWith("'") && text.endsWith("'")) ||
+            (text.startsWith("`") && text.endsWith("`"))
+          ) {
+            text = text.slice(1, -1);
+          }
 
-					text = text
-						.replace(/\\n/g, "\n")
-						.replace(/\\t/g, "\t")
-						.replace(/\\"/g, '"')
-						.replace(/\\'/g, "'");
+          text = text
+            .replace(/\\n/g, "\n")
+            .replace(/\\t/g, "\t")
+            .replace(/\\"/g, '"')
+            .replace(/\\'/g, "'");
 
-					for (const char of text) {
-						textSet.add(char);
-					}
-				});
-			}
-		});
-	}
+          for (const char of text) {
+            textSet.add(char);
+          }
+        });
+      }
+    });
+  }
 
-	let contentDir;
-	if (process.env.ENABLE_CONTENT_SYNC === "true" && process.env.CONTENT_DIR) {
-		contentDir = path.join(__dirname, "..", process.env.CONTENT_DIR);
-		console.log(`Using external content directory: ${process.env.CONTENT_DIR}`);
-	} else {
-		contentDir = path.join(__dirname, "../src/content");
-	}
+  let contentDir;
+  if (process.env.ENABLE_CONTENT_SYNC === "true" && process.env.CONTENT_DIR) {
+    contentDir = path.join(__dirname, "..", process.env.CONTENT_DIR);
+    console.log(`Using external content directory: ${process.env.CONTENT_DIR}`);
+  } else {
+    contentDir = path.join(__dirname, "../src/content");
+  }
 
-	if (!fs.existsSync(contentDir)) {
-		console.log(`Content directory does not exist: ${contentDir}`);
-		console.log("  Skipping content text collection");
-	} else {
-		const contentFiles = readFilesRecursively(contentDir);
+  if (!fs.existsSync(contentDir)) {
+    console.log(`Content directory does not exist: ${contentDir}`);
+    console.log("  Skipping content text collection");
+  } else {
+    const contentFiles = readFilesRecursively(contentDir);
 
-		contentFiles.forEach((file) => {
-			const ext = path.extname(file);
-			if ([".md", ".mdx", ".ts", ".js"].includes(ext)) {
-				const content = fs.readFileSync(file, "utf-8");
-				const text = extractText(content, ext);
-				for (const char of text) {
-					if (char.match(/[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\u3000-\u303f\uff00-\uffef]/)) {
-						textSet.add(char);
-					}
-				}
-			}
-		});
-	}
+    contentFiles.forEach((file) => {
+      const ext = path.extname(file);
+      if ([".md", ".mdx", ".ts", ".js"].includes(ext)) {
+        const content = fs.readFileSync(file, "utf-8");
+        const text = extractText(content, ext);
+        for (const char of text) {
+          if (
+            char.match(
+              /[\u4e00-\u9fff\u3040-\u309f\u30a0-\u30ff\uac00-\ud7af\u3000-\u303f\uff00-\uffef]/,
+            )
+          ) {
+            textSet.add(char);
+          }
+        }
+      }
+    });
+  }
 
-	const commonChars = "0123456789，。！？；：\"\"''（）【】《》、·—…「」『』";
-	for (const char of commonChars) {
-		textSet.add(char);
-	}
+  const commonChars = "0123456789，。！？；：\"\"''（）【】《》、·—…「」『』";
+  for (const char of commonChars) {
+    textSet.add(char);
+  }
 
-	const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-	for (const char of alphabet) {
-		textSet.add(char);
-	}
+  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+  for (const char of alphabet) {
+    textSet.add(char);
+  }
 
-	return Array.from(textSet).sort().join("");
+  const metingTextSet = await fetchMetingPlaylistText();
+
+  for (const char of metingTextSet) {
+    textSet.add(char);
+  }
+
+  if (metingTextSet.size > 0) {
+    console.log(
+      `Added ${metingTextSet.size} unique characters from music playlist`,
+    );
+  }
+
+  return Array.from(textSet).sort().join("");
 }
 
 async function compressFonts() {
-	try {
-		const { fonts } = await getConfig();
+  try {
+    const { fonts } = await getConfig();
 
-		if (fonts.length === 0) {
-			console.log("No fonts to compress (enableCompress=false or localFonts is empty)");
-			return;
-		}
+    if (fonts.length === 0) {
+      console.log(
+        "No fonts to compress (enableCompress=false or localFonts is empty)",
+      );
+      return;
+    }
 
-		console.log(`Found ${fonts.length} font configs to compress`);
+    console.log(`Found ${fonts.length} font configs to compress`);
 
-		const distDir = path.join(__dirname, "../dist");
-		if (!fs.existsSync(distDir)) {
-			console.log("dist directory does not exist, please run astro build first");
-			return;
-		}
+    const distDir = path.join(__dirname, "../dist");
+    if (!fs.existsSync(distDir)) {
+      console.log(
+        "dist directory does not exist, please run astro build first",
+      );
+      return;
+    }
 
-		const distFontDir = path.join(distDir, "fonts");
-		if (!fs.existsSync(distFontDir)) {
-			fs.mkdirSync(distFontDir, { recursive: true });
-		}
+    const distFontDir = path.join(distDir, "fonts");
+    if (!fs.existsSync(distFontDir)) {
+      fs.mkdirSync(distFontDir, { recursive: true });
+    }
 
-		const cjkText = await collectText();
-		const asciiText = getAsciiCharset();
+    const cjkText = await collectText();
+    const asciiText = getAsciiCharset();
 
-		console.log("Starting font compression...");
+    console.log("Starting font compression...");
 
-		let totalOriginalSize = 0;
-		let totalCompressedSize = 0;
-		let processedCount = 0;
+    let totalOriginalSize = 0;
+    let totalCompressedSize = 0;
+    let processedCount = 0;
 
-		const errors = [];
+    const errors = [];
 
-		for (const fontConfig of fonts) {
-			const text = fontConfig.type === "asciiFont" ? asciiText : cjkText;
+    for (const fontConfig of fonts) {
+      const text = fontConfig.type === "asciiFont" ? asciiText : cjkText;
 
-			for (const fontFile of fontConfig.files) {
-				const fontSrc = path.join(__dirname, "../public/fonts", fontFile);
-				const ext = path.extname(fontFile).toLowerCase();
-				const baseName = path.basename(fontFile, ext);
+      for (const fontFile of fontConfig.files) {
+        const fontSrc = path.join(__dirname, "../public/fonts", fontFile);
+        const ext = path.extname(fontFile).toLowerCase();
+        const baseName = path.basename(fontFile, ext);
 
-				if (!fs.existsSync(fontSrc)) {
-					const errorMsg = `Font file does not exist [${fontConfig.type}]: "${fontFile}"\n  Expected path: public/fonts/${fontFile}`;
-					errors.push(errorMsg);
-					console.log(`Error: ${errorMsg}`);
-					continue;
-				}
+        if (!fs.existsSync(fontSrc)) {
+          const errorMsg = `Font file does not exist [${fontConfig.type}]: "${fontFile}"\n  Expected path: public/fonts/${fontFile}`;
+          errors.push(errorMsg);
+          console.log(`Error: ${errorMsg}`);
+          continue;
+        }
 
-				const originalSize = fs.statSync(fontSrc).size;
-				totalOriginalSize += originalSize;
+        const originalSize = fs.statSync(fontSrc).size;
+        totalOriginalSize += originalSize;
 
-				if (ext === ".woff2" || ext === ".woff") {
-					console.log(`Skipping ${fontFile} (already web-optimized format)`);
+        if (ext === ".woff2" || ext === ".woff") {
+          console.log(`Skipping ${fontFile} (already web-optimized format)`);
 
-					const destFile = path.join(distFontDir, fontFile);
-					fs.copyFileSync(fontSrc, destFile);
-					totalCompressedSize += originalSize;
-				} else if (ext === ".ttf" || ext === ".otf") {
-					console.log(`Compressing ${fontFile}...`);
+          const destFile = path.join(distFontDir, fontFile);
+          fs.copyFileSync(fontSrc, destFile);
+          totalCompressedSize += originalSize;
+        } else if (ext === ".ttf" || ext === ".otf") {
+          console.log(`Compressing ${fontFile}...`);
 
-					const fontmin = new Fontmin()
-						.src(fontSrc)
-						.use(
-							Fontmin.glyph({
-								text: text,
-								hinting: false,
-							}),
-						)
-						.use(
-							Fontmin.ttf2woff2({
-								deflate: true,
-							}),
-						)
-						.dest(distFontDir);
+          const fontmin = new Fontmin()
+            .src(fontSrc)
+            .use(
+              Fontmin.glyph({
+                text: text,
+                hinting: false,
+              }),
+            )
+            .use(
+              Fontmin.ttf2woff2({
+                deflate: true,
+              }),
+            )
+            .dest(distFontDir);
 
-					await new Promise((resolve, reject) => {
-						fontmin.run((err, files) => {
-							if (err) {
-								reject(err);
-							} else {
-								resolve(files);
-							}
-						});
-					});
+          await new Promise((resolve, reject) => {
+            fontmin.run((err, files) => {
+              if (err) {
+                reject(err);
+              } else {
+                resolve(files);
+              }
+            });
+          });
 
-					const compressedFile = path.join(distFontDir, `${baseName}.woff2`);
+          const compressedFile = path.join(distFontDir, `${baseName}.woff2`);
 
-					if (fs.existsSync(compressedFile)) {
-						const compressedSize = fs.statSync(compressedFile).size;
-						totalCompressedSize += compressedSize;
-						const reduction = ((1 - compressedSize / originalSize) * 100).toFixed(2);
+          if (fs.existsSync(compressedFile)) {
+            const compressedSize = fs.statSync(compressedFile).size;
+            totalCompressedSize += compressedSize;
+            const reduction = (
+              (1 - compressedSize / originalSize) *
+              100
+            ).toFixed(2);
 
-						console.log(`  ${fontFile} -> ${baseName}.woff2 (${(compressedSize / 1024).toFixed(2)} KB, reduced ${reduction}%)`);
-						processedCount++;
-					}
-				} else {
-					console.log(`Unsupported font format, skipping: ${fontFile}`);
-				}
-			}
-		}
+            console.log(
+              `  ${fontFile} -> ${baseName}.woff2 (${(compressedSize / 1024).toFixed(2)} KB, reduced ${reduction}%)`,
+            );
+            processedCount++;
+          }
+        } else {
+          console.log(`Unsupported font format, skipping: ${fontFile}`);
+        }
+      }
+    }
 
-		if (errors.length > 0) {
-			console.log(`\nFont compression encountered ${errors.length} errors!`);
+    if (errors.length > 0) {
+      console.log(`\nFont compression encountered ${errors.length} errors!`);
 
-			const fontDir = path.join(__dirname, "../public/fonts");
-			if (fs.existsSync(fontDir)) {
-				const actualFiles = fs.readdirSync(fontDir).filter((f) => [".ttf", ".otf", ".woff", ".woff2"].includes(path.extname(f).toLowerCase()));
+      const fontDir = path.join(__dirname, "../public/fonts");
+      if (fs.existsSync(fontDir)) {
+        const actualFiles = fs
+          .readdirSync(fontDir)
+          .filter((f) =>
+            [".ttf", ".otf", ".woff", ".woff2"].includes(
+              path.extname(f).toLowerCase(),
+            ),
+          );
 
-				if (actualFiles.length > 0) {
-					console.log("Available font files:");
-					actualFiles.forEach((f) => console.log(`  - ${f}`));
-				} else {
-					console.log("  (font directory is empty)");
-				}
-			}
+        if (actualFiles.length > 0) {
+          console.log("Available font files:");
+          actualFiles.forEach((f) => console.log(`  - ${f}`));
+        } else {
+          console.log("  (font directory is empty)");
+        }
+      }
 
-			process.exit(1);
-		}
+      process.exit(1);
+    }
 
-		if (processedCount > 0) {
-			const totalReduction = ((1 - totalCompressedSize / totalOriginalSize) * 100).toFixed(2);
-			console.log(`\nFont optimization complete!`);
-			console.log(`  Files processed: ${processedCount}, Overall reduction: ${totalReduction}%`);
-		} else {
-			console.log("\nNo font files processed");
-		}
-	} catch (error) {
-		console.error("Font compression failed:", error);
-		process.exit(1);
-	}
+    if (processedCount > 0) {
+      const totalReduction = (
+        (1 - totalCompressedSize / totalOriginalSize) *
+        100
+      ).toFixed(2);
+      console.log(`\nFont optimization complete!`);
+      console.log(
+        `  Files processed: ${processedCount}, Overall reduction: ${totalReduction}%`,
+      );
+    } else {
+      console.log("\nNo font files processed");
+    }
+  } catch (error) {
+    console.error("Font compression failed:", error);
+    process.exit(1);
+  }
 }
 
 compressFonts();

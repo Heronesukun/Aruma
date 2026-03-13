@@ -1,0 +1,494 @@
+:root {
+  --tk-text: #333;
+  --tk-primary: #2337ff;
+  --tk-bg: rgba(255, 255, 255, 0.9);
+  --tk-border: rgba(144, 147, 153, 0.31);
+}
+
+html.mdui-theme-layout-dark {
+  --tk-text: #d1d5db;
+  --tk-primary: #6b7fff;
+  --tk-bg: rgba(66, 66, 66, 0.9);
+  --tk-border: rgba(200, 200, 200, 0.2);
+}
+
+.tk-comments {
+  color: var(--tk-text);
+}
+
+.tk-submit .tk-avatar {
+  display: none;
+}
+
+.tk-row .tk-col {
+  flex-direction: column-reverse;
+}
+
+.tk-row .tk-col .tk-input textarea {
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 190px !important;
+  border: 1px solid var(--tk-border);
+  background-color: rgba(255, 255, 255, 0) !important;
+  background-image: url("/assets/images/textarea.webp");
+  background-repeat: no-repeat;
+  background-position: right;
+  background-size: contain;
+  color: var(--tk-text);
+  resize: none;
+  outline: none !important;
+}
+
+.tk-row .tk-col .tk-input textarea:focus {
+  border-color: var(--tk-primary);
+  outline: none;
+}
+
+.tk-meta-input {
+  position: relative;
+  margin-top: 12px;
+}
+
+.tk-meta-input input {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--tk-border);
+  background: var(--tk-bg);
+  color: var(--tk-text);
+}
+
+.tk-meta-input input:focus {
+  border-color: var(--tk-primary);
+  outline: none;
+}
+
+.tk-row.actions {
+  width: 100%;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+}
+
+.tk-row.actions .__markdown {
+  display: none !important;
+}
+
+.tk-row.actions .tk-preview,
+.tk-row.actions .tk-send,
+.tk-row.actions .tk-cancel {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 16px;
+  height: 32px;
+  background: var(--tk-primary) !important;
+  color: white !important;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.tk-row.actions .tk-preview:hover,
+.tk-row.actions .tk-send:hover,
+.tk-row.actions .tk-cancel:hover {
+  opacity: 0.85;
+}
+
+.tk-row.actions .tk-preview:disabled,
+.tk-row.actions .tk-send:disabled,
+.tk-row.actions .tk-cancel:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.tk-comments-title .__comments svg {
+  fill: var(--tk-primary);
+}
+
+.tk-comment {
+  position: relative;
+  border: 1px solid var(--tk-border);
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  transition: box-shadow 0.2s;
+}
+
+.tk-comment:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.tk-action-icon svg {
+  fill: var(--tk-primary);
+}
+
+.tk-action .tk-action-count {
+  color: var(--tk-text);
+}
+
+.tk-comments .tk-nick {
+  color: #ff4081; /* 指定粉色昵称 */
+  transition: all 0.2s ease;
+}
+
+.tk-comments .tk-nick:hover {
+  color: #ff80ab; /* 悬浮时稍亮一点的粉色 */
+  text-decoration: underline;
+}
+
+html.mdui-theme-layout-dark .tk-comments .tk-nick {
+  color: #ff80ab; /* 暗色模式下使用稍亮的粉色 */
+}
+
+html.mdui-theme-layout-dark .tk-comments .tk-nick:hover {
+  color: #ffb2dd; /* 暗色模式下悬浮使用更亮的粉色 */
+}
+
+.tk-meta .tk-tag {
+  border: none;
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.tk-comments .tk-meta .tk-tag-green {
+  display: none;
+}
+
+/* 头像样式优化 */
+.tk-comments .tk-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%; /* 圆形头像 */
+  overflow: visible; /* 允许认证标识溢出 */
+}
+
+.tk-comments .tk-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* 博主头像认证 Logo */
+.tk-comment:has(.tk-tag-green) .tk-avatar {
+  position: relative;
+}
+
+.tk-comment:has(.tk-tag-green) .tk-avatar::after {
+  content: "";
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  width: 18px; /* 稍微调大一点以匹配大头像 */
+  height: 18px;
+  background-image: url("/assets/images/author.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2)); /* 添加微弱阴影更立体 */
+}
+
+.tk-content,
+.tk-preview-container {
+  color: var(--tk-text);
+}
+
+.tk-content img,
+.tk-preview-container img {
+  display: inline;
+  vertical-align: bottom;
+}
+
+/* Bilibili 自定义表情大小限制 */
+.tk-content img.emoji,
+.tk-content img[src*="bilibili"],
+.tk-content img[src*="bili"],
+.tk-preview-container img.emoji,
+.tk-preview-container img[src*="bilibili"],
+.tk-preview-container img[src*="bili"] {
+  max-width: 23px;
+  max-height: 23px;
+  vertical-align: middle;
+}
+
+.tk-content a,
+.tk-preview-container a {
+  color: var(--tk-primary);
+  text-decoration: underline;
+}
+
+.tk-content code:not(pre code),
+.tk-preview-container code:not(pre code) {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+
+html.mdui-theme-layout-dark .tk-content code:not(pre code),
+html.mdui-theme-layout-dark .tk-preview-container code:not(pre code) {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.tk-replies .tk-comment {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+html.mdui-theme-layout-dark .tk-replies .tk-comment {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.twikoo .code-block pre {
+  border-radius: 8px;
+}
+
+.tk-expand-wrap .tk-expand,
+.tk-collapse-wrap .tk-expand {
+  border-radius: 6px;
+  margin-top: 4px;
+  transition: background 0.2s;
+}
+
+.tk-expand-wrap .tk-expand:hover,
+.tk-collapse-wrap .tk-expand:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+html.mdui-theme-layout-dark .tk-expand-wrap .tk-expand:hover,
+html.mdui-theme-layout-dark .tk-collapse-wrap .tk-expand:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.tk-action-icon,
+.tk-owo,
+.tk-submit,
+.tk-cancel,
+.tk-preview,
+.tk-admin,
+.tk-delete,
+.tk-edit {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.tk-admin {
+  position: relative;
+  z-index: 1000;
+}
+
+.tk-admin .tk-content {
+  color: #fff !important;
+}
+
+.tk-action {
+  min-height: 24px;
+  display: flex;
+  align-items: center;
+}
+
+/* ===== Twikoo 评论区布局改造 (Typecho风格) ===== */
+
+/* 加载动画居中 */
+#tcomment .tk-loading,
+.tk-comments-container .tk-loading,
+.tk-loading {
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  margin: 20px 0 !important;
+  text-align: center !important;
+}
+
+#tcomment .tk-loading *,
+.tk-loading * {
+  display: inline-block !important;
+  margin: 0 auto !important;
+}
+
+/* 1. 将主容器改为 Flex 布局，以便重新排序所有的子元素 */
+.tk-comment .tk-main {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* 消除原有的 div 层级限制，让元数据直接参与 flex 排版，同时避免影响回复输入框 */
+.tk-comment .tk-main > .tk-row,
+.tk-comment .tk-main > .tk-row > .tk-meta {
+  display: contents !important;
+}
+
+/* ---------------- 第一行元素 ---------------- */
+
+/* 昵称 */
+.tk-comment .tk-nick {
+  order: 1;
+  font-size: 15px; /* 字体微调：稍微大一点点 */
+  font-weight: bold;
+  line-height: 1.2;
+  /* 防止过长昵称破坏布局，超出显示省略号 */
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 标签 (如博主、置顶) */
+.tk-comment .tk-tag {
+  order: 2;
+  margin-left: 6px;
+}
+
+/* 系统和浏览器图标容器 */
+.tk-comment .tk-extras {
+  order: 3;
+  display: flex;
+  margin-top: 0 !important;
+  margin-left: 8px; /* 距离左侧昵称的间距 */
+  gap: 6px; /* 两个图标之间的间距 */
+  opacity: 0.6; /* 降低透明度，模仿 Typecho 的灰色弱化小图标 */
+}
+
+/* 隐藏图标旁边的文字 */
+.tk-comment .tk-extra-text {
+  display: none !important;
+}
+
+/* 清除原有自带的外边距 */
+.tk-comment .tk-extra {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 图标大小微调 */
+.tk-comment .tk-extra .tk-icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+/* 时间：显示在图标右边 */
+.tk-comment .tk-time {
+  order: 4;
+  font-size: 12px;
+  color: #999;
+  margin-left: 8px;
+}
+
+/* 响应式：在窄屏或文字较多要换行时隐藏时间，保持布局整洁 */
+@media (max-width: 600px) {
+  .tk-comment .tk-time {
+    display: none !important;
+  }
+}
+
+/* 管理员操作项 (隐藏/置顶)：显示在时间右边，手机端显示在右下角 */
+.tk-comment .tk-actions {
+  order: 5;
+  margin-left: 8px;
+  font-size: 12px;
+  color: #999;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.tk-comment:hover .tk-actions {
+  opacity: 1;
+}
+
+@media (max-width: 768px) {
+  .tk-comment .tk-actions {
+    position: absolute;
+    bottom: 16px;
+    right: 16px;
+    order: unset;
+    margin-left: 0;
+    z-index: 10;
+  }
+}
+
+/* 右侧的 评论/点赞 三件套：推到最右侧 */
+.tk-comment .tk-main > .tk-row > .tk-action {
+  order: 6;
+  margin-left: auto;
+}
+
+/* ---------------- 强制换行占位 ---------------- */
+.tk-comment .tk-main::before {
+  content: "";
+  width: 100%;
+  order: 7;
+}
+
+/* ---------------- 第二行元素 ---------------- */
+
+/* 评论正文 */
+.tk-comment .tk-content {
+  order: 8;
+  width: 100%;
+  margin-top: 3px;
+  font-size: 14px;
+}
+
+/* 嵌套回复区域 */
+.tk-comment .tk-replies {
+  order: 9;
+  width: 100%;
+}
+
+/* OwO 表情选择框透明设计 */
+.OwO-body {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(144, 147, 153, 0.2) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.OwO-body .OwO-items {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.OwO-body .OwO-items::-webkit-scrollbar {
+  display: none;
+}
+
+.OwO-body .OwO-bar {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(144, 147, 153, 0.15) !important;
+}
+
+.OwO-body .OwO-items-item {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.OwO-body .OwO-items-item:hover {
+  background: rgba(0, 0, 0, 0.08) !important;
+}
+
+html.mdui-theme-layout-dark .OwO-body {
+  background: rgba(50, 50, 50, 0.85) !important;
+  border: 1px solid rgba(200, 200, 200, 0.15) !important;
+  color: #e5e5e5 !important;
+}
+
+html.mdui-theme-layout-dark .OwO-body .OwO-bar {
+  border-bottom: 1px solid rgba(200, 200, 200, 0.1) !important;
+  color: #e5e5e5 !important;
+}
+
+html.mdui-theme-layout-dark .OwO-body .OwO-items-item {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+html.mdui-theme-layout-dark .OwO-body .OwO-items-item:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.mdui-theme-layout-dark .OwO-body .OwO-header li {
+  color: #b0b0b0 !important;
+}
+
+html.mdui-theme-layout-dark .OwO-body .OwO-header li:hover,
+html.mdui-theme-layout-dark .OwO-body .OwO-header .OwO-item-active {
+  color: #fff !important;
+}

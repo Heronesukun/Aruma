@@ -1,12 +1,20 @@
 ---
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../layouts/BlogPost.astro';
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import BlogPost from "../layouts/BlogPost.astro";
 
-const abouts = await getCollection('spec');
-const about = abouts[0] as CollectionEntry<'spec'>;
+const abouts = await getCollection("spec");
+const about = abouts[0] as CollectionEntry<"spec">;
 const { Content } = await render(about);
 ---
 
-<BlogPost title={about.data.title} description={about.data.description} pubDate={about.data.pubDate} heroImage={about.data.heroImage} id={about.id} tags={[]} category={undefined}>
+<BlogPost
+	title={about.data.title}
+	description={about.data.description}
+	pubDate={about.data.pubDate}
+	heroImage={about.data.heroImage}
+	id={about.id}
+	tags={[]}
+	category={undefined}
+>
 	<Content />
 </BlogPost>

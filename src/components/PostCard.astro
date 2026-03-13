@@ -1,14 +1,14 @@
 ---
-import type { CollectionEntry } from 'astro:content';
-import FormattedDate from './FormattedDate.astro';
+import type { CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
 
-import { siteConfig } from '../site.config';
-import { i18n } from '../i18n/translation';
-import I18nKey from '../i18n/i18nKey';
+import { siteConfig } from "../site.config";
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
 
 interface Props {
-  post: CollectionEntry<'post'>;
-  fullWidth?: boolean;
+	post: CollectionEntry<"post">;
+	fullWidth?: boolean;
 }
 
 const { post } = Astro.props;
@@ -16,36 +16,53 @@ const { title, description, pubDate, heroImage, pinned } = post.data;
 
 // 处理封面图逻辑
 let coverImage = null;
-if (siteConfig.randomImage && siteConfig.randomImage.enable && siteConfig.randomImage.ignoreHeroImage) {
-  // 如果开启了随机图且强制忽略 heroImage，使用带有 post.id 的 URL 确保每篇文章图不同
-  coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
+if (
+	siteConfig.randomImage &&
+	siteConfig.randomImage.enable &&
+	siteConfig.randomImage.ignoreHeroImage
+) {
+	// 如果开启了随机图且强制忽略 heroImage，使用带有 post.id 的 URL 确保每篇文章图不同
+	coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
 } else if (heroImage) {
-  coverImage = typeof heroImage === 'string' ? heroImage : heroImage.src;
+	coverImage = typeof heroImage === "string" ? heroImage : heroImage.src;
 } else if (siteConfig.randomImage && siteConfig.randomImage.enable) {
-  // 使用带有 post.id 的 URL 确保每篇文章图不同
-  coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
+	// 使用带有 post.id 的 URL 确保每篇文章图不同
+	coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
 }
 ---
 
 <a class="post" href={`/post/${post.id}/`}>
-  <div class="mdui-card index-card mdui-hoverable">
-    <div class="mdui-card-media index-img-media">
-      <div class="index-img" style={`background-image: url('${coverImage}')`}></div>
-      <div class="index-card-filter"></div>
-      <div class="mdui-card-media-covered">
-        <div class="mdui-card-primary index-primary">
-          <div class="mdui-card-primary-title">
-            {pinned && <span class="mdui-text-color-theme" id="sticky">{i18n(I18nKey.sticky)} </span>}
-            {title}
-          </div>
-          <div class="mdui-card-primary-subtitle index-info">
-            <FormattedDate date={pubDate} />
-             | {i18n(I18nKey.comments).replace("{count}", "10")}
-          </div>
-          <div class="mdui-card-primary-subtitle index-subtitle">{description}</div>
-        </div>
-      </div>
-    </div>
-  </div>
+	<div class="mdui-card index-card mdui-hoverable">
+		<div class="mdui-card-media index-img-media">
+			<img
+				class="index-img"
+				src={coverImage}
+				alt={title}
+				loading="lazy"
+				decoding="async"
+			/>
+			<div class="index-card-filter"></div>
+			<div class="mdui-card-media-covered">
+				<div class="mdui-card-primary index-primary">
+					<div class="mdui-card-primary-title">
+						{
+							pinned && (
+								<span class="mdui-text-color-theme" id="sticky">
+									{i18n(I18nKey.sticky)}{" "}
+								</span>
+							)
+						}
+						{title}
+					</div>
+					<div class="mdui-card-primary-subtitle index-info">
+						<FormattedDate date={pubDate} />
+						| {i18n(I18nKey.comments).replace("{count}", "10")}
+					</div>
+					<div class="mdui-card-primary-subtitle index-subtitle">
+						{description}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </a>
-

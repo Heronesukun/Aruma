@@ -1,22 +1,30 @@
 ---
 export const prerender = true;
 
-import { type CollectionEntry, getCollection, render } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import BlogPost from "../../layouts/BlogPost.astro";
 
 export async function getStaticPaths() {
-	const posts = await getCollection('post');
+	const posts = await getCollection("post");
 	return posts.map((post) => ({
 		params: { slug: post.id },
 		props: post,
 	}));
 }
-type Props = CollectionEntry<'post'>;
+type Props = CollectionEntry<"post">;
 
 const post = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogPost title={post.data.title} description={post.data.description} pubDate={post.data.pubDate} heroImage={post.data.heroImage} tags={post.data.tags} category={post.data.category} id={post.id}>
+<BlogPost
+	title={post.data.title}
+	description={post.data.description}
+	pubDate={post.data.pubDate}
+	heroImage={post.data.heroImage}
+	tags={post.data.tags}
+	category={post.data.category}
+	id={post.id}
+>
 	<Content />
 </BlogPost>

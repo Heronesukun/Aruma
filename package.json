@@ -5,18 +5,23 @@
   "scripts": {
     "dev": "astro dev",
     "check": "astro check",
-    "build": "astro build && pagefind --site dist && node scripts/compress-fonts.js",
+    "build": "astro build && node scripts/copy-katex-css.js && node scripts/extract-math-symbols.js && node scripts/compress-katex-fonts.js && pagefind --site dist && node scripts/compress-fonts.js",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "type-check": "tsc --noEmit --isolatedDeclarations",
+    "format": "prettier --write ./src",
+    "lint": "prettier --check ./src"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.6",
-    "@astrojs/mdx": "^4.3.13",
-    "@astrojs/node": "^9.5.4",
-    "@astrojs/rss": "^4.0.15",
-    "@astrojs/sitemap": "^3.7.0",
+    "@astrojs/check": "^0.9.7",
+    "@astrojs/mdx": "^5.0.0",
+    "@astrojs/node": "^10.0.0",
+    "@astrojs/rss": "^4.0.17",
+    "@astrojs/sitemap": "^3.7.1",
+    "@astrojs/svelte": "^8.0.0",
+    "@iconify/svelte": "^5.2.1",
     "@tailwindcss/vite": "^4.2.1",
-    "astro": "^5.17.1",
+    "astro": "^6.0.2",
     "clsx": "^2.1.1",
     "hastscript": "^9.0.1",
     "katex": "^0.16.38",
@@ -31,6 +36,7 @@
     "remark-directive": "^3.0.1",
     "remark-math": "^6.0.0",
     "sharp": "^0.34.3",
+    "svelte": "^5.53.10",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.1",
     "typescript": "^5.9.3",
@@ -38,7 +44,9 @@
   },
   "devDependencies": {
     "@types/qrcode": "^1.5.6",
-    "fontmin": "^1.1.1"
+    "fontmin": "^1.1.1",
+    "prettier": "^3.8.1",
+    "prettier-plugin-astro": "^0.14.1"
   },
   "pnpm": {
     "overrides": {

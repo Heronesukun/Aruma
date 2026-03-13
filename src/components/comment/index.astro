@@ -1,0 +1,29 @@
+---
+import { siteConfig } from "../../site.config";
+import Twikoo from "./Twikoo.astro";
+
+interface Props {
+	id: string;
+}
+
+const commentConfig = siteConfig.comment;
+const path = `/post/${Astro.props.id}`;
+
+let commentService = "";
+if (commentConfig?.enable && commentConfig?.twikoo) {
+	commentService = "twikoo";
+}
+---
+
+{
+	commentConfig?.enable && (
+		<div
+			class="mdui-card post-card-content mdui-hoverable"
+			style="margin-top: 20px; border-radius: 7px;"
+		>
+			<div class="mdui-card-content">
+				{commentService === "twikoo" && <Twikoo path={path} />}
+			</div>
+		</div>
+	)
+}
