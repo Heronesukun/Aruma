@@ -102,4 +102,33 @@ export type SiteConfig = {
 	comment?: CommentConfig;
 	musicPlayer?: MusicPlayerConfig; // 音乐播放器配置
 	notice?: NoticeConfig; // 侧边栏公告配置
+	animeSource?: AnimeSourceConfig; // 动漫数据源配置
+};
+
+// 动漫数据源配置
+export type AnimeSourceConfig = {
+	enable: boolean;
+	mode: "local" | "bilibili" | "bangumi" | "mixed";
+	bilibili?: BilibiliAnimeConfig;
+	bangumi?: BangumiAnimeConfig;
+	local?: LocalAnimeConfig;
+};
+
+export type BilibiliAnimeConfig = {
+	userId: string; // Bilibili 用户 ID
+	token?: string; // SESSDATA（可选，用于获取私有数据）
+	amount?: number; // 拉取数量（默认 50）
+	cacheTime?: number; // 缓存时间（秒，默认 86400）
+	hideMedia?: boolean; // 隐藏媒体信息
+};
+
+export type BangumiAnimeConfig = {
+	userId: string; // Bangumi 用户 ID
+	token?: string; // Access Token（可选）
+	amount?: number; // 拉取数量（默认 50）
+	cacheTime?: number; // 缓存时间（秒，默认 86400）
+};
+
+export type LocalAnimeConfig = {
+	dataPath: string; // 本地 JSON 文件路径（默认 "src/data/anime.json"）
 };

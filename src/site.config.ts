@@ -113,6 +113,31 @@ export const siteConfig: SiteConfig = {
 		enable: true, // 是否启用公告
 		content: "今天的天气看起来不错", // 公告内容，支持简单 HTML
 	},
+
+	// 动漫外部数据源配置，不开启默认Local（示例，当前禁用）
+	// 详细说明请参考 docs/EXTERNAL_ANIME_SOURCE.md
+	animeSource: {
+		enable: false, // 设为 true 启用
+		mode: "bangumi" as const, // 数据源模式：'local' | 'bilibili' | 'bangumi' | 'mixed'
+		// 本地数据源配置
+		local: {
+			dataPath: "src/data/anime.json", // 本地 JSON 文件路径
+		},
+		// Bilibili 数据源配置
+		bilibili: {
+			userId: "701864046", // 必填，从 https://space.bilibili.com/12345678 获取
+			token: "", // 可选，SESSDATA token，从浏览器 Cookie 获取
+			amount: 50, // 拉取数量
+			cacheTime: 86400, // 缓存时间（秒），默认 24 小时
+		},
+		// Bangumi 数据源配置
+		bangumi: {
+			userId: "sai", // 必填，从 https://bgm.tv/user/yourname 获取
+			token: "", // 可选，Access Token，从 https://next.bgm.tv/demo/access-token 获取
+			amount: 50, // 拉取数量
+			cacheTime: 86400, // 缓存时间（秒）
+		},
+	},
 };
 
 export const footerConfig = {
