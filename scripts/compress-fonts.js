@@ -7,17 +7,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 async function getConfig() {
-  const configPath = path.join(__dirname, "../src/site.config.ts");
-  const configContent = fs.readFileSync(configPath, "utf-8");
+  try {
+    const configPath = path.join(__dirname, "../src/site.config.ts");
+    const configContent = fs.readFileSync(configPath, "utf-8");
 
-  const langMatch = configContent.match(/lang:\s*["']([^"']+)["']/);
-  const lang = langMatch ? langMatch[1] : "zh-CN";
+    const langMatch = configContent.match(/lang:\s*["']([^"']+)["']/);
+    const lang = langMatch ? langMatch[1] : "zh-CN";
 
-  const fontStartMatch = configContent.match(/font:\s*\{/);
-  if (!fontStartMatch) {
-    console.log("No font config found, skipping font compression");
-    return { lang, fonts: [] };
-  }
+    const fontStartMatch = configContent.match(/font:\s*\{/);
+    if (!fontStartMatch) {
+      console.log("No font config found, skipping font compression");
+      return { lang, fonts: [] };
+    }
 
   const fontStartIndex = fontStartMatch.index;
   let braceCount = 0;
@@ -82,7 +83,11 @@ async function getConfig() {
     }
   }
 
-  return { lang, fonts };
+    return { lang, fonts };
+  } catch (error) {
+    console.error("⚠ Error reading config:", error.message);
+    return { lang: "zh-CN", fonts: [] };
+  }
 }
 
 function readFilesRecursively(dir, fileList = []) {
@@ -324,6 +329,108 @@ async function fetchMetingPlaylistText() {
   }
 }
 
+/**
+ * 从外部动漫数据源收集文本
+ * 当开启了 bilibili 或 bangumi 模式时，从缓存文件中读取番剧数据
+ * 提取标题、描述、制作公司等文本中的字符
+ */
+async function fetchExternalAnimeText() {
+  const textSet = new Set();
+
+  try {
+    // 检查 site.config.ts 中的 animeSource 配置
+    const configPath = path.join(__dirname, "../src/site.config.ts");
+    const configContent = fs.readFileSync(configPath, "utf-8");
+
+    // 如果 animeSource 未启用，直接返回空字符串
+    if (!configContent.includes("animeSource:") ||
+        configContent.match(/animeSource:\s*{\s*enable:\s*false/)) {
+      console.log("animeSource is disabled, skipping external anime text collection");
+      return "";
+    }
+
+    // 提取 mode 配置
+    const modeMatch = configContent.match(/animeSource:\s*\{[\s\S]*?mode:\s*["']([^"']+)["']/);
+    const mode = modeMatch ? modeMatch[1] : "local";
+
+    console.log(`animeSource mode: ${mode}`);
+
+    // 读取外部动漫缓存文件
+    const cacheFile = path.join(__dirname, "../src/data/external-anime.json");
+
+    if (!fs.existsSync(cacheFile)) {
+      console.log("External anime cache file not found, skipping text collection");
+      return "";
+    }
+
+    const cache = JSON.parse(fs.readFileSync(cacheFile, "utf-8"));
+
+    // 根据模式有选择地收集数据
+    if (mode === "bilibili" || mode === "mixed") {
+      // 收集 Bilibili 数据文本
+      if (cache.bilibili && Array.isArray(cache.bilibili)) {
+        console.log(`Collecting text from ${cache.bilibili.length} Bilibili anime items`);
+        for (const item of cache.bilibili) {
+          if (item.title) {
+            for (const char of item.title) {
+              textSet.add(char);
+            }
+          }
+          if (item.description) {
+            for (const char of item.description) {
+              textSet.add(char);
+            }
+          }
+          if (item.studio) {
+            for (const char of item.studio) {
+              textSet.add(char);
+            }
+          }
+        }
+      }
+    }
+
+    if (mode === "bangumi" || mode === "mixed") {
+      // 收集 Bangumi 数据文本
+      if (cache.bangumi && Array.isArray(cache.bangumi)) {
+        console.log(`Collecting text from ${cache.bangumi.length} Bangumi anime items`);
+        for (const item of cache.bangumi) {
+          if (item.title) {
+            for (const char of item.title) {
+              textSet.add(char);
+            }
+          }
+          if (item.description) {
+            for (const char of item.description) {
+              textSet.add(char);
+            }
+          }
+          if (item.studio) {
+            for (const char of item.studio) {
+              textSet.add(char);
+            }
+          }
+          if (item.tags && Array.isArray(item.tags)) {
+            for (const tag of item.tags) {
+              for (const char of tag) {
+                textSet.add(char);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    const text = Array.from(textSet).sort().join("");
+    console.log(`Collected ${text.length} unique characters from external anime data`);
+    return text;
+
+  } catch (error) {
+    console.error("Error fetching external anime text:", error.message);
+    return "";
+  }
+}
+
 async function collectText() {
   const { lang } = await getConfig();
 
@@ -520,7 +627,25 @@ async function collectText() {
     );
   }
 
-  return Array.from(textSet).sort().join("");
+  // 添加：从外部动漫数据源收集文本
+  const externalAnimeText = await fetchExternalAnimeText();
+  for (const char of externalAnimeText) {
+    textSet.add(char);
+  }
+
+  // 过滤非法字符，只保留合法的 CJK 和 ASCII 字符
+  const filteredTextSet = new Set();
+  const validChars = /[\u4e00-\u9fff\u3400-\u4dbf\u20000-\u2a6df\u2a700-\u2b73f\u2b740-\u2b81f\u2b820-\u2ceaf\u2ceb0-\u2ebef\u3007\u3021-\u302f\u3038-\u303b\u3040-\u309f\u30a0-\u30ff\u31f0-\u31ff\u3200-\u32ff\u3300-\u33ff\uf900-\ufaff\ufe30-\ufe4f\u2f800-\u2fa1f\uac00-\ud7af\u1100-\u11ff\u3130-\u318f\ua960-\ua97f\ud7b0-\ud7ff\u0021-\u007e\u0080-\u00ff\u3000-\u303f\uff00-\uffef]/;
+
+  for (const char of textSet) {
+    if (validChars.test(char)) {
+      filteredTextSet.add(char);
+    }
+  }
+
+  console.log(`Filtered ${textSet.size - filteredTextSet.size} invalid characters, kept ${filteredTextSet.size} valid characters`);
+
+  return Array.from(filteredTextSet).sort().join("");
 }
 
 async function compressFonts() {
@@ -587,44 +712,103 @@ async function compressFonts() {
         } else if (ext === ".ttf" || ext === ".otf") {
           console.log(`Compressing ${fontFile}...`);
 
-          const fontmin = new Fontmin()
-            .src(fontSrc)
-            .use(
-              Fontmin.glyph({
-                text: text,
-                hinting: false,
-              }),
-            )
-            .use(
-              Fontmin.ttf2woff2({
-                deflate: true,
-              }),
-            )
-            .dest(distFontDir);
+          let compressionSuccess = false;
 
-          await new Promise((resolve, reject) => {
-            fontmin.run((err, files) => {
-              if (err) {
-                reject(err);
-              } else {
-                resolve(files);
-              }
+          try {
+            const fontmin = new Fontmin()
+              .src(fontSrc)
+              .use(
+                Fontmin.glyph({
+                  text: text,
+                  hinting: false,
+                }),
+              )
+              .use(
+                Fontmin.ttf2woff2({
+                  deflate: true,
+                }),
+              )
+              .dest(distFontDir);
+
+            await new Promise((resolve, reject) => {
+              fontmin.run((err, files) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(files);
+                }
+              });
             });
-          });
 
-          const compressedFile = path.join(distFontDir, `${baseName}.woff2`);
+            const compressedFile = path.join(distFontDir, `${baseName}.woff2`);
 
-          if (fs.existsSync(compressedFile)) {
-            const compressedSize = fs.statSync(compressedFile).size;
-            totalCompressedSize += compressedSize;
-            const reduction = (
-              (1 - compressedSize / originalSize) *
-              100
-            ).toFixed(2);
+            if (fs.existsSync(compressedFile)) {
+              const compressedSize = fs.statSync(compressedFile).size;
+              totalCompressedSize += compressedSize;
+              const reduction = (
+                (1 - compressedSize / originalSize) *
+                100
+              ).toFixed(2);
 
-            console.log(
-              `  ${fontFile} -> ${baseName}.woff2 (${(compressedSize / 1024).toFixed(2)} KB, reduced ${reduction}%)`,
-            );
+              console.log(
+                `  ${fontFile} -> ${baseName}.woff2 (${(compressedSize / 1024).toFixed(2)} KB, reduced ${reduction}%)`,
+              );
+              processedCount++;
+              compressionSuccess = true;
+            }
+          } catch (compressError) {
+            console.log(`  ⚠ Font subsetting failed for ${fontFile}: ${compressError.message}`);
+
+            try {
+              console.log(`  ℹ Retrying with WOFF2 conversion only (no subsetting)...`);
+
+              const fontmin = new Fontmin()
+                .src(fontSrc)
+                .use(
+                  Fontmin.ttf2woff2({
+                    deflate: true,
+                  }),
+                )
+                .dest(distFontDir);
+
+              await new Promise((resolve, reject) => {
+                fontmin.run((err, files) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve(files);
+                  }
+                });
+              });
+
+              const compressedFile = path.join(distFontDir, `${baseName}.woff2`);
+
+              if (fs.existsSync(compressedFile)) {
+                const compressedSize = fs.statSync(compressedFile).size;
+                totalCompressedSize += compressedSize;
+                const reduction = (
+                  (1 - compressedSize / originalSize) *
+                  100
+                ).toFixed(2);
+
+                console.log(
+                  `  ${fontFile} -> ${baseName}.woff2 (${(compressedSize / 1024).toFixed(2)} KB, reduced ${reduction}%) [WOFF2 only]`,
+                );
+                processedCount++;
+                compressionSuccess = true;
+              }
+            } catch (woff2Error) {
+              console.log(`  ⚠ WOFF2 conversion also failed: ${woff2Error.message}`);
+            }
+          }
+
+          if (!compressionSuccess) {
+            console.log(`  ℹ Using original ${fontFile} instead`);
+            errors.push(`Font compression failed: ${fontFile} - unable to convert to WOFF2`);
+
+            const destFile = path.join(distFontDir, fontFile);
+            fs.copyFileSync(fontSrc, destFile);
+            totalCompressedSize += originalSize;
             processedCount++;
           }
         } else {
@@ -634,7 +818,8 @@ async function compressFonts() {
     }
 
     if (errors.length > 0) {
-      console.log(`\nFont compression encountered ${errors.length} errors!`);
+      console.log(`\n⚠ Font compression encountered ${errors.length} errors (using original fonts):`);
+      errors.forEach((err) => console.log(`  - ${err}`));
 
       const fontDir = path.join(__dirname, "../public/fonts");
       if (fs.existsSync(fontDir)) {
@@ -647,14 +832,12 @@ async function compressFonts() {
           );
 
         if (actualFiles.length > 0) {
-          console.log("Available font files:");
+          console.log("\nAvailable font files:");
           actualFiles.forEach((f) => console.log(`  - ${f}`));
         } else {
-          console.log("  (font directory is empty)");
+          console.log("\n  (font directory is empty)");
         }
       }
-
-      process.exit(1);
     }
 
     if (processedCount > 0) {
@@ -670,8 +853,8 @@ async function compressFonts() {
       console.log("\nNo font files processed");
     }
   } catch (error) {
-    console.error("Font compression failed:", error);
-    process.exit(1);
+    console.error("❌ Font compression failed with critical error:", error);
+    console.log("⚠ Build will continue, but fonts may not be optimized");
   }
 }
 
