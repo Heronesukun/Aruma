@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "astro dev",
     "check": "astro check",
-    "build": "astro build && node scripts/copy-katex-css.js && node scripts/extract-math-symbols.js && node scripts/compress-katex-fonts.js && pagefind --site dist && node scripts/compress-fonts.js",
+    "build": "node scripts/fetch-external-anime.js && astro build && node scripts/copy-katex-css.js && node scripts/extract-math-symbols.js && node scripts/compress-katex-fonts.js && pagefind --site dist && node scripts/compress-fonts.js",
     "preview": "astro preview",
     "astro": "astro",
     "type-check": "tsc --noEmit --isolatedDeclarations",
@@ -22,6 +22,7 @@
     "@iconify/svelte": "^5.2.1",
     "@tailwindcss/vite": "^4.2.1",
     "astro": "^6.0.2",
+    "axios": "^1.13.6",
     "clsx": "^2.1.1",
     "hastscript": "^9.0.1",
     "katex": "^0.16.38",
