@@ -89,10 +89,10 @@ export const siteConfig: SiteConfig = {
 
 	// 评论配置
 	comment: {
-		enable: false,
+		enable: true,
 		twikoo: {
-			envId: "https://twikoo.vercel.app/",
-			masterTag: "博主", //设置成你 Twikoo 里面站长的标识名字，用于获取认证图标，注意要区分语言
+			envId: "heronesukuntwikoo.vercel.app",
+			masterTag: "heronesukun", //设置成你 Twikoo 里面站长的标识名字，用于获取认证图标，注意要区分语言
 		},
 	},
 
@@ -110,7 +110,7 @@ export const siteConfig: SiteConfig = {
 	// 侧边栏公告配置
 	notice: {
 		enable: true, // 是否启用公告
-		content: "今天的天气看起来不错", // 公告内容，支持简单 HTML
+		content: "可以来拾音这里视奸一辈子吗，想要的话随时都可以通过（heronesukun.top）来喵", // 公告内容，支持简单 HTML
 	},
 };
 
