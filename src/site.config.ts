@@ -4,8 +4,8 @@ import sidebarImage from "./assets/home/sidebar.webp";
 import type { SiteConfig } from "./types/site-config";
 
 export const siteConfig: SiteConfig = {
-	title: "拾音",
-	description: "拾音的个人博客",
+	title: "To The Neri",
+	description: "没有梦想的拾音喵",
 	author: "拾音",
 	lang: "zh-CN",
 	avatar: avatarImage.src,
