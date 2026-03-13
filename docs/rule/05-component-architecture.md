@@ -832,6 +832,136 @@ describe('Header', () => {
 - 测试组件交互
 - 测试导航
 
+## 组件复用规范
+
+### 侧边栏组件架构
+
+侧边栏模块采用分层复用设计，确保一致性和可维护性。
+
+#### 组件层级
+
+```
+src/components/svelte/
+├── SidebarModule.svelte    # 通用侧边栏包装器（标题 + 分隔线 + 内容）
+├── ChipCloud.svelte        # 通用 chip 标签组件
+├── TagCloud.svelte         # 标签云（使用 SidebarModule + ChipCloud）
+├── CategoryCloud.svelte    # 分类云（使用 SidebarModule + ChipCloud）
+└── ReplyModule.svelte      # 回复模块（使用 SidebarModule）
+```
+
+#### SidebarModule.svelte
+
+通用侧边栏模块组件，提供统一的卡片、标题和分隔线结构。
+
+```svelte
+<script lang="ts">
+  let { 
+    title,
+    children 
+  }: { 
+    title: string,
+    children?: any 
+  } = $props();
+</script>
+
+<div class="mdui-card mdui-hoverable sidebar-module">
+  <ul class="mdui-list">
+    <div class="sidebar-module-title">{title}</div>
+    <li class="mdui-divider mdui-m-y-0"></li>
+    <slot />
+  </ul>
+</div>
+```
+
+**使用示例：**
+
+```svelte
+<!-- TagCloud.svelte -->
+<SidebarModule title={i18n(I18nKey.tagCloud)}>
+  <ChipCloud items={tags} hrefPrefix="/tags/" />
+</SidebarModule>
+
+<!-- CategoryCloud.svelte -->
+<SidebarModule title={i18n(I18nKey.categoryCloud)}>
+  <ChipCloud items={categories} hrefPrefix="/category/" />
+</SidebarModule>
+
+<!-- ReplyModule.svelte -->
+<SidebarModule title={i18n(I18nKey.recentReplies)}>
+  {#if replies.length > 0}
+    {#each replies as reply (reply.id)}
+      <li class="mdui-list-item mdui-ripple sidebar-module-list">
+        <!-- 回复内容 -->
+      </li>
+    {/each}
+  {:else}
+    <li class="mdui-list-item mdui-ripple sidebar-module-list">
+      <div class="sidebar-reply-text">{i18n(I18nKey.noReplies)}</div>
+    </li>
+  {/if}
+</SidebarModule>
+```
+
+#### ChipCloud.svelte
+
+通用 chip 标签组件，用于展示标签、分类等可点击的 chip 集合。
+
+```svelte
+<script lang="ts">
+  let { 
+    items = [], 
+    hrefPrefix 
+  }: { 
+    items?: string[] | { name: string; slug: string }[], 
+    hrefPrefix: string 
+  } = $props();
+
+  function getLabel(item: string | { name: string; slug: string }): string {
+    return typeof item === 'string' ? item : item.name;
+  }
+
+  function getSlug(item: string | { name: string; slug: string }): string {
+    return typeof item === 'string' ? item : item.slug;
+  }
+</script>
+
+<div class="sidebar-tag">
+  {#each items as item (getSlug(item))}
+    <a href={`${hrefPrefix}${getSlug(item)}`} class="tag-link">
+      <div class="mdui-chip">
+        <span class="mdui-chip-title">{getLabel(item)}</span>
+      </div>
+    </a>
+  {/each}
+</div>
+```
+
+**使用示例：**
+
+```svelte
+<!-- 标签云 -->
+<ChipCloud items={tags} hrefPrefix="/tags/" />
+
+<!-- 分类云 -->
+<ChipCloud items={categories} hrefPrefix="/category/" />
+```
+
+#### 复用原则
+
+1. **统一结构** - 所有侧边栏模块使用 `SidebarModule` 作为外层包装
+2. **职责分离** - `SidebarModule` 负责结构，子组件负责内容
+3. **样式一致** - 通过复用确保所有侧边栏视觉一致
+4. **易于扩展** - 新增侧边栏模块只需组合现有组件
+
+#### 何时创建新的复用组件
+
+- ✅ 多个组件有相同的结构模式
+- ✅ 样式需要在多处保持一致
+- ✅ 功能可以在不同场景复用
+- ✅ 组件职责单一且明确
+
+---
+
 ## 代码审查检查清单
 
 在提交代码前，请确保：
@@ -845,6 +975,8 @@ describe('Header', () => {
 - [ ] 保持样式作用域
 - [ ] 清理事件监听器（使用 `dataset.bound`）
 - [ ] 文件命名符合规范（PascalCase、Module 后缀）
+- [ ] 侧边栏组件使用 `SidebarModule` 复用结构
+- [ ] 标签/分类使用 `ChipCloud` 复用 chip 展示
 - [ ] 代码格式化通过（`npm run format`）
 - [ ] Lint 检查通过（`npm run lint`）
 

@@ -52,6 +52,7 @@
 - 使用懒加载优化性能
 - 使用 TypeScript 接口定义 Props
 - 合理使用 Hydration 指令
+- 侧边栏组件使用 `SidebarModule` + `ChipCloud` 复用架构
 
 ## 代码审查检查清单
 
