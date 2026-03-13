@@ -1,6 +1,7 @@
 <script lang="ts">
   import { i18n } from '../../i18n/translation';
   import I18nKey from '../../i18n/i18nKey';
+  import SidebarModule from './SidebarModule.svelte';
 
   interface Reply {
     id: number;
@@ -14,27 +15,23 @@
   let { replies = [] }: { replies?: Reply[] } = $props();
 </script>
 
-<div class="mdui-card mdui-hoverable sidebar-module">
-  <ul class="mdui-list">
-    <div class="sidebar-module-title">{i18n(I18nKey.recentReplies)}</div>
-    <li class="mdui-divider mdui-m-y-0"></li>
-    {#if replies.length > 0}
-      {#each replies as reply (reply.id)}
-        <li class="mdui-list-item mdui-ripple sidebar-module-list">
-          <a href={reply.postUrl} class="sidebar-reply-link">
-            <div class="sidebar-reply-author">{reply.author}</div>
-            <div class="sidebar-reply-content">{reply.content}</div>
-            <div class="sidebar-reply-meta">
-              <span class="sidebar-reply-post">{reply.postTitle}</span>
-              <span class="sidebar-reply-date">{reply.date}</span>
-            </div>
-          </a>
-        </li>
-      {/each}
-    {:else}
+<SidebarModule title={i18n(I18nKey.recentReplies)}>
+  {#if replies.length > 0}
+    {#each replies as reply (reply.id)}
       <li class="mdui-list-item mdui-ripple sidebar-module-list">
-        <div class="sidebar-reply-text">{i18n(I18nKey.noReplies)}</div>
+        <a href={reply.postUrl} class="sidebar-reply-link">
+          <div class="sidebar-reply-author">{reply.author}</div>
+          <div class="sidebar-reply-content">{reply.content}</div>
+          <div class="sidebar-reply-meta">
+            <span class="sidebar-reply-post">{reply.postTitle}</span>
+            <span class="sidebar-reply-date">{reply.date}</span>
+          </div>
+        </a>
       </li>
-    {/if}
-  </ul>
-</div>
+    {/each}
+  {:else}
+    <li class="mdui-list-item mdui-ripple sidebar-module-list">
+      <div class="sidebar-reply-text">{i18n(I18nKey.noReplies)}</div>
+    </li>
+  {/if}
+</SidebarModule>
