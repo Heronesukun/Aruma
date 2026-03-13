@@ -34,6 +34,7 @@ export const en: Translation = {
 	[Key.noReplies]: "No replies yet",
 	[Key.tagCloud]: "Tag Cloud",
 	[Key.categoryCloud]: "Categories",
+	[Key.notice]: "Notice",
 
 	// Page titles
 	[Key.friendsTitle]: "Friend Links",

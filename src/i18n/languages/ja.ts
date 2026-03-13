@@ -34,6 +34,7 @@ export const ja: Translation = {
 	[Key.noReplies]: "返信はまだありません",
 	[Key.tagCloud]: "タグクラウド",
 	[Key.categoryCloud]: "カテゴリー",
+	[Key.notice]: "お知らせ",
 
 	// ページタイトル
 	[Key.friendsTitle]: "リンク集",

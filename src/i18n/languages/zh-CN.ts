@@ -34,6 +34,7 @@ export const zhCN: Translation = {
 	[Key.noReplies]: "暂无回复",
 	[Key.tagCloud]: "标签云",
 	[Key.categoryCloud]: "分类",
+	[Key.notice]: "公告",
 
 	// 页面标题
 	[Key.friendsTitle]: "友情链接",

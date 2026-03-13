@@ -1,9 +1,11 @@
 ---
 import { getCollection } from "astro:content";
 import ProfileCard from "../components/svelte/ProfileCard.svelte";
+import NoticeModule from "../components/svelte/NoticeModule.svelte";
 import ReplyModule from "../components/svelte/ReplyModule.svelte";
 import TagCloud from "../components/svelte/TagCloud.svelte";
 import CategoryCloud from "../components/svelte/CategoryCloud.svelte";
+import { siteConfig } from "../site.config";
 
 const posts = await getCollection("post");
 const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))];
@@ -25,9 +27,12 @@ const categories = Object.entries(categoryCounts)
 		slug: encodeURIComponent(name),
 	}))
 	.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "zh"));
+
+const noticeContent = siteConfig.notice?.enable ? siteConfig.notice.content : "";
 ---
 
 <ProfileCard client:visible />
+{noticeContent && <NoticeModule content={noticeContent} client:visible />}
 <ReplyModule client:visible />
 <CategoryCloud categories={categories} client:visible />
 <TagCloud tags={tags} client:visible />

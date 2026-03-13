@@ -77,6 +77,11 @@ export type MusicPlayerConfig = {
 	type: string; // 播单类型 (playlist/album/artist 等)
 };
 
+export type NoticeConfig = {
+	enable: boolean; // 是否启用公告
+	content: string; // 公告内容，支持简单 HTML
+};
+
 export type SiteConfig = {
 	title: string;
 	description: string;
@@ -96,4 +101,5 @@ export type SiteConfig = {
 	imageOptimization?: ImageOptimizationConfig;
 	comment?: CommentConfig;
 	musicPlayer?: MusicPlayerConfig; // 音乐播放器配置
+	notice?: NoticeConfig; // 侧边栏公告配置
 };

@@ -34,6 +34,7 @@ export const zhTW: Translation = {
 	[Key.noReplies]: "暫無回覆",
 	[Key.tagCloud]: "標籤雲",
 	[Key.categoryCloud]: "分類",
+	[Key.notice]: "公告",
 
 	// 頁面標題
 	[Key.friendsTitle]: "友情連結",

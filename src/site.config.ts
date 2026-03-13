@@ -90,7 +90,7 @@ export const siteConfig: SiteConfig = {
 
 	// 评论配置
 	comment: {
-		enable: false, 
+		enable: false,
 		twikoo: {
 			envId: "https://twikoo.vercel.app/",
 			masterTag: "博主", //设置成你 Twikoo 里面站长的标识名字，用于获取认证图标，注意要区分语言
@@ -106,6 +106,12 @@ export const siteConfig: SiteConfig = {
 		id: "14164869977", // 默认歌单 ID
 		server: "netease" as const, // 网易云音乐
 		type: "playlist" as const, // 播单类型
+	},
+
+	// 侧边栏公告配置
+	notice: {
+		enable: true, // 是否启用公告
+		content: "今天的天气看起来不错", // 公告内容，支持简单 HTML
 	},
 };
 

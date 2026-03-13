@@ -31,6 +31,7 @@ enum I18nKey {
 	noReplies = "noReplies",
 	tagCloud = "tagCloud",
 	categoryCloud = "categoryCloud",
+	notice = "notice",
 
 	// 页面标题
 	friendsTitle = "friendsTitle",

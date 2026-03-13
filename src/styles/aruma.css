@@ -893,6 +893,17 @@ html.mdui-theme-layout-dark .sidebar-tag .mdui-chip {
   white-space: nowrap;
 }
 
+.sidebar-notice-content {
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+html.mdui-theme-layout-dark .sidebar-notice-content {
+  color: rgba(255, 255, 255, 0.87);
+}
+
 /* ----------------- 文章详情页 (Post Content) ----------------- */
 .archive-card {
   margin-top: 20px;
