@@ -4,9 +4,9 @@ import sidebarImage from "./assets/home/sidebar.webp";
 import type { SiteConfig } from "./types/site-config";
 
 export const siteConfig: SiteConfig = {
-	title: "有希",
-	description: "有希的个人博客",
-	author: "有希",
+	title: "拾音",
+	description: "拾音的个人博客",
+	author: "拾音",
 	lang: "zh-CN",
 	avatar: avatarImage.src,
 	background: backgroundImage.src,
@@ -15,9 +15,8 @@ export const siteConfig: SiteConfig = {
 	sidebarBackground: "rgba(255, 255, 255, 0.8)", // 侧边栏背景色
 	glassmorphism: true,
 	social: [
-		{ name: "GitHub", url: "https://github.com/nut612", icon: "github" },
-		{ name: "Twitter", url: "https://twitter.com", icon: "twitter" },
-		{ name: "Email", url: "mailto:example@email.com", icon: "email" },
+		{ name: "GitHub", url: "https://github.com/Heronesukun", icon: "github" },
+		{ name: "Email", url: "mailto:shiyinsukun@gmail.com", icon: "email" },
 	],
 	nav: [
 		{ name: "home", path: "/", icon: "home" },
