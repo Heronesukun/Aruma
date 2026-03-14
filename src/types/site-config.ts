@@ -82,6 +82,15 @@ export type NoticeConfig = {
 	content: string; // 公告内容，支持简单 HTML
 };
 
+// 侧栏模块配置
+export type SidebarModuleConfig = {
+	name: "profile" | "notice" | "reply" | "category" | "tag"; // 模块名称
+};
+
+export type SidebarConfig = {
+	modules: SidebarModuleConfig[]; // 模块数组，按顺序显示
+};
+
 export type SiteConfig = {
 	title: string;
 	description: string;
@@ -102,6 +111,7 @@ export type SiteConfig = {
 	comment?: CommentConfig;
 	musicPlayer?: MusicPlayerConfig; // 音乐播放器配置
 	notice?: NoticeConfig; // 侧边栏公告配置
+	sidebar?: SidebarConfig; // 侧栏模块配置
 	animeSource?: AnimeSourceConfig; // 动漫数据源配置
 };
 

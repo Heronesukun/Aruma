@@ -114,6 +114,17 @@ export const siteConfig: SiteConfig = {
 		content: "今天的天气看起来不错", // 公告内容，支持简单 HTML
 	},
 
+	// 侧栏模块配置
+	sidebar: {
+		modules: [
+			{ name: "profile" },
+			{ name: "notice" },
+			{ name: "reply" },
+			{ name: "category" },
+			{ name: "tag" },
+		],
+	},
+
 	// 动漫外部数据源配置，不开启默认Local（示例，当前禁用）
 	// 详细说明请参考 docs/EXTERNAL_ANIME_SOURCE.md
 	animeSource: {
