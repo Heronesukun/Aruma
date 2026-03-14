@@ -85,6 +85,8 @@ export const zhTW: Translation = {
 	[Key.animeStatusOnHold]: "擱置",
 	[Key.animeStatusDropped]: "拋棄",
 	[Key.searchAnime]: "搜尋番劇...",
+	[Key.prevPage]: "上一頁",
+	[Key.nextPage]: "下一頁",
 
 	// 評論區
 	[Key.commentPlaceholder]:

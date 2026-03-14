@@ -2,6 +2,9 @@ import Key from "../i18nKey";
 import type { Translation } from "../translation";
 
 export const ja: Translation = {
+	// 修复：补充缺失的 animeStatusOnHold 和 animeStatusDropped
+	[Key.animeStatusOnHold]: "一時中断",
+	[Key.animeStatusDropped]: "中止",
 	// ナビゲーション
 	[Key.home]: "ホーム",
 	[Key.category]: "カテゴリー",
@@ -84,6 +87,8 @@ export const ja: Translation = {
 	[Key.completed]: "視聴済み",
 	[Key.planned]: "視聴予定",
 	[Key.searchAnime]: "アニメを検索...",
+	[Key.prevPage]: "前のページ",
+	[Key.nextPage]: "次のページ",
 
 	// コメントエリア
 	[Key.commentPlaceholder]: "こちらにメッセージを残してください～",

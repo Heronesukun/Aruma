@@ -119,6 +119,7 @@ export type SiteConfig = {
 export type AnimeSourceConfig = {
 	enable: boolean;
 	mode: "local" | "bilibili" | "bangumi" | "mixed";
+	pageSize?: number; // 每页显示数量，超过此数量开始分页
 	bilibili?: BilibiliAnimeConfig;
 	bangumi?: BangumiAnimeConfig;
 	local?: LocalAnimeConfig;

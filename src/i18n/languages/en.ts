@@ -85,6 +85,8 @@ export const en: Translation = {
 	[Key.animeStatusOnHold]: "On Hold",
 	[Key.animeStatusDropped]: "Dropped",
 	[Key.searchAnime]: "Search anime...",
+	[Key.prevPage]: "Previous",
+	[Key.nextPage]: "Next",
 
 	// Comment section
 	[Key.commentPlaceholder]: "Leave your message here~",

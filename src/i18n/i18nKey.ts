@@ -82,6 +82,8 @@ enum I18nKey {
 	animeStatusOnHold = "animeStatusOnHold",
 	animeStatusDropped = "animeStatusDropped",
 	searchAnime = "searchAnime",
+	prevPage = "prevPage",
+	nextPage = "nextPage",
 
 	// 评论区
 	commentPlaceholder = "commentPlaceholder",

@@ -128,8 +128,9 @@ export const siteConfig: SiteConfig = {
 	// 动漫外部数据源配置，不开启默认Local（示例，当前禁用）
 	// 详细说明请参考 docs/EXTERNAL_ANIME_SOURCE.md
 	animeSource: {
-		enable: false, // 设为 true 启用
-		mode: "bangumi" as const, // 数据源模式：'local' | 'bilibili' | 'bangumi' | 'mixed'
+		enable: true, // 设为 true 启用
+		mode: "local" as const, // 数据源模式：'local' | 'bilibili' | 'bangumi' | 'mixed'
+		pageSize: 10, // 每页显示数量，超过此数量开始分页
 		// 本地数据源配置
 		local: {
 			dataPath: "src/data/anime.json", // 本地 JSON 文件路径

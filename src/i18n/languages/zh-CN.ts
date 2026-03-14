@@ -85,6 +85,8 @@ export const zhCN: Translation = {
 	[Key.animeStatusOnHold]: "搁置",
 	[Key.animeStatusDropped]: "抛弃",
 	[Key.searchAnime]: "搜索番剧...",
+	[Key.prevPage]: "上一页",
+	[Key.nextPage]: "下一页",
 
 	// 评论区
 	[Key.commentPlaceholder]:
