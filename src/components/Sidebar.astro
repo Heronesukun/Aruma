@@ -29,10 +29,32 @@ const categories = Object.entries(categoryCounts)
 	.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "zh"));
 
 const noticeContent = siteConfig.notice?.enable ? siteConfig.notice.content : "";
+
+// 获取侧栏模块配置，如果不存在则使用默认顺序
+const sidebarModules = siteConfig.sidebar?.modules || [
+	{ name: "profile" },
+	{ name: "notice" },
+	{ name: "reply" },
+	{ name: "category" },
+	{ name: "tag" },
+];
 ---
 
-<ProfileCard client:visible />
-{noticeContent && <NoticeModule content={noticeContent} client:visible />}
-<ReplyModule client:visible />
-<CategoryCloud categories={categories} client:visible />
-<TagCloud tags={tags} client:visible />
+{sidebarModules.map((module) => {
+	if (module.name === "profile") {
+		return <ProfileCard client:visible />;
+	}
+	if (module.name === "notice" && noticeContent) {
+		return <NoticeModule content={noticeContent} client:visible />;
+	}
+	if (module.name === "reply") {
+		return <ReplyModule client:visible />;
+	}
+	if (module.name === "category") {
+		return <CategoryCloud categories={categories} client:visible />;
+	}
+	if (module.name === "tag") {
+		return <TagCloud tags={tags} client:visible />;
+	}
+	return null;
+})}
