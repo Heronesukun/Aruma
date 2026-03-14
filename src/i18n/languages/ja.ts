@@ -29,6 +29,7 @@ export const ja: Translation = {
 	[Key.comments]: "{count} 件のコメント",
 	[Key.views]: "{count} 回表示",
 	[Key.readingTime]: "読了時間: 約 {minutes} 分",
+	[Key.wordCount]: "{count} 文字",
 	[Key.categoryLabel]: "カテゴリー: ",
 	[Key.tagsLabel]: "タグ: ",
 

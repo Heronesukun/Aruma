@@ -26,6 +26,7 @@ export const zhCN: Translation = {
 	[Key.comments]: "{count} 条评论",
 	[Key.views]: "{count} 浏览",
 	[Key.readingTime]: "阅读时间: 约 {minutes} 分钟",
+	[Key.wordCount]: "{count} 字",
 	[Key.categoryLabel]: "分类: ",
 	[Key.tagsLabel]: "标签: ",
 

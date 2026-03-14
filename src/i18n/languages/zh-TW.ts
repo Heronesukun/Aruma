@@ -26,6 +26,7 @@ export const zhTW: Translation = {
 	[Key.comments]: "{count} 則留言",
 	[Key.views]: "{count} 瀏覽",
 	[Key.readingTime]: "閱讀時間: 約 {minutes} 分鐘",
+	[Key.wordCount]: "{count} 字",
 	[Key.categoryLabel]: "分類: ",
 	[Key.tagsLabel]: "標籤: ",
 

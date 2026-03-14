@@ -14,6 +14,9 @@ interface Props {
 const { post } = Astro.props;
 const { title, description, pubDate, heroImage, pinned } = post.data;
 
+// 计算文章字数
+const wordCount = post.body ? post.body.length : 0;
+
 // 处理封面图逻辑
 let coverImage = null;
 if (
@@ -56,7 +59,7 @@ if (
 					</div>
 					<div class="mdui-card-primary-subtitle index-info">
 						<FormattedDate date={pubDate} />
-						| {i18n(I18nKey.comments).replace("{count}", "10")}
+						| {i18n(I18nKey.wordCount).replace("{count}", wordCount.toString())}
 					</div>
 					<div class="mdui-card-primary-subtitle index-subtitle">
 						{description}

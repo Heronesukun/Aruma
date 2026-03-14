@@ -26,6 +26,7 @@ export const en: Translation = {
 	[Key.comments]: "{count} comments",
 	[Key.views]: "{count} views",
 	[Key.readingTime]: "Reading time: about {minutes} minutes",
+	[Key.wordCount]: "{count} words",
 	[Key.categoryLabel]: "Category: ",
 	[Key.tagsLabel]: "Tags: ",
 

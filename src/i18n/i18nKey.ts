@@ -23,6 +23,7 @@ enum I18nKey {
 	comments = "comments",
 	views = "views",
 	readingTime = "readingTime",
+	wordCount = "wordCount",
 	categoryLabel = "categoryLabel",
 	tagsLabel = "tagsLabel",
 
