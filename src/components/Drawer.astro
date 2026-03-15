@@ -48,7 +48,7 @@ const archives = Object.entries(archiveCounts)
 	class="mdui-drawer mdui-drawer-close mdui-drawer-full-height drawer"
 	id="main-drawer"
 >
-	<DrawerProfile social={siteConfig.social} client:load />
+	<DrawerProfile social={siteConfig.profileCard?.social || []} client:load />
 
 	<div class="mdui-divider"></div>
 
@@ -145,11 +145,11 @@ const archives = Object.entries(archiveCounts)
 							{/* @ts-ignore */}
 							<div class="mdui-list-item-content">
 								{I18nKey[
-									item.name.toLowerCase() as keyof typeof I18nKey
+									item.name?.toLowerCase() as keyof typeof I18nKey
 								]
 									? i18n(
 											I18nKey[
-												item.name.toLowerCase() as keyof typeof I18nKey
+												item.name?.toLowerCase() as keyof typeof I18nKey
 											],
 										)
 									: item.name}
@@ -190,11 +190,11 @@ const archives = Object.entries(archiveCounts)
 						{/* @ts-ignore */}
 						<div class="mdui-list-item-content">
 							{I18nKey[
-								item.name.toLowerCase() as keyof typeof I18nKey
+								item.name?.toLowerCase() as keyof typeof I18nKey
 							]
 								? i18n(
 										I18nKey[
-											item.name.toLowerCase() as keyof typeof I18nKey
+											item.name?.toLowerCase() as keyof typeof I18nKey
 										],
 									)
 								: item.name}

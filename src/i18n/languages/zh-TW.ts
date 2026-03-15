@@ -76,6 +76,17 @@ export const zhTW: Translation = {
 	[Key.animeStudio]: "製作",
 	[Key.animeEpisodes]: "集數",
 	[Key.animeEmpty]: "暫無番劇",
+	[Key.totalAnime]: "總番劇數",
+	[Key.local]: "本地",
+	[Key.all]: "全部",
+	[Key.watching]: "觀看中",
+	[Key.completed]: "已完成",
+	[Key.planned]: "計劃看",
+	[Key.animeStatusOnHold]: "擱置",
+	[Key.animeStatusDropped]: "拋棄",
+	[Key.searchAnime]: "搜尋番劇...",
+	[Key.prevPage]: "上一頁",
+	[Key.nextPage]: "下一頁",
 
 	// 評論區
 	[Key.commentPlaceholder]:
@@ -105,4 +116,12 @@ export const zhTW: Translation = {
 	[Key.musicPlayerErrorEmpty]: "播放列表中沒有可用的歌曲",
 	[Key.unknownSong]: "未知歌曲",
 	[Key.unknownArtist]: "未知藝術家",
+
+	// Twikoo
+	[Key.twikooCommentDisabled]: "[Twikoo] 評論組件未啟用，跳過拉取最新評論。",
+	[Key.twikooEnvIdMissing]:
+		"[Twikoo] envId 未在 site.config.ts 中配置，跳過拉取最新評論。",
+	[Key.twikooFetching]: "[Twikoo] 正在拉取最新評論...",
+	[Key.twikooFetchFail]: "[Twikoo] 拉取最新評論失敗：",
+	[Key.twikooParseFail]: "[Twikoo] 響應解析失敗，無法讀取最新評論：",
 };

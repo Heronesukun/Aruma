@@ -80,9 +80,9 @@ export const siteConfig: SiteConfig = {
 			enableCompress: true,
 		},
 		cjkFont: {
-			fontFamily: "zk",
+			fontFamily: "loli",
 			fontWeight: "400",
-			localFonts: ["zk.ttf"],
+			localFonts: ["loli.ttf"],
 			enableCompress: true,
 		},
 	},
@@ -111,6 +111,53 @@ export const siteConfig: SiteConfig = {
 	notice: {
 		enable: true, // 是否启用公告
 		content: "可以来拾音这里视奸一辈子吗，想要的话随时都可以通过（heronesukun.top）来喵", // 公告内容，支持简单 HTML
+	},
+
+	// 侧栏模块配置
+	sidebar: {
+		modules: [
+			{ name: "profile" },
+			{ name: "notice" },
+			{ name: "reply" },
+			{ name: "category" },
+			{ name: "tag" },
+		],
+	},
+
+	// 个人信息卡片配置
+	profileCard: {
+		social: [
+			{ name: "GitHub", url: "https://github.com/Heronesukun", icon: "github" },
+			{ name: "bilibili", url: "https://space.bilibili.com/701864046", icon: "bilibili" },
+			{ name: "Email", url: "mailto:shiyinsukun@gmail.com", icon: "email" },
+		],
+		showSocialLinks: true, // 显示社交链接
+	},
+
+	// 动漫外部数据源配置，不开启默认Local（示例，当前禁用）
+	// 详细说明请参考 docs/EXTERNAL_ANIME_SOURCE.md
+	animeSource: {
+		enable: true, // 设为 true 启用
+		mode: "local" as const, // 数据源模式：'local' | 'bilibili' | 'bangumi' | 'mixed'
+		pageSize: 10, // 每页显示数量，超过此数量开始分页
+		// 本地数据源配置
+		local: {
+			dataPath: "src/data/anime.json", // 本地 JSON 文件路径
+		},
+		// Bilibili 数据源配置
+		bilibili: {
+			userId: "701864046", // 必填，从 https://space.bilibili.com/12345678 获取
+			token: "", // 可选，SESSDATA token，从浏览器 Cookie 获取
+			amount: 50, // 拉取数量
+			cacheTime: 86400, // 缓存时间（秒），默认 24 小时
+		},
+		// Bangumi 数据源配置
+		bangumi: {
+			userId: "sai", // 必填，从 https://bgm.tv/user/yourname 获取
+			token: "", // 可选，Access Token，从 https://next.bgm.tv/demo/access-token 获取
+			amount: 50, // 拉取数量
+			cacheTime: 86400, // 缓存时间（秒）
+		},
 	},
 };
 

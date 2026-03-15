@@ -60,7 +60,7 @@ let showError = false;
 let currentSong = {
 	title: "Sample Song",
 	artist: "Sample Artist",
-	cover: "/favicon/favicon.ico",
+	cover: "/favicon.ico",
 	url: "",
 	duration: 0,
 };

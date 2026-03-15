@@ -73,6 +73,17 @@ enum I18nKey {
 	animeStudio = "animeStudio",
 	animeEpisodes = "animeEpisodes",
 	animeEmpty = "animeEmpty",
+	totalAnime = "totalAnime",
+	local = "local",
+	all = "all",
+	watching = "watching",
+	completed = "completed",
+	planned = "planned",
+	animeStatusOnHold = "animeStatusOnHold",
+	animeStatusDropped = "animeStatusDropped",
+	searchAnime = "searchAnime",
+	prevPage = "prevPage",
+	nextPage = "nextPage",
 
 	// 评论区
 	commentPlaceholder = "commentPlaceholder",
@@ -101,5 +112,12 @@ enum I18nKey {
 	musicPlayerErrorEmpty = "musicPlayerErrorEmpty",
 	unknownSong = "unknownSong",
 	unknownArtist = "unknownArtist",
+
+	// Twikoo
+	twikooCommentDisabled = "twikooCommentDisabled",
+	twikooEnvIdMissing = "twikooEnvIdMissing",
+	twikooFetching = "twikooFetching",
+	twikooFetchFail = "twikooFetchFail",
+	twikooParseFail = "twikooParseFail",
 }
 export default I18nKey;

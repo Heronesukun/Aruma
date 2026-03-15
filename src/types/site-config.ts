@@ -4,6 +4,12 @@ export type SocialLink = {
 	icon: string;
 };
 
+// ProfileCard 配置
+export type ProfileCardConfig = {
+	social?: SocialLink[]; // 社交链接配置
+	showSocialLinks?: boolean; // 是否显示社交链接，默认 true
+};
+
 export type NavItem = {
 	name?: string;
 	path?: string;
@@ -61,6 +67,7 @@ export type TwikooConfig = {
 	region?: string;
 	lang?: string;
 	masterTag?: string; // 博主标识文字
+	recentCommentsPageSize?: number; // 首页最新回复显示条数
 };
 
 export type CommentConfig = {
@@ -82,8 +89,18 @@ export type NoticeConfig = {
 	content: string; // 公告内容，支持简单 HTML
 };
 
+// 侧栏模块配置
+export type SidebarModuleConfig = {
+	name: "profile" | "notice" | "reply" | "category" | "tag"; // 模块名称
+};
+
+export type SidebarConfig = {
+	modules: SidebarModuleConfig[]; // 模块数组，按顺序显示
+};
+
 export type SiteConfig = {
 	title: string;
+	subtitle?: string; // 副标题
 	description: string;
 	author: string;
 	lang: string;
@@ -93,7 +110,6 @@ export type SiteConfig = {
 	postBackground: string;
 	sidebarBackground: string;
 	glassmorphism: boolean;
-	social: SocialLink[];
 	nav: NavItem[];
 	randomImage: RandomImageConfig;
 	featurePages: FeaturePagesConfig;
@@ -102,4 +118,36 @@ export type SiteConfig = {
 	comment?: CommentConfig;
 	musicPlayer?: MusicPlayerConfig; // 音乐播放器配置
 	notice?: NoticeConfig; // 侧边栏公告配置
+	sidebar?: SidebarConfig; // 侧栏模块配置
+	animeSource?: AnimeSourceConfig; // 动漫数据源配置
+	profileCard?: ProfileCardConfig; // 个人信息卡片配置
+};
+
+// 动漫数据源配置
+export type AnimeSourceConfig = {
+	enable: boolean;
+	mode: "local" | "bilibili" | "bangumi" | "mixed";
+	pageSize?: number; // 每页显示数量，超过此数量开始分页
+	bilibili?: BilibiliAnimeConfig;
+	bangumi?: BangumiAnimeConfig;
+	local?: LocalAnimeConfig;
+};
+
+export type BilibiliAnimeConfig = {
+	userId: string; // Bilibili 用户 ID
+	token?: string; // SESSDATA（可选，用于获取私有数据）
+	amount?: number; // 拉取数量（默认 50）
+	cacheTime?: number; // 缓存时间（秒，默认 86400）
+	hideMedia?: boolean; // 隐藏媒体信息
+};
+
+export type BangumiAnimeConfig = {
+	userId: string; // Bangumi 用户 ID
+	token?: string; // Access Token（可选）
+	amount?: number; // 拉取数量（默认 50）
+	cacheTime?: number; // 缓存时间（秒，默认 86400）
+};
+
+export type LocalAnimeConfig = {
+	dataPath: string; // 本地 JSON 文件路径（默认 "src/data/anime.json"）
 };

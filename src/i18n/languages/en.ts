@@ -76,6 +76,17 @@ export const en: Translation = {
 	[Key.animeStudio]: "Studio",
 	[Key.animeEpisodes]: "Episodes",
 	[Key.animeEmpty]: "No anime yet",
+	[Key.totalAnime]: "Total Anime",
+	[Key.local]: "Local",
+	[Key.all]: "All",
+	[Key.watching]: "Watching",
+	[Key.completed]: "Completed",
+	[Key.planned]: "Plan to Watch",
+	[Key.animeStatusOnHold]: "On Hold",
+	[Key.animeStatusDropped]: "Dropped",
+	[Key.searchAnime]: "Search anime...",
+	[Key.prevPage]: "Previous",
+	[Key.nextPage]: "Next",
 
 	// Comment section
 	[Key.commentPlaceholder]: "Leave your message here~",
@@ -104,4 +115,13 @@ export const en: Translation = {
 	[Key.musicPlayerErrorEmpty]: "No available songs in the playlist",
 	[Key.unknownSong]: "Unknown Song",
 	[Key.unknownArtist]: "Unknown Artist",
+
+	// Twikoo
+	[Key.twikooCommentDisabled]:
+		"[Twikoo] Comment feature disabled, skipping fetching recent comments.",
+	[Key.twikooEnvIdMissing]:
+		"[Twikoo] envId is not configured in site.config.ts, skipping fetching recent comments.",
+	[Key.twikooFetching]: "[Twikoo] Fetching recent comments...",
+	[Key.twikooFetchFail]: "[Twikoo] Failed to fetch recent comments:",
+	[Key.twikooParseFail]: "[Twikoo] Failed to parse response data:",
 };
