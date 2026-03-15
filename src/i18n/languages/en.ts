@@ -26,6 +26,7 @@ export const en: Translation = {
 	[Key.comments]: "{count} comments",
 	[Key.views]: "{count} views",
 	[Key.readingTime]: "Reading time: about {minutes} minutes",
+	[Key.wordCount]: "{count} words",
 	[Key.categoryLabel]: "Category: ",
 	[Key.tagsLabel]: "Tags: ",
 
@@ -35,6 +36,12 @@ export const en: Translation = {
 	[Key.tagCloud]: "Tag Cloud",
 	[Key.categoryCloud]: "Categories",
 	[Key.notice]: "Notice",
+
+	// Site Stats
+	[Key.siteStats]: "Site Statistics",
+	[Key.siteStatsPosts]: "Posts",
+	[Key.siteStatsRunningDays]: "Running Days",
+	[Key.siteStatsWords]: "Total Words",
 
 	// Page titles
 	[Key.friendsTitle]: "Friend Links",

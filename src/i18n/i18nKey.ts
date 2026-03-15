@@ -23,6 +23,7 @@ enum I18nKey {
 	comments = "comments",
 	views = "views",
 	readingTime = "readingTime",
+	wordCount = "wordCount",
 	categoryLabel = "categoryLabel",
 	tagsLabel = "tagsLabel",
 
@@ -32,6 +33,12 @@ enum I18nKey {
 	tagCloud = "tagCloud",
 	categoryCloud = "categoryCloud",
 	notice = "notice",
+
+	// 站点统计
+	siteStats = "siteStats",
+	siteStatsPosts = "siteStatsPosts",
+	siteStatsRunningDays = "siteStatsRunningDays",
+	siteStatsWords = "siteStatsWords",
 
 	// 页面标题
 	friendsTitle = "friendsTitle",

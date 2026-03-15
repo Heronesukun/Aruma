@@ -29,6 +29,7 @@ export const ja: Translation = {
 	[Key.comments]: "{count} 件のコメント",
 	[Key.views]: "{count} 回表示",
 	[Key.readingTime]: "読了時間: 約 {minutes} 分",
+	[Key.wordCount]: "{count} 文字",
 	[Key.categoryLabel]: "カテゴリー: ",
 	[Key.tagsLabel]: "タグ: ",
 
@@ -38,6 +39,12 @@ export const ja: Translation = {
 	[Key.tagCloud]: "タグクラウド",
 	[Key.categoryCloud]: "カテゴリー",
 	[Key.notice]: "お知らせ",
+
+	// サイト統計
+	[Key.siteStats]: "サイト統計",
+	[Key.siteStatsPosts]: "記事数",
+	[Key.siteStatsRunningDays]: "運営日数",
+	[Key.siteStatsWords]: "総文字数",
 
 	// ページタイトル
 	[Key.friendsTitle]: "リンク集",

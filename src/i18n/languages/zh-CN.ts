@@ -26,6 +26,7 @@ export const zhCN: Translation = {
 	[Key.comments]: "{count} 条评论",
 	[Key.views]: "{count} 浏览",
 	[Key.readingTime]: "阅读时间: 约 {minutes} 分钟",
+	[Key.wordCount]: "{count} 字",
 	[Key.categoryLabel]: "分类: ",
 	[Key.tagsLabel]: "标签: ",
 
@@ -35,6 +36,12 @@ export const zhCN: Translation = {
 	[Key.tagCloud]: "标签云",
 	[Key.categoryCloud]: "分类",
 	[Key.notice]: "公告",
+
+	// 站点统计
+	[Key.siteStats]: "站点统计",
+	[Key.siteStatsPosts]: "文章数",
+	[Key.siteStatsRunningDays]: "运行天数",
+	[Key.siteStatsWords]: "总字数",
 
 	// 页面标题
 	[Key.friendsTitle]: "友情链接",

@@ -26,6 +26,7 @@ export const zhTW: Translation = {
 	[Key.comments]: "{count} 則留言",
 	[Key.views]: "{count} 瀏覽",
 	[Key.readingTime]: "閱讀時間: 約 {minutes} 分鐘",
+	[Key.wordCount]: "{count} 字",
 	[Key.categoryLabel]: "分類: ",
 	[Key.tagsLabel]: "標籤: ",
 
@@ -35,6 +36,12 @@ export const zhTW: Translation = {
 	[Key.tagCloud]: "標籤雲",
 	[Key.categoryCloud]: "分類",
 	[Key.notice]: "公告",
+
+	// 站點統計
+	[Key.siteStats]: "站點統計",
+	[Key.siteStatsPosts]: "文章數",
+	[Key.siteStatsRunningDays]: "運行天數",
+	[Key.siteStatsWords]: "總字數",
 
 	// 頁面標題
 	[Key.friendsTitle]: "友情連結",
