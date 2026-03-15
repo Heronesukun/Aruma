@@ -128,7 +128,7 @@ export const siteConfig: SiteConfig = {
 
 	// 站点统计配置
 	siteStats: {
-		siteStartDate: "2024-01-01", // 建站日期，格式：YYYY-MM-DD
+		siteStartDate: "2025-11-04", // 建站日期，格式：YYYY-MM-DD
 	},
 
 	// 个人信息卡片配置
