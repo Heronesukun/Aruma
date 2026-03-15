@@ -89,10 +89,11 @@ export const siteConfig: SiteConfig = {
 
 	// 评论配置
 	comment: {
-		enable: true,
+		enable: false,
 		twikoo: {
 			envId: "heronesukuntwikoo.vercel.app",
 			masterTag: "heronesukun", //设置成你 Twikoo 里面站长的标识名字，用于获取认证图标，注意要区分语言
+			recentCommentsPageSize: 5,
 		},
 	},
 
@@ -128,7 +129,7 @@ export const siteConfig: SiteConfig = {
 	profileCard: {
 		social: [
 			{ name: "GitHub", url: "https://github.com/Heronesukun", icon: "github" },
-			{ name: "bilibili", url: "https://space.bilibili.com/701864046", icon: "bilibili" },
+			{ name: "bilibili", url: "https://space.bilibili.com/20565553", icon: "bilibili" },
 			{ name: "Email", url: "mailto:shiyinsukun@gmail.com", icon: "email" },
 		],
 		showSocialLinks: true, // 显示社交链接
@@ -146,7 +147,7 @@ export const siteConfig: SiteConfig = {
 		},
 		// Bilibili 数据源配置
 		bilibili: {
-			userId: "701864046", // 必填，从 https://space.bilibili.com/12345678 获取
+			userId: "20565553", // 必填，从 https://space.bilibili.com/12345678 获取
 			token: "", // 可选，SESSDATA token，从浏览器 Cookie 获取
 			amount: 50, // 拉取数量
 			cacheTime: 86400, // 缓存时间（秒），默认 24 小时

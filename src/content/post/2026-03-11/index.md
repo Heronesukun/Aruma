@@ -2,9 +2,9 @@
 title: 博客主题迁移记录：从 Mizuki 到 Aruma
 published: 2026-03-11
 pubDate: 2026-03-11
-pinned: true
+pinned: false
 description: 2026年3月11日，将博客从Mizuki主题迁移到Aruma主题的记录
-tags: [commemorate, Blogging, 迁移]
+tags: [commemorate, Blogging]
 author: 拾音
 draft: false
 category: 纪念
