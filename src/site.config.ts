@@ -89,7 +89,7 @@ export const siteConfig: SiteConfig = {
 
 	// 评论配置
 	comment: {
-		enable: true,
+		enable: false,
 		twikoo: {
 			envId: "https://heronesukun-twikoo.vercel.app/",
 			masterTag: "heronesukun", //设置成你 Twikoo 里面站长的标识名字，用于获取认证图标，注意要区分语言
