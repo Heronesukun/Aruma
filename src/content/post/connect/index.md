@@ -2,7 +2,7 @@
 title: "コネクト"
 published: 2026-03-15
 pubDate: 2026-03-15
-pinned: true
+pinned: false
 description: "我想一直就这样建立好深入的联系"
 tags: [Blogging,commemorate]
 author: 拾音
