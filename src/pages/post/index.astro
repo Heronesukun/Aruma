@@ -1,11 +1,15 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Sidebar from "../../components/Sidebar.astro";
-import { getCollection } from "astro:content";
+import { type CollectionEntry, getCollection } from "astro:content";
 import { i18n } from "../../i18n/translation";
 import PostCard from "../../components/PostCard.astro";
 import I18nKey from "../../i18n/i18nKey";
 import { siteConfig } from "../../site.config";
+import { formatWordCount, getReadingStats } from "../../utils/reading-stats";
+
+const getPostDate = (post: CollectionEntry<"post">) =>
+	post.data.pubDate ?? post.data.published ?? post.data.date ?? new Date(0);
 
 const allPosts = (await getCollection("post")).sort((a, b) => {
 	// 优先按置顶排序
@@ -13,11 +17,12 @@ const allPosts = (await getCollection("post")).sort((a, b) => {
 	const bSticky = b.data.category === "置顶" ? 1 : 0;
 	if (aSticky !== bSticky) return bSticky - aSticky;
 	// 其次按日期排序
-	return b.data.pubDate.valueOf() - a.data.pubDate.valueOf();
+	return getPostDate(b).valueOf() - getPostDate(a).valueOf();
 });
 
 // 准备文章数据供客户端搜索使用
 const postsData = allPosts.map((post) => {
+	const readingStats = getReadingStats(post.body ?? "");
 	// 处理封面图逻辑（与 PostCard.astro 保持一致）
 	let coverImage = "";
 	if (
@@ -41,8 +46,14 @@ const postsData = allPosts.map((post) => {
 		description: post.data.description ?? "",
 		category: post.data.category ?? "",
 		tags: post.data.tags ?? [],
-		pubDate: post.data.pubDate.toISOString(),
+		pubDate: getPostDate(post).toISOString(),
 		image: coverImage,
+		wordCount: i18n(I18nKey.wordCount, {
+			count: formatWordCount(readingStats.wordCount),
+		}),
+		readingTime: i18n(I18nKey.readingTime, {
+			minutes: readingStats.readingMinutes,
+		}),
 	};
 });
 ---
@@ -145,7 +156,7 @@ const postsData = allPosts.map((post) => {
 									${stickyHtml}${escapeHtml(post.title)}
 								</div>
 								<div class="mdui-card-primary-subtitle index-info">
-									${formatDate(post.pubDate)} | 10 评论
+									${formatDate(post.pubDate)} | ${escapeHtml(post.wordCount)} | ${escapeHtml(post.readingTime)}
 								</div>
 								<div class="mdui-card-primary-subtitle index-subtitle">${escapeHtml(post.description)}</div>
 							</div>

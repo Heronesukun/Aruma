@@ -1,0 +1,40 @@
+---
+export const prerender = true;
+
+import Layout from "../../layouts/Layout.astro";
+import Pagination from "../../components/Pagination.astro";
+import PostCard from "../../components/PostCard.astro";
+import Sidebar from "../../components/Sidebar.astro";
+import { getCollection } from "astro:content";
+import { POSTS_PER_PAGE, sortPostsForIndex } from "../../utils/post-list";
+
+export async function getStaticPaths() {
+	const allPosts = sortPostsForIndex(await getCollection("post"));
+	const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
+
+	return Array.from({ length: Math.max(0, totalPages - 1) }, (_, index) => {
+		const currentPage = index + 2;
+		const start = (currentPage - 1) * POSTS_PER_PAGE;
+
+		return {
+			params: { page: String(currentPage) },
+			props: {
+				currentPage,
+				totalPages,
+				posts: allPosts.slice(start, start + POSTS_PER_PAGE),
+			},
+		};
+	});
+}
+
+const { currentPage, totalPages, posts } = Astro.props;
+---
+
+<Layout>
+	<div class="article">
+		{posts.map((post) => <PostCard post={post} />)}
+		<Pagination currentPage={currentPage} totalPages={totalPages} />
+	</div>
+
+	<Sidebar slot="sidebar" />
+</Layout>

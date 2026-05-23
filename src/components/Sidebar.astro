@@ -2,13 +2,11 @@
 import { getCollection } from "astro:content";
 import ProfileCard from "../components/svelte/ProfileCard.svelte";
 import NoticeModule from "../components/svelte/NoticeModule.svelte";
-import ReplyModule from "../components/svelte/ReplyModule.svelte";
-import TwikooRecentReplies from "../components/svelte/TwikooRecentReplies.svelte";
-import twikooRecentComments from "../data/twikooRecentComments.json";
 import TagCloud from "../components/svelte/TagCloud.svelte";
 import CategoryCloud from "../components/svelte/CategoryCloud.svelte";
 import SiteStats from "../components/svelte/SiteStats.svelte";
 import { siteConfig } from "../site.config";
+import { getReadingStats } from "../utils/reading-stats";
 
 const posts = await getCollection("post");
 const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))];
@@ -31,16 +29,14 @@ const categories = Object.entries(categoryCounts)
 	}))
 	.sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "zh"));
 
-const noticeContent = siteConfig.notice?.enable ? siteConfig.notice.content : "";
-
-const useTwikooRecentReplies =
-	siteConfig.comment?.enable && !!siteConfig.comment?.twikoo?.envId;
+const noticeContent = siteConfig.notice?.enable
+	? siteConfig.notice.content
+	: "";
 
 // 计算站点统计数据
 const postCount = posts.length;
 const wordCount = posts.reduce((total, post) => {
-	const content = post.body || "";
-	return total + content.length;
+	return total + getReadingStats(post.body ?? "").wordCount;
 }, 0);
 const siteStartDate = siteConfig.siteStats?.siteStartDate;
 
@@ -48,41 +44,35 @@ const siteStartDate = siteConfig.siteStats?.siteStartDate;
 const sidebarModules = siteConfig.sidebar?.modules || [
 	{ name: "profile" },
 	{ name: "notice" },
-	{ name: "reply" },
 	{ name: "category" },
 	{ name: "tag" },
 ];
 ---
 
-{sidebarModules.map((module) => {
-	if (module.name === "profile") {
-		return <ProfileCard client:visible />;
-	}
-	if (module.name === "notice" && noticeContent) {
-		return <NoticeModule content={noticeContent} client:visible />;
-	}
-	if (module.name === "reply") {
-		if (useTwikooRecentReplies) {
-			// TwikooRecentReplies 现在仅展示构建阶段预先注入的数据
-			return <TwikooRecentReplies replies={twikooRecentComments} client:visible />;
+{
+	sidebarModules.map((module) => {
+		if (module.name === "profile") {
+			return <ProfileCard client:visible />;
 		}
-		return <ReplyModule client:visible />;
-	}
-	if (module.name === "category") {
-		return <CategoryCloud categories={categories} client:visible />;
-	}
-	if (module.name === "tag") {
-		return <TagCloud tags={tags} client:visible />;
-	}
-	if (module.name === "stats") {
-		return (
-			<SiteStats 
-				postCount={postCount} 
-				wordCount={wordCount} 
-				siteStartDate={siteStartDate}
-				client:visible 
-			/>
-		);
-	}
-	return null;
-})}
+		if (module.name === "notice" && noticeContent) {
+			return <NoticeModule content={noticeContent} client:visible />;
+		}
+		if (module.name === "category") {
+			return <CategoryCloud categories={categories} client:visible />;
+		}
+		if (module.name === "tag") {
+			return <TagCloud tags={tags} client:visible />;
+		}
+		if (module.name === "stats") {
+			return (
+				<SiteStats
+					postCount={postCount}
+					wordCount={wordCount}
+					siteStartDate={siteStartDate}
+					client:visible
+				/>
+			);
+		}
+		return null;
+	})
+}

@@ -15,7 +15,11 @@ export const siteConfig: SiteConfig = {
 	sidebarBackground: "rgba(255, 255, 255, 0.8)", // 侧边栏背景色
 	glassmorphism: true,
 	social: [
-		{ name: "GitHub", url: "https://github.com/Heronesukun", icon: "github" },
+		{
+			name: "GitHub",
+			url: "https://github.com/Heronesukun",
+			icon: "github",
+		},
 		{ name: "Email", url: "mailto:shiyinsukun@gmail.com", icon: "email" },
 	],
 	nav: [
@@ -111,7 +115,8 @@ export const siteConfig: SiteConfig = {
 	// 侧边栏公告配置
 	notice: {
 		enable: true, // 是否启用公告
-		content: "可以来拾音这里视奸一辈子吗，想要的话随时都可以通过（heronesukun.top）来喵", // 公告内容，支持简单 HTML
+		content:
+			"可以来拾音这里视奸一辈子吗，想要的话随时都可以通过（heronesukun.top）来喵", // 公告内容，支持简单 HTML
 	},
 
 	// 侧栏模块配置
@@ -120,7 +125,6 @@ export const siteConfig: SiteConfig = {
 			{ name: "profile" },
 			{ name: "stats" },
 			{ name: "notice" },
-			{ name: "reply" },
 			{ name: "category" },
 			{ name: "tag" },
 		],
@@ -134,9 +138,21 @@ export const siteConfig: SiteConfig = {
 	// 个人信息卡片配置
 	profileCard: {
 		social: [
-			{ name: "GitHub", url: "https://github.com/Heronesukun", icon: "github" },
-			{ name: "bilibili", url: "https://space.bilibili.com/20565553", icon: "bilibili" },
-			{ name: "Email", url: "mailto:shiyinsukun@gmail.com", icon: "email" },
+			{
+				name: "GitHub",
+				url: "https://github.com/Heronesukun",
+				icon: "github",
+			},
+			{
+				name: "bilibili",
+				url: "https://space.bilibili.com/20565553",
+				icon: "bilibili",
+			},
+			{
+				name: "Email",
+				url: "mailto:shiyinsukun@gmail.com",
+				icon: "email",
+			},
 		],
 		showSocialLinks: true, // 显示社交链接
 	},

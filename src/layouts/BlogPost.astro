@@ -1,5 +1,5 @@
 ---
-import type { CollectionEntry } from "astro:content";
+import type { ImageMetadata } from "astro";
 import Layout from "./Layout.astro";
 import FormattedDate from "../components/FormattedDate.astro";
 import Sidebar from "../components/Sidebar.astro";
@@ -8,13 +8,22 @@ import Comment from "../components/comment/index.astro";
 import { siteConfig } from "../site.config";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
+import { formatWordCount } from "../utils/reading-stats";
 import "../styles/twikoo.css";
 
-type Props = Omit<CollectionEntry<"post">["data"], "pinned"> & {
+interface Props {
+	title: string;
+	description: string;
+	pubDate: Date;
+	heroImage?: ImageMetadata | string;
+	tags?: string[];
+	category?: string;
 	id: string;
 	pinned?: boolean;
 	hasMath?: boolean;
-};
+	wordCount?: number;
+	readingMinutes?: number;
+}
 
 const {
 	title,
@@ -25,7 +34,15 @@ const {
 	category,
 	id,
 	hasMath = false,
+	wordCount = 0,
+	readingMinutes = 0,
 } = Astro.props;
+const wordCountText = i18n(I18nKey.wordCount, {
+	count: formatWordCount(wordCount),
+});
+const readingTimeText = i18n(I18nKey.readingTime, {
+	minutes: readingMinutes,
+});
 
 // 处理封面图逻辑，保持与 PostCard 一致
 let coverImage = null;
@@ -59,20 +76,14 @@ if (
 							<div class="post-header-primary">
 								<div class="post-header-title">{title}</div>
 								<div class="post-header-subtitle">
-									<span class="post-meta-item">
-										{i18n(I18nKey.views).replace(
-											"{count}",
-											"3125",
-										)}
-									</span>
-									<span class="post-meta-divider">|</span>
 									<FormattedDate date={pubDate} />
 									<span class="post-meta-divider">|</span>
 									<span class="post-meta-item">
-										{i18n(I18nKey.readingTime).replace(
-											"{minutes}",
-											"6",
-										)}
+										{wordCountText}
+									</span>
+									<span class="post-meta-divider">|</span>
+									<span class="post-meta-item">
+										{readingTimeText}
 									</span>
 									{category && (
 										<>

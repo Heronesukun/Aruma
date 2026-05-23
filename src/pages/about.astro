@@ -1,10 +1,12 @@
 ---
 import { type CollectionEntry, getCollection, render } from "astro:content";
 import BlogPost from "../layouts/BlogPost.astro";
+import { getReadingStats } from "../utils/reading-stats";
 
 const abouts = await getCollection("spec");
 const about = abouts[0] as CollectionEntry<"spec">;
 const { Content } = await render(about);
+const readingStats = getReadingStats(about.body ?? "");
 ---
 
 <BlogPost
@@ -15,6 +17,8 @@ const { Content } = await render(about);
 	id={about.id}
 	tags={[]}
 	category={undefined}
+	wordCount={readingStats.wordCount}
+	readingMinutes={readingStats.readingMinutes}
 >
 	<Content />
 </BlogPost>

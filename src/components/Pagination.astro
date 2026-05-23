@@ -1,0 +1,141 @@
+---
+import { i18n } from "../i18n/translation";
+import I18nKey from "../i18n/i18nKey";
+import { getIndexPageUrl } from "../utils/post-list";
+
+interface Props {
+	currentPage: number;
+	totalPages: number;
+}
+
+const { currentPage, totalPages } = Astro.props;
+const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+const hasPrevious = currentPage > 1;
+const hasNext = currentPage < totalPages;
+---
+
+{
+	totalPages > 1 && (
+		<nav class="pagination" aria-label="文章分页">
+			<a
+				class:list={["pagination-btn", { disabled: !hasPrevious }]}
+				href={
+					hasPrevious ? getIndexPageUrl(currentPage - 1) : undefined
+				}
+				aria-disabled={!hasPrevious}
+			>
+				<i class="mdui-icon material-icons">chevron_left</i>
+				<span>{i18n(I18nKey.prevPage)}</span>
+			</a>
+
+			<div class="pagination-pages">
+				{pages.map((page) => (
+					<a
+						class:list={[
+							"pagination-page",
+							{ active: page === currentPage },
+						]}
+						href={getIndexPageUrl(page)}
+						aria-current={page === currentPage ? "page" : undefined}
+					>
+						{page}
+					</a>
+				))}
+			</div>
+
+			<a
+				class:list={["pagination-btn", { disabled: !hasNext }]}
+				href={hasNext ? getIndexPageUrl(currentPage + 1) : undefined}
+				aria-disabled={!hasNext}
+			>
+				<span>{i18n(I18nKey.nextPage)}</span>
+				<i class="mdui-icon material-icons">chevron_right</i>
+			</a>
+		</nav>
+	)
+}
+
+<style>
+	.pagination {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		margin: 24px 0 8px;
+		flex-wrap: wrap;
+	}
+
+	.pagination-btn,
+	.pagination-page {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		min-height: 36px;
+		border-radius: 7px;
+		text-decoration: none;
+		background: rgba(255, 255, 255, 0.82);
+		color: var(--mdui-color-on-surface);
+		box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+		transition:
+			transform 0.2s ease,
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.pagination-btn {
+		gap: 4px;
+		padding: 0 12px;
+	}
+
+	.pagination-btn i {
+		font-size: 20px;
+	}
+
+	.pagination-pages {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+	}
+
+	.pagination-page {
+		width: 36px;
+		font-weight: 500;
+	}
+
+	.pagination-btn:hover,
+	.pagination-page:hover {
+		transform: translateY(-1px);
+		background: rgba(255, 64, 129, 0.12);
+		color: var(--color);
+	}
+
+	.pagination-page.active {
+		background: var(--color);
+		color: #fff;
+	}
+
+	.pagination-btn.disabled {
+		pointer-events: none;
+		opacity: 0.45;
+	}
+
+	:global(.mdui-theme-layout-dark) .pagination-btn,
+	:global(.mdui-theme-layout-dark) .pagination-page {
+		background: rgba(66, 66, 66, 0.88);
+		color: #fff;
+	}
+
+	:global(.mdui-theme-layout-dark) .pagination-page.active {
+		background: var(--color);
+	}
+
+	@media (max-width: 520px) {
+		.pagination {
+			gap: 8px;
+		}
+
+		.pagination-btn span {
+			display: none;
+		}
+	}
+</style>

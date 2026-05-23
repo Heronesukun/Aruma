@@ -74,11 +74,36 @@ type Song = {
 	duration: number;
 };
 
+type MusicPlayerState = {
+	audio: HTMLAudioElement;
+	initialized: boolean;
+	playlist: Song[];
+	currentIndex: number;
+	currentSong: typeof currentSong;
+	isPlaying: boolean;
+	currentTime: number;
+	duration: number;
+	volume: number;
+	isMuted: boolean;
+	isShuffled: boolean;
+	isRepeating: number;
+	isLoading: boolean;
+	willAutoPlay: boolean;
+	autoplayFailed: boolean;
+};
+
+declare global {
+	interface Window {
+		__arumaMusicPlayer?: MusicPlayerState;
+	}
+}
+
 let playlist: Song[] = [];
 let currentIndex = 0;
 let audio: HTMLAudioElement;
 let progressBar: HTMLElement;
 let volumeBar: HTMLElement;
+let playerState: MusicPlayerState | null = null;
 
 const localPlaylist = [
 	{
@@ -131,6 +156,82 @@ function saveVolumeSettings() {
 	}
 }
 
+function ensurePlayerState(): MusicPlayerState | null {
+	if (typeof window === "undefined") return null;
+	const audioRoot =
+		document.getElementById("global-music-audio-root") ?? document.body;
+
+	if (!window.__arumaMusicPlayer) {
+		const globalAudio = new Audio();
+		globalAudio.preload = "auto";
+		globalAudio.style.display = "none";
+		globalAudio.dataset.arumaMusicPlayer = "true";
+		audioRoot.appendChild(globalAudio);
+
+		window.__arumaMusicPlayer = {
+			audio: globalAudio,
+			initialized: false,
+			playlist: [],
+			currentIndex: 0,
+			currentSong: { ...currentSong },
+			isPlaying: false,
+			currentTime: 0,
+			duration: 0,
+			volume,
+			isMuted,
+			isShuffled,
+			isRepeating,
+			isLoading: false,
+			willAutoPlay: false,
+			autoplayFailed: false,
+		};
+	}
+	if (window.__arumaMusicPlayer.audio.parentElement !== audioRoot) {
+		audioRoot.appendChild(window.__arumaMusicPlayer.audio);
+	}
+
+	return window.__arumaMusicPlayer;
+}
+
+function syncFromPlayerState() {
+	if (!playerState) return;
+
+	audio = playerState.audio;
+	playlist = playerState.playlist;
+	currentIndex = playerState.currentIndex;
+	currentSong = { ...playerState.currentSong };
+	isPlaying = playerState.isPlaying || !audio.paused;
+	currentTime = audio.currentTime || playerState.currentTime;
+	duration = Number.isFinite(audio.duration) && audio.duration > 0
+		? Math.floor(audio.duration)
+		: playerState.duration;
+	volume = playerState.volume;
+	isMuted = playerState.isMuted;
+	isShuffled = playerState.isShuffled;
+	isRepeating = playerState.isRepeating;
+	isLoading = playerState.isLoading;
+	willAutoPlay = playerState.willAutoPlay;
+	autoplayFailed = playerState.autoplayFailed;
+}
+
+function writePlayerState() {
+	if (!playerState) return;
+
+	playerState.playlist = playlist;
+	playerState.currentIndex = currentIndex;
+	playerState.currentSong = { ...currentSong };
+	playerState.isPlaying = isPlaying;
+	playerState.currentTime = currentTime;
+	playerState.duration = duration;
+	playerState.volume = volume;
+	playerState.isMuted = isMuted;
+	playerState.isShuffled = isShuffled;
+	playerState.isRepeating = isRepeating;
+	playerState.isLoading = isLoading;
+	playerState.willAutoPlay = willAutoPlay;
+	playerState.autoplayFailed = autoplayFailed;
+}
+
 async function fetchMetingPlaylist() {
 	if (!meting_api || !meting_id) return;
 	isLoading = true;
@@ -140,6 +241,7 @@ async function fetchMetingPlaylist() {
 		.replace(":id", meting_id)
 		.replace(":auth", "")
 		.replace(":r", Date.now().toString());
+	writePlayerState();
 	try {
 		const res = await fetch(apiUrl);
 		if (!res.ok) throw new Error("meting api error");
@@ -162,10 +264,16 @@ async function fetchMetingPlaylist() {
 		if (playlist.length > 0) {
 			loadSong(playlist[0]);
 		}
+		if (playerState) {
+			playerState.initialized = true;
+			playerState.playlist = playlist;
+		}
 		isLoading = false;
+		writePlayerState();
 	} catch (e) {
 		showErrorMessage(i18n(Key.musicPlayerErrorPlaylist));
 		isLoading = false;
+		if (playerState) playerState.isLoading = false;
 	}
 }
 
@@ -203,6 +311,7 @@ function toggleShuffle() {
 	if (isShuffled) {
         isRepeating = 0;
 	}
+	writePlayerState();
 }
 
 function toggleRepeat() {
@@ -210,6 +319,7 @@ function toggleRepeat() {
 	if (isRepeating !== 0) {
         isShuffled = false;
 	}
+	writePlayerState();
 }
 
 function previousSong() {
@@ -240,6 +350,7 @@ function playSong(index: number, autoPlay = true) {
 	
     willAutoPlay = autoPlay;
 	currentIndex = index;
+	writePlayerState();
 	loadSong(playlist[currentIndex]);
 }
 
@@ -257,9 +368,14 @@ function loadSong(song: typeof currentSong) {
 		isCoverLoading = true;
 		if (song.url) {
 			isLoading = true;
+			if (audio) {
+				audio.src = getAssetPath(song.url);
+				audio.load();
+			}
 		} else {
 			isLoading = false;
 		}
+		writePlayerState();
 	}
 }
 
@@ -283,6 +399,7 @@ function handleLoadSuccess() {
 		if (playlist[currentIndex]) playlist[currentIndex].duration = duration;
 		currentSong.duration = duration;
 	}
+	writePlayerState();
 
 	if (willAutoPlay || isPlaying) {
         const playPromise = audio.play();
@@ -291,6 +408,7 @@ function handleLoadSuccess() {
                 console.warn("自动播放被拦截，等待用户交互:", error);
                 autoplayFailed = true;
 				isPlaying = false;
+				writePlayerState();
             });
 		}
     }
@@ -302,6 +420,7 @@ function handleUserInteraction() {
 		if (playPromise !== undefined) {
             playPromise.then(() => {
                 autoplayFailed = false;
+				writePlayerState();
             }).catch(() => {});
 		}
     }
@@ -310,6 +429,7 @@ function handleUserInteraction() {
 function handleLoadError(_event: Event) {
 	if (!currentSong.url) return;
 	isLoading = false;
+	writePlayerState();
 	showErrorMessage(i18n(Key.musicPlayerErrorSong));
 	
     const shouldContinue = isPlaying || willAutoPlay;
@@ -333,6 +453,7 @@ function handleAudioEnded() {
 		nextSong(true);
 	} else {
 		isPlaying = false;
+		writePlayerState();
 	}
 }
 
@@ -354,6 +475,7 @@ function setProgress(event: MouseEvent) {
 	const newTime = percent * duration;
 	audio.currentTime = newTime;
 	currentTime = newTime;
+	writePlayerState();
 }
 
 let isVolumeDragging = false;
@@ -408,12 +530,16 @@ function updateVolumeLogic(clientX: number) {
 	const percent = Math.max(
         0,
         Math.min(1, (clientX - rect.left) / rect.width),
-    );
+	);
 	volume = percent;
+	if (audio) audio.volume = volume;
+	writePlayerState();
 }
 
 function toggleMute() {
 	isMuted = !isMuted;
+	if (audio) audio.muted = isMuted;
+	writePlayerState();
 }
 
 function formatTime(seconds: number): string {
@@ -424,13 +550,80 @@ function formatTime(seconds: number): string {
 }
 
 const interactionEvents = ['click', 'keydown', 'touchstart'];
+let audioCleanups: Array<() => void> = [];
+
+function bindGlobalAudioEvents() {
+	if (!audio) return;
+
+	const onPlay = () => {
+		isPlaying = true;
+		writePlayerState();
+	};
+	const onPause = () => {
+		isPlaying = false;
+		writePlayerState();
+	};
+	const onTimeUpdate = () => {
+		currentTime = audio.currentTime;
+		writePlayerState();
+	};
+	const onLoadStart = () => handleLoadStart();
+	const onLoadedData = () => handleLoadSuccess();
+	const onEnded = () => handleAudioEnded();
+	const onError = (event: Event) => handleLoadError(event);
+
+	audio.addEventListener("play", onPlay);
+	audio.addEventListener("pause", onPause);
+	audio.addEventListener("timeupdate", onTimeUpdate);
+	audio.addEventListener("loadstart", onLoadStart);
+	audio.addEventListener("loadeddata", onLoadedData);
+	audio.addEventListener("ended", onEnded);
+	audio.addEventListener("error", onError);
+
+	audioCleanups = [
+		() => audio.removeEventListener("play", onPlay),
+		() => audio.removeEventListener("pause", onPause),
+		() => audio.removeEventListener("timeupdate", onTimeUpdate),
+		() => audio.removeEventListener("loadstart", onLoadStart),
+		() => audio.removeEventListener("loadeddata", onLoadedData),
+		() => audio.removeEventListener("ended", onEnded),
+		() => audio.removeEventListener("error", onError),
+	];
+}
+
 onMount(() => {
-    loadVolumeSettings(); 
+	playerState = ensurePlayerState();
+	syncFromPlayerState();
+	if (!playerState?.initialized) {
+		loadVolumeSettings();
+		if (playerState) {
+			playerState.volume = volume;
+			playerState.isMuted = isMuted;
+		}
+	}
+	if (audio) {
+		audio.volume = volume;
+		audio.muted = isMuted;
+		if (
+			playerState?.isPlaying &&
+			audio.paused &&
+			currentSong.url
+		) {
+			audio.play().catch(() => {
+				autoplayFailed = true;
+				writePlayerState();
+			});
+		}
+	}
+	bindGlobalAudioEvents();
     interactionEvents.forEach(event => {
         document.addEventListener(event, handleUserInteraction, { capture: true });
     });
 
 	if (!siteConfig.musicPlayer?.enable) {
+		return;
+	}
+	if (playerState?.initialized) {
 		return;
 	}
 	if (mode === "meting") {
@@ -443,10 +636,17 @@ onMount(() => {
 		} else {
 			showErrorMessage("本地播放列表为空");
 		}
+		if (playerState) {
+			playerState.initialized = true;
+			playerState.playlist = playlist;
+		}
+		writePlayerState();
 	}
 });
 
 onDestroy(() => {
+	audioCleanups.forEach((cleanup) => cleanup());
+	audioCleanups = [];
     if (typeof document !== 'undefined') {
         interactionEvents.forEach(event => {
             document.removeEventListener(event, handleUserInteraction, { capture: true });
@@ -454,21 +654,6 @@ onDestroy(() => {
     }
 });
 </script>
-
-<audio
-	bind:this={audio}
-	src={getAssetPath(currentSong.url)}
-	bind:volume
-	bind:muted={isMuted}
-	on:play={() => isPlaying = true}
-	on:pause={() => isPlaying = false}
-	on:timeupdate={() => currentTime = audio.currentTime}
-	on:ended={handleAudioEnded}
-	on:error={handleLoadError}
-	on:loadeddata={handleLoadSuccess}
-	on:loadstart={handleLoadStart}
-	preload="auto"
-></audio>
 
 <svelte:window 
     on:pointermove={handleVolumeMove} 

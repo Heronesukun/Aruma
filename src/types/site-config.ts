@@ -91,7 +91,7 @@ export type NoticeConfig = {
 
 // 侧栏模块配置
 export type SidebarModuleConfig = {
-	name: "profile" | "notice" | "reply" | "category" | "tag" | "stats"; // 模块名称
+	name: "profile" | "notice" | "category" | "tag" | "stats"; // 模块名称
 };
 
 export type SidebarConfig = {
