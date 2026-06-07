@@ -2,7 +2,7 @@
 title: 建站纪念
 published: 2025-11-04
 pubDate: 2025-11-04
-pinned: true
+pinned: false
 description: 从零开始摸鱼建站生活
 tags: [commemorate, Blogging]
 author: 拾音
