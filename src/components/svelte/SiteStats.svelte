@@ -80,23 +80,19 @@
 
   .stat-item .mdui-icon {
     font-size: 20px;
-    color: var(--mdui-color-primary, #1a73e8);
+    color: rgb(var(--mdui-color-on-surface, 28, 27, 31));
     opacity: 0.8;
   }
 
   .stat-label {
     flex: 1;
     font-size: 14px;
-    color: var(--mdui-color-on-surface, rgba(0, 0, 0, 0.7));
-  }
-
-  :global(.mdui-theme-layout-dark) .stat-label {
-    color: var(--mdui-color-on-surface, rgba(255, 255, 255, 0.7));
+    color: rgba(var(--mdui-color-on-surface, 28, 27, 31), 0.7);
   }
 
   .stat-value {
     font-size: 16px;
     font-weight: 600;
-    color: var(--mdui-color-primary, #1a73e8);
+    color: rgb(var(--mdui-color-on-surface, 28, 27, 31));
   }
 </style>

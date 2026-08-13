@@ -28,8 +28,8 @@ import { navigate } from "astro:transitions/client";
 	}
 
 	.appbar-search .mdui-textfield-input {
-		color: rgba(255, 255, 255, 0.87);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.42);
+		color: var(--appbar-foreground);
+		border-bottom: 1px solid var(--appbar-border);
 		width: 0;
 		transition: width 0.3s ease;
 		background: transparent;
@@ -45,16 +45,16 @@ import { navigate } from "astro:transitions/client";
 	.appbar-search .mdui-textfield-input:focus {
 		outline: none;
 		box-shadow: none;
-		border-bottom: 1px solid #fff;
+		border-bottom: 1px solid var(--appbar-foreground);
 	}
 
 	.appbar-search.mdui-textfield-expanded .mdui-textfield-input {
 		width: 200px;
-		border-bottom-color: #fff;
+		border-bottom-color: var(--appbar-foreground);
 	}
 
 	.appbar-search .mdui-textfield-input::placeholder {
-		color: rgba(255, 255, 255, 0.5);
+		color: var(--appbar-placeholder);
 	}
 
 	@media (max-width: 768px) {

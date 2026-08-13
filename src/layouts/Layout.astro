@@ -80,18 +80,25 @@ if (siteConfig.font) {
 				const theme = localStorage.getItem("theme");
 				// 默认暗色模式：theme === 'dark' 或 theme 为 null/undefined
 				const isDark = theme === "dark" || theme === null;
-				if (isDark) {
-					document.documentElement.classList.add(
-						"mdui-theme-layout-dark",
-					);
-				} else {
-					document.documentElement.classList.remove(
-						"mdui-theme-layout-dark",
-					);
-				}
+				document.documentElement.classList.toggle(
+					"mdui-theme-layout-dark",
+					isDark,
+				);
+				document.documentElement.classList.toggle(
+					"mdui-theme-dark",
+					isDark,
+				);
+				document.documentElement.classList.toggle(
+					"mdui-theme-light",
+					!isDark,
+				);
 			})();
 		</script>
-		<BaseHead title={pageTitle} description={description} hasMath={hasMath} />
+		<BaseHead
+			title={pageTitle}
+			description={description}
+			hasMath={hasMath}
+		/>
 		<ClientRouter />
 		<script is:inline>
 			window.paceOptions = {
@@ -170,15 +177,19 @@ if (siteConfig.font) {
 			};
 
 			const setTheme = () => {
-				if (getTheme()) {
-					document.documentElement.classList.add(
-						"mdui-theme-layout-dark",
-					);
-				} else {
-					document.documentElement.classList.remove(
-						"mdui-theme-layout-dark",
-					);
-				}
+				const isDark = getTheme();
+				document.documentElement.classList.toggle(
+					"mdui-theme-layout-dark",
+					isDark,
+				);
+				document.documentElement.classList.toggle(
+					"mdui-theme-dark",
+					isDark,
+				);
+				document.documentElement.classList.toggle(
+					"mdui-theme-light",
+					!isDark,
+				);
 			};
 
 			// Initial setup
@@ -186,15 +197,19 @@ if (siteConfig.font) {
 
 			// Re-apply theme before View Transitions navigation to prevent FOUC
 			document.addEventListener("astro:before-swap", (event) => {
-				if (getTheme()) {
-					event.newDocument.documentElement.classList.add(
-						"mdui-theme-layout-dark",
-					);
-				} else {
-					event.newDocument.documentElement.classList.remove(
-						"mdui-theme-layout-dark",
-					);
-				}
+				const isDark = getTheme();
+				event.newDocument.documentElement.classList.toggle(
+					"mdui-theme-layout-dark",
+					isDark,
+				);
+				event.newDocument.documentElement.classList.toggle(
+					"mdui-theme-dark",
+					isDark,
+				);
+				event.newDocument.documentElement.classList.toggle(
+					"mdui-theme-light",
+					!isDark,
+				);
 			});
 		</script>
 	</head>

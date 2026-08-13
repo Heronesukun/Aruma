@@ -1,5 +1,10 @@
 /* ----------------- 全局样式 ----------------- */
 :root {
+  --appbar-foreground: rgba(0, 0, 0, 0.87);
+  --appbar-border: rgba(0, 0, 0, 0.42);
+  --appbar-placeholder: rgba(0, 0, 0, 0.5);
+  --appbar-hover-bg: rgba(0, 0, 0, 0.08);
+  --appbar-text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.65);
   --color: #ff4081; /* 默认粉色主题 */
   /* 主题背景色变量 - 避免过渡动画导致闪烁 */
   --card-bg: rgba(255, 255, 255, 0.8);
@@ -20,6 +25,11 @@
 
 /* 暗色模式变量覆盖 */
 html.mdui-theme-layout-dark {
+  --appbar-foreground: #fff;
+  --appbar-border: rgba(255, 255, 255, 0.42);
+  --appbar-placeholder: rgba(255, 255, 255, 0.5);
+  --appbar-hover-bg: rgba(255, 255, 255, 0.1);
+  --appbar-text-shadow: 1px 1px 1px rgba(66, 66, 66, 0.5);
   --card-bg: rgba(66, 66, 66, 0.8);
   --chip-bg: rgba(255, 255, 255, 0.1);
   --chip-hover-bg: rgba(255, 255, 255, 0.2);
@@ -233,8 +243,8 @@ a {
 
 /* ----------------- 顶部导航 (Appbar) ----------------- */
 .mdui-appbar {
-  color: #fff;
-  text-shadow: 1px 1px 1px rgba(66, 66, 66, 0.5); /* 增加文字阴影提高可读性 */
+  color: var(--appbar-foreground);
+  text-shadow: var(--appbar-text-shadow); /* 增加文字阴影提高可读性 */
   background-color: transparent; /* 导航栏背景透明 */
   transition: all 0.3s;
   position: fixed; /* 强制固定 */
@@ -268,7 +278,7 @@ a {
   margin: 0 16px;
   font-size: 20px;
   font-weight: 500;
-  color: #fff;
+  color: inherit;
 }
 
 .mdui-toolbar-spacer {
@@ -283,8 +293,8 @@ a {
 }
 
 .appbar-search .mdui-textfield-input {
-  color: rgba(255, 255, 255, 0.87);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.42);
+  color: var(--appbar-foreground);
+  border-bottom: 1px solid var(--appbar-border);
   width: 0;
   transition: width 0.3s;
   background: transparent;
@@ -297,11 +307,11 @@ a {
 .appbar-search:hover .mdui-textfield-input,
 .appbar-search .mdui-textfield-input:focus {
   width: 200px; /* 展开宽度 */
-  border-bottom-color: #fff;
+  border-bottom-color: var(--appbar-foreground);
 }
 
 .appbar-search ::placeholder {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--appbar-placeholder);
 }
 
 /* 按钮图标 */
@@ -322,6 +332,14 @@ a {
 
 .mdui-btn-icon:hover {
   background-color: rgba(255, 255, 255, 0.1);
+}
+
+.mdui-appbar .mdui-btn-icon {
+  color: var(--appbar-foreground);
+}
+
+.mdui-appbar .mdui-btn-icon:hover {
+  background-color: var(--appbar-hover-bg);
 }
 
 /* ----------------- 侧边抽屉 (Drawer) ----------------- */
