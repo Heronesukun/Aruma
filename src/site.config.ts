@@ -14,14 +14,6 @@ export const siteConfig: SiteConfig = {
 	postBackground: "rgba(255, 255, 255, 0.7)", // 文章背景色 (带透明度)
 	sidebarBackground: "rgba(255, 255, 255, 0.8)", // 侧边栏背景色
 	glassmorphism: true,
-	social: [
-		{
-			name: "GitHub",
-			url: "https://github.com/Heronesukun",
-			icon: "github",
-		},
-		{ name: "Email", url: "mailto:shiyinsukun@gmail.com", icon: "email" },
-	],
 	nav: [
 		{ name: "home", path: "/", icon: "home" },
 		{ type: "category", icon: "widgets" },

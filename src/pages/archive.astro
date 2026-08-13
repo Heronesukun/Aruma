@@ -2,18 +2,18 @@
 import Layout from "../layouts/Layout.astro";
 import PostCard from "../components/PostCard.astro";
 import Sidebar from "../components/Sidebar.astro";
-import { getCollection } from "astro:content";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
+import { getPostDate, getVisiblePosts } from "../utils/post-list";
 
-const allPosts = await getCollection("post");
+const allPosts = await getVisiblePosts();
 const posts = allPosts.sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	(a, b) => getPostDate(b).valueOf() - getPostDate(a).valueOf(),
 );
 
 const groupedPosts = posts.reduce(
 	(acc, post) => {
-		const year = post.data.pubDate.getFullYear();
+		const year = getPostDate(post).getFullYear();
 		if (!acc[year]) acc[year] = [];
 		acc[year].push(post);
 		return acc;
@@ -52,22 +52,16 @@ const years = Object.keys(groupedPosts)
 </Layout>
 
 <script>
-	// 存储初始 hash，用于 View Transitions 导航后的处理
-	let pendingHash: string | null = null;
-
 	const applyArchiveFilter = (hashOverride?: string) => {
 		const hash = hashOverride || window.location.hash;
-		const sections = document.querySelectorAll(".archive-year-section");
+		const sections = document.querySelectorAll<HTMLElement>(
+			".archive-year-section",
+		);
 
-		// 如果没有 sections，可能 DOM 还没准备好，延迟重试
-		if (sections.length === 0) {
-			requestAnimationFrame(() => applyArchiveFilter(hashOverride));
-			return;
-		}
+		if (sections.length === 0) return;
 
 		if (!hash || !hash.startsWith("#year-")) {
 			sections.forEach((section) => {
-				// @ts-ignore
 				section.style.display = "";
 			});
 			// 如果没有指定年份，强制回到顶部
@@ -79,7 +73,6 @@ const years = Object.keys(groupedPosts)
 
 		const targetId = hash.slice(1);
 		sections.forEach((section) => {
-			// @ts-ignore
 			section.style.display = section.id === targetId ? "" : "none";
 		});
 
@@ -92,55 +85,20 @@ const years = Object.keys(groupedPosts)
 	// Expose the function globally for Header.astro to call
 	(window as any).applyArchiveFilter = applyArchiveFilter;
 
-	// 处理从其他页面带 hash 导航过来的情况
-	// 在页面切换前保存 hash
-	document.addEventListener("astro:before-preparation", () => {
-		if (window.location.pathname.includes("/archive")) {
-			pendingHash = window.location.hash;
-		}
-	});
-
 	// 页面加载时处理（包括 View Transitions 导航）
-	document.addEventListener("astro:page-load", () => {
-		// 使用延迟确保 DOM 和 hash 都已准备好
-		requestAnimationFrame(() => {
-			applyArchiveFilter();
-		});
-	});
+	document.addEventListener("astro:page-load", () => applyArchiveFilter());
 
 	// 处理 hash 变化（同页面内切换年份）
-	const handleHashChange = () => {
-		applyArchiveFilter();
-	};
-
 	// 只在 window 上绑定一次 hashchange
 	if (!(window as any).hasArchiveHashListener) {
-		window.addEventListener("hashchange", handleHashChange);
+		window.addEventListener("hashchange", () => {
+			(window as any).applyArchiveFilter?.();
+		});
 		(window as any).hasArchiveHashListener = true;
 	}
 
-	// 处理点击归档链接时的特殊情况
-	// 确保在 View Transitions 导航完成后应用过滤
-	document.addEventListener("astro:after-swap", () => {
-		// 在 swap 后立即检查是否有 hash 需要处理
-		const hash = window.location.hash;
-		if (hash && hash.startsWith("#year-")) {
-			// 延迟执行，确保新 DOM 已完全插入
-			setTimeout(() => {
-				applyArchiveFilter(hash);
-			}, 0);
-		}
-	});
-
 	// 初始加载时也执行一次
-	if (document.readyState === "loading") {
-		document.addEventListener("DOMContentLoaded", () => {
-			applyArchiveFilter();
-		});
-	} else {
-		// DOM 已准备好，直接执行
-		applyArchiveFilter();
-	}
+	applyArchiveFilter();
 </script>
 
 <style>

@@ -8,7 +8,7 @@
 		"build": "node scripts/fetch-external-anime.js && node scripts/fetchTwikooRecentComments.mjs && astro build && node scripts/copy-katex-css.js && node scripts/extract-math-symbols.js && node scripts/compress-katex-fonts.js && pagefind --site dist && node scripts/compress-fonts.js",
 		"preview": "astro preview",
 		"astro": "astro",
-		"type-check": "tsc --noEmit --isolatedDeclarations",
+		"type-check": "tsc --noEmit",
 		"format": "prettier --write ./src",
 		"lint": "prettier --check ./src"
 	},
@@ -49,15 +49,5 @@
 		"fontmin": "^1.1.1",
 		"prettier": "^3.8.1",
 		"prettier-plugin-astro": "^0.14.1"
-	},
-	"pnpm": {
-		"overrides": {
-			"ttf2woff2": "4.0.5"
-		},
-		"onlyBuiltDependencies": [
-			"esbuild",
-			"sharp",
-			"ttf2woff2"
-		]
 	}
 }

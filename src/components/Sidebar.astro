@@ -1,14 +1,14 @@
 ---
-import { getCollection } from "astro:content";
 import ProfileCard from "../components/svelte/ProfileCard.svelte";
 import NoticeModule from "../components/svelte/NoticeModule.svelte";
 import TagCloud from "../components/svelte/TagCloud.svelte";
 import CategoryCloud from "../components/svelte/CategoryCloud.svelte";
 import SiteStats from "../components/svelte/SiteStats.svelte";
 import { siteConfig } from "../site.config";
+import { getVisiblePosts } from "../utils/post-list";
 import { getReadingStats } from "../utils/reading-stats";
 
-const posts = await getCollection("post");
+const posts = await getVisiblePosts();
 const tags = [...new Set(posts.flatMap((post) => post.data.tags || []))];
 
 const categoryCounts = posts.reduce(

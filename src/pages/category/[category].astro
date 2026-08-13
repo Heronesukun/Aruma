@@ -4,12 +4,12 @@ export const prerender = true;
 import Layout from "../../layouts/Layout.astro";
 import PostCard from "../../components/PostCard.astro";
 import Sidebar from "../../components/Sidebar.astro";
-import { getCollection } from "astro:content";
 import { i18n } from "../../i18n/translation";
 import I18nKey from "../../i18n/i18nKey";
+import { getPostDate, getVisiblePosts } from "../../utils/post-list";
 
 export async function getStaticPaths() {
-	const posts = await getCollection("post");
+	const posts = await getVisiblePosts();
 	const categories = [
 		...new Set(posts.map((post) => post.data.category).filter(Boolean)),
 	];
@@ -30,7 +30,7 @@ const name = category
 	: decodeURIComponent(Astro.params.category || "");
 
 const sortedPosts = (posts || []).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+	(a, b) => getPostDate(b).valueOf() - getPostDate(a).valueOf(),
 );
 ---
 

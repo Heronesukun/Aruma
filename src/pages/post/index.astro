@@ -1,17 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Sidebar from "../../components/Sidebar.astro";
-import { type CollectionEntry, getCollection } from "astro:content";
 import { i18n } from "../../i18n/translation";
 import PostCard from "../../components/PostCard.astro";
 import I18nKey from "../../i18n/i18nKey";
 import { siteConfig } from "../../site.config";
+import { getPostDate, getVisiblePosts } from "../../utils/post-list";
 import { formatWordCount, getReadingStats } from "../../utils/reading-stats";
 
-const getPostDate = (post: CollectionEntry<"post">) =>
-	post.data.pubDate ?? post.data.published ?? post.data.date ?? new Date(0);
-
-const allPosts = (await getCollection("post")).sort((a, b) => {
+const allPosts = (await getVisiblePosts()).sort((a, b) => {
 	// 优先按置顶排序
 	const aSticky = a.data.category === "置顶" ? 1 : 0;
 	const bSticky = b.data.category === "置顶" ? 1 : 0;
@@ -193,6 +190,7 @@ const postsData = allPosts.map((post) => {
 		const noResultsText = document.getElementById("no-results-text");
 		const queryEl = document.getElementById("search-query");
 		const countEl = document.getElementById("search-count");
+		if (!container || !searchHeader || !noResults || !noResultsText) return;
 
 		const filteredPosts = filterPosts(query);
 
@@ -219,6 +217,7 @@ const postsData = allPosts.map((post) => {
 	}
 
 	function initSearch() {
+		if (!document.getElementById("posts-container")) return;
 		const urlParams = new URLSearchParams(window.location.search);
 		const query = urlParams.get("q")?.trim() || "";
 		renderPosts(query);
@@ -308,7 +307,7 @@ const postsData = allPosts.map((post) => {
 		align-items: center;
 		gap: 12px;
 		font-size: 13px;
-		color: var(--mdui-color-text-secondary);
+		color: rgba(var(--mdui-color-on-surface, 28, 27, 31), 0.7);
 		margin-bottom: 8px;
 	}
 	.post-card-date {
@@ -338,7 +337,7 @@ const postsData = allPosts.map((post) => {
 	}
 	.post-card-description {
 		font-size: 14px;
-		color: var(--mdui-color-text-secondary);
+		color: rgba(var(--mdui-color-on-surface, 28, 27, 31), 0.7);
 		margin: 0 0 10px 0;
 		line-height: 1.6;
 		display: -webkit-box;
@@ -356,7 +355,7 @@ const postsData = allPosts.map((post) => {
 		padding: 2px 6px;
 		border-radius: 3px;
 		background: rgba(0, 0, 0, 0.05);
-		color: var(--mdui-color-text-secondary);
+		color: rgba(var(--mdui-color-on-surface, 28, 27, 31), 0.7);
 		text-decoration: none;
 		transition: background 0.2s;
 	}

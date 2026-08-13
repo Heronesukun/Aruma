@@ -3,9 +3,9 @@ import DrawerProfile from "./svelte/DrawerProfile.svelte";
 import { siteConfig } from "../site.config";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
-import { getCollection } from "astro:content";
+import { getPostDate, getVisiblePosts } from "../utils/post-list";
 
-const posts = await getCollection("post");
+const posts = await getVisiblePosts();
 
 const categoryCounts = posts.reduce(
 	(acc, post) => {
@@ -27,7 +27,7 @@ const categories = Object.entries(categoryCounts)
 
 const archiveCounts = posts.reduce(
 	(acc, post) => {
-		const year = post.data.pubDate.getFullYear();
+		const year = getPostDate(post).getFullYear();
 		acc[year] = (acc[year] || 0) + 1;
 		return acc;
 	},

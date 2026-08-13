@@ -1,13 +1,13 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import Sidebar from "../../components/Sidebar.astro";
-import { getCollection } from "astro:content";
 import { i18n } from "../../i18n/translation";
 import I18nKey from "../../i18n/i18nKey";
 import CategoryCard from "../../components/cards/CategoryCard.astro";
 import PageGrid from "../../components/layouts/PageGrid.astro";
+import { getVisiblePosts } from "../../utils/post-list";
 
-const posts = await getCollection("post");
+const posts = await getVisiblePosts();
 const categoryCounts = posts.reduce(
 	(acc, post) => {
 		const category = post.data.category?.trim();

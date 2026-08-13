@@ -99,40 +99,45 @@ function loadSiteConfig() {
 }
 
 function loadPostUrls() {
-	// 读取当前博客文章列表（src/content/post 下的 md/mdx 文件）
 	const postsDir = path.resolve(__dirname, "../src/content/post");
 	if (!fs.existsSync(postsDir)) return [];
 
-	const entries = fs.readdirSync(postsDir, { withFileTypes: true });
 	const urls = [];
+	const collectPostUrls = (directory) => {
+		for (const entry of fs.readdirSync(directory, {
+			withFileTypes: true,
+		})) {
+			const absolutePath = path.join(directory, entry.name);
+			if (entry.isDirectory()) {
+				collectPostUrls(absolutePath);
+				continue;
+			}
 
-	for (const entry of entries) {
-		if (!entry.isFile()) continue;
-		const ext = path.extname(entry.name).toLowerCase();
-		if (ext !== ".md" && ext !== ".mdx") continue;
-		const slug = path.basename(entry.name, ext);
-		// 与前端 Twikoo 存储 path 保持一致：/post/{id}（无结尾斜杠）
-		urls.push(`/post/${slug}`);
-	}
+			const extension = path.extname(entry.name).toLowerCase();
+			if (extension !== ".md" && extension !== ".mdx") continue;
 
-	return urls;
-}
+			const source = fs.readFileSync(absolutePath, "utf-8");
+			const frontmatter = source.match(/^---\s*\r?\n([\s\S]*?)\r?\n---/);
+			if (
+				frontmatter &&
+				/^\s*draft\s*:\s*true\s*(?:#.*)?$/im.test(frontmatter[1])
+			) {
+				continue;
+			}
 
-function formatDate(lang, timestamp) {
-	try {
-		return new Intl.DateTimeFormat(lang || "zh-CN", {
-			year: "numeric",
-			month: "2-digit",
-			day: "2-digit",
-		}).format(new Date(timestamp));
-	} catch {
-		return new Date(timestamp).toLocaleDateString();
-	}
-}
+			const relativePath = path
+				.relative(postsDir, absolutePath)
+				.split(path.sep)
+				.join("/");
+			const slug = relativePath
+				.slice(0, -extension.length)
+				.replace(/\/index$/i, "");
+			if (slug && slug !== "index") urls.push(`/post/${slug}`);
+		}
+	};
 
-function extractTitleFromUrl(url) {
-	const parts = url.split("/").filter(Boolean);
-	return parts[parts.length - 1] || "/";
+	collectPostUrls(postsDir);
+	return [...new Set(urls)].sort();
 }
 
 async function fetchRecentComments() {

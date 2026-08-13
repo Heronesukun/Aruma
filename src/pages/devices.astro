@@ -45,14 +45,14 @@ const categories = Object.keys(devices);
 		<div class="devices-container">
 			{
 				categories.map((category) =>
-					devices[category].map((device, index) => (
+					devices[category].map((device) => (
 						<a
 							href={device.link}
 							target="_blank"
 							rel="noopener noreferrer"
 							class="device-card-link"
 							data-category={category}
-							style={`display: ${index === 0 && category === categories[0] ? "block" : "none"}`}
+							style={`display: ${category === categories[0] ? "block" : "none"}`}
 						>
 							<div class="mdui-card device-card mdui-hoverable">
 								<div class="device-image">

@@ -3,10 +3,13 @@ import Layout from "../layouts/Layout.astro";
 import Pagination from "../components/Pagination.astro";
 import PostCard from "../components/PostCard.astro";
 import Sidebar from "../components/Sidebar.astro";
-import { getCollection } from "astro:content";
-import { POSTS_PER_PAGE, sortPostsForIndex } from "../utils/post-list";
+import {
+	getVisiblePosts,
+	POSTS_PER_PAGE,
+	sortPostsForIndex,
+} from "../utils/post-list";
 
-const allPosts = sortPostsForIndex(await getCollection("post"));
+const allPosts = sortPostsForIndex(await getVisiblePosts());
 const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE);
 const posts = allPosts.slice(0, POSTS_PER_PAGE);
 ---

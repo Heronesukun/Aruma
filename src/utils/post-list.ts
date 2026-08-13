@@ -1,6 +1,19 @@
-import type { CollectionEntry } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 
 export const POSTS_PER_PAGE = 7;
+
+/**
+ * Returns posts visible in the current environment.
+ *
+ * Drafts stay available during local development, but production builds must
+ * never generate pages, feeds, navigation entries, or statistics for them.
+ */
+export async function getVisiblePosts(): Promise<CollectionEntry<"post">[]> {
+	const posts = await getCollection("post");
+	return import.meta.env.PROD
+		? posts.filter((post) => !post.data.draft)
+		: posts;
+}
 
 export function getPostDate(post: CollectionEntry<"post">): Date {
 	return (
