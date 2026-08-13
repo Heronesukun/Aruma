@@ -1,14 +1,19 @@
 ---
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
-import { navigate } from "astro:transitions/client";
 ---
 
 <div
 	class="mdui-textfield mdui-textfield-expandable appbar-search"
 	id="search-container"
 >
-	<button class="mdui-textfield-icon mdui-btn mdui-btn-icon" id="open-search">
+	<button
+		class="mdui-textfield-icon mdui-btn mdui-btn-icon"
+		id="open-search"
+		type="button"
+		aria-label="搜索文章"
+		title="搜索文章"
+	>
 		<i class="mdui-icon material-icons">search</i>
 	</button>
 	<input
@@ -64,6 +69,13 @@ import { navigate } from "astro:transitions/client";
 	}
 
 	@media (max-width: 480px) {
+		:global(
+			.mdui-toolbar:has(.appbar-search.mdui-textfield-expanded)
+				.mdui-typo-title
+		) {
+			display: none;
+		}
+
 		.appbar-search.mdui-textfield-expanded .mdui-textfield-input {
 			width: 100px;
 		}

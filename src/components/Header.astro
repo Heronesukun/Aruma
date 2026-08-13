@@ -10,7 +10,13 @@ import ThemeToggle from './ThemeToggle.astro';
 
 <Appbar>
   <Toolbar>
-    <button class="mdui-btn mdui-btn-icon" id="toggle-drawer">
+    <button
+      class="mdui-btn mdui-btn-icon"
+      id="toggle-drawer"
+      type="button"
+      aria-label="打开导航菜单"
+      title="打开导航菜单"
+    >
       <i class="mdui-icon material-icons">menu</i>
     </button>
     <a href="/" class="mdui-typo-title">{siteConfig.title}</a>
