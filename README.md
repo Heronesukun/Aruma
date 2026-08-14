@@ -7,7 +7,8 @@
 [![Astro](https://img.shields.io/badge/Astro-6.0-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
 [![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?logo=svelte&logoColor=white)](https://svelte.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](./LICENSE)
+[![Code License](https://img.shields.io/badge/Code-MIT-blue.svg)](./LICENSE)
+[![Content License](https://img.shields.io/badge/Content-CC_BY--NC--ND_4.0-lightgrey.svg)](./src/content/post/LICENSE)
 
 [在线预览](https://aruma.mysqil.com) · [问题反馈](https://github.com/Heronesukun/Aruma/issues) · [项目文档](./docs)
 
@@ -204,4 +205,9 @@ pnpm check
 
 ## 许可证
 
-本项目代码基于 [GNU General Public License v3.0](./LICENSE) 发布。复制、修改或分发时，请遵守许可证条款并保留相应的版权与许可证信息。
+本仓库采用双许可证，代码与文章内容分别授权：
+
+- **代码、模板与脚本：**采用 [MIT License](./LICENSE)。你可以自由使用、复制、修改、合并、发布、分发、再授权或销售，但必须保留原版权与许可声明。
+- **文章内容：**`src/content/post/` 下由 Heronesukun 创作的原创文章及原创随文媒体采用 [CC BY-NC-ND 4.0](./src/content/post/LICENSE)。允许在正确署名并链接原文与许可证的前提下进行非商业、原样转载；禁止分发修改、改编或翻译后的版本。
+
+文章中引用的第三方图片、文字、商标及其他材料仍归原权利人所有，不因本仓库的许可证而被重新授权。
