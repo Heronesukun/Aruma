@@ -1,62 +1,207 @@
-# Astro Starter Kit: Blog
+<div align="center">
 
-```sh
-pnpm create astro@latest -- --template blog
+# Aruma
+
+一个基于 Astro 6 与 Svelte 5 构建的个人博客，兼顾内容创作、视觉表现与静态站点性能。
+
+[![Astro](https://img.shields.io/badge/Astro-6.0-BC52EE?logo=astro&logoColor=white)](https://astro.build/)
+[![Svelte](https://img.shields.io/badge/Svelte-5-FF3E00?logo=svelte&logoColor=white)](https://svelte.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)](./LICENSE)
+
+[在线预览](https://aruma.mysqil.com) · [问题反馈](https://github.com/Heronesukun/Aruma/issues) · [项目文档](./docs)
+
+</div>
+
+## 项目简介
+
+Aruma 是 [Heronesukun](https://github.com/Heronesukun) 的个人博客项目。它以 Astro 的静态生成能力为基础，通过 Svelte 组件提供交互体验，并使用 MDUI、Tailwind CSS、Pagefind、KaTeX 与 PhotoSwipe 等工具完善主题、搜索、数学公式和相册能力。
+
+项目不仅包含文章系统，也集成了相册、追番、日记、友链、设备展示、音乐播放器和站点统计等页面，适合作为个人内容站点直接使用，也可以作为二次开发 Astro 博客的参考实现。
+
+## 功能特性
+
+### 内容与导航
+
+- 使用 Astro Content Collections 管理 Markdown / MDX 文章，并通过 Zod 校验 Frontmatter。
+- 支持文章置顶、分类、标签、归档、草稿、阅读时间与字数统计。
+- 提供文章列表、分页、全文搜索、RSS、Atom 与 Sitemap。
+- 支持目录式文章资源，图片可以与文章放在同一文件夹中维护。
+- 生产环境自动过滤草稿内容，避免草稿进入列表、详情页和订阅源。
+
+### 界面与阅读体验
+
+- 响应式玻璃拟态布局，适配桌面、平板与移动端。
+- 亮色 / 暗色主题切换，并在 Astro ClientRouter 页面切换期间保持主题状态。
+- 顶部提供站内搜索、当前页面二维码和主题切换入口。
+- 支持 KaTeX 数学公式、代码高亮、代码复制和宽表格横向滚动。
+- 集成 PhotoSwipe 相册预览、Pace 页面加载进度与本地音乐播放器。
+- 内置简体中文、繁体中文、英文和日文翻译结构，便于继续扩展国际化内容。
+
+### 扩展页面
+
+- 相册：扫描本地相册目录并生成相册列表与详情页。
+- 追番：支持本地 JSON、Bilibili、Bangumi 及混合数据源。
+- 日记、友链与设备：使用结构化 JSON 数据维护。
+- 评论：预留 Twikoo 评论与最近回复组件，可通过站点配置启用。
+- 侧边栏：包含个人资料、公告、站点统计、分类云与标签云。
+
+### 工程能力
+
+- Astro 6 静态输出，构建结果位于 `dist/`。
+- Svelte 5 按需水合，减少不必要的客户端 JavaScript。
+- Sharp 图片处理、字体压缩、KaTeX 资源裁剪与 Pagefind 离线索引。
+- TypeScript、Astro Check 与 Prettier 组成基础质量检查流程。
+- 项目内置主题、i18n、组件化和 View Transitions 开发规范。
+
+## 技术栈
+
+| 分类 | 技术 |
+| --- | --- |
+| 框架 | Astro 6、Svelte 5、TypeScript |
+| 样式 | MDUI 2、Tailwind CSS 4、原生 CSS |
+| 内容 | Astro Content Collections、Markdown、MDX |
+| 搜索 | Pagefind |
+| 数学公式 | Remark Math、Rehype KaTeX、KaTeX |
+| 图片与相册 | Astro Assets、Sharp、PhotoSwipe |
+| 其他 | QRCode、Pace、Twikoo、Lucide、Iconify |
+
+## 环境要求
+
+- Node.js `^20.19.1` 或 `>=22.12.0`
+- pnpm `>=7.1.0`
+
+推荐使用较新的 Node.js LTS 和 Corepack 管理 pnpm。
+
+## 快速开始
+
+```bash
+git clone https://github.com/Heronesukun/Aruma.git
+cd Aruma
+
+corepack enable
+pnpm install
+pnpm dev
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+开发服务器默认运行在 <http://localhost:4321>。
 
-Features:
+## 常用命令
 
-- ✅ Minimal styling (make it your own!)
-- ✅ 100/100 Lighthouse performance
-- ✅ SEO-friendly with canonical URLs and OpenGraph data
-- ✅ Sitemap support
-- ✅ RSS Feed support
-- ✅ Markdown & MDX support
+| 命令 | 说明 |
+| --- | --- |
+| `pnpm dev` | 启动本地开发服务器 |
+| `pnpm build` | 拉取外部数据、构建站点、生成搜索索引并压缩资源 |
+| `pnpm preview` | 本地预览生产构建 |
+| `pnpm check` | 运行 Astro 类型与模板诊断 |
+| `pnpm type-check` | 运行 TypeScript 类型检查 |
+| `pnpm lint` | 检查 `src/` 下的代码格式 |
+| `pnpm format` | 使用 Prettier 格式化 `src/` |
 
-## 🚀 Project Structure
+## 站点配置
 
-Inside of your Astro project, you'll see the following folders and files:
+主要配置文件如下：
+
+| 文件 | 用途 |
+| --- | --- |
+| [`src/site.config.ts`](./src/site.config.ts) | 站点信息、导航、主题资源、侧边栏、音乐、评论和追番数据源 |
+| [`astro.config.mjs`](./astro.config.mjs) | 站点域名、Astro 集成、Markdown 与图片处理配置 |
+| [`src/content.config.ts`](./src/content.config.ts) | 文章集合与 Frontmatter Schema |
+| [`src/data/anime.json`](./src/data/anime.json) | 本地追番数据 |
+| [`src/data/diary.json`](./src/data/diary.json) | 日记数据 |
+| [`src/data/friends.json`](./src/data/friends.json) | 友链数据 |
+| [`src/data/devices.json`](./src/data/devices.json) | 设备展示数据 |
+
+如果部署到自己的域名，请同步修改 `astro.config.mjs` 中的 `site`，以及 `src/site.config.ts` 中的站点资料和外部服务配置。
+
+## 添加文章
+
+在 `src/content/post/` 下创建 Markdown 或 MDX 文件。推荐每篇文章使用独立目录，方便将正文与图片一起管理：
 
 ```text
-├── public/
-├── src/
-│   ├── components/
-│   ├── content/
-│   ├── layouts/
-│   └── pages/
-├── astro.config.mjs
-├── README.md
-├── package.json
-└── tsconfig.json
+src/content/post/my-post/
+├── index.md
+└── cover.webp
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Frontmatter 示例：
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+```yaml
+---
+title: 我的第一篇文章
+description: 文章摘要
+pubDate: 2026-08-14
+updatedDate: 2026-08-14
+category: 随想
+tags:
+  - Astro
+  - Blogging
+heroImage: ./cover.webp
+pinned: false
+draft: false
+---
+```
 
-The `src/content/` directory contains "collections" of related Markdown and MDX documents. Use `getCollection()` to retrieve posts from `src/content/blog/`, and type-check your frontmatter using an optional schema. See [Astro's Content Collections docs](https://docs.astro.build/en/guides/content-collections/) to learn more.
+日期字段兼容 `pubDate`、`published` 或 `date`。设置 `draft: true` 后，文章不会出现在生产环境的页面、统计和订阅源中。
 
-Any static assets, like images, can be placed in the `public/` directory.
+## 构建与部署
 
-## 🧞 Commands
+```bash
+pnpm build
+```
 
-All commands are run from the root of the project, from a terminal:
+构建脚本会依次执行：
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+1. 拉取配置启用的外部追番与评论数据。
+2. 生成 Astro 静态站点。
+3. 处理 KaTeX 样式与字体资源。
+4. 为 `dist/` 生成 Pagefind 搜索索引。
+5. 压缩站点字体资源。
 
-## 👀 Want to learn more?
+最终产物位于 `dist/`，可以部署到支持静态站点的任意平台。构建过程可能访问外部 API；在 CI 环境中请确保网络可用，并通过平台的 Secret 管理敏感配置，不要将令牌或 Cookie 提交到仓库。
 
-Check out [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+## 项目结构
 
-## Credit
+```text
+Aruma/
+├── public/                 # 字体、音乐、相册和其他静态资源
+├── scripts/                # 数据拉取、字体与 KaTeX 构建脚本
+├── src/
+│   ├── assets/             # 由 Astro 处理的站点资源
+│   ├── components/         # Astro 与 Svelte 组件
+│   ├── content/            # 文章与独立内容集合
+│   ├── data/               # 追番、日记、友链和设备数据
+│   ├── i18n/               # 国际化键值与语言文件
+│   ├── layouts/            # 全局与文章布局
+│   ├── pages/              # 文件路由与订阅源
+│   ├── plugins/            # Remark / Rehype 插件
+│   ├── styles/             # 全局、主题与功能样式
+│   └── site.config.ts      # 站点核心配置
+├── docs/                   # 用户文档与开发规范
+├── astro.config.mjs
+├── package.json
+└── pnpm-lock.yaml
+```
 
-This theme is based off of the lovely [Bear Blog](https://github.com/HermanMartinus/bearblog/).
+## 开发文档
+
+- [代码格式约定](./docs/user/CODE_FORMAT.md)
+- [外部追番数据源](./docs/user/EXTERNAL_ANIME_SOURCE.md)
+- [个人资料卡片配置](./docs/user/PROFILE_CARD.md)
+- [项目开发规范](./docs/rule/README.md)
+
+提交代码前建议运行：
+
+```bash
+pnpm type-check
+pnpm lint
+pnpm check
+```
+
+## 作者
+
+[Heronesukun](https://github.com/Heronesukun)
+
+## 许可证
+
+本项目代码基于 [GNU General Public License v3.0](./LICENSE) 发布。复制、修改或分发时，请遵守许可证条款并保留相应的版权与许可证信息。
