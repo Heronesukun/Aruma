@@ -223,6 +223,15 @@ const archives = Object.entries(archiveCounts)
 		border-right: 1px solid rgba(0, 0, 0, 0.05);
 		display: flex;
 		flex-direction: column;
+		overflow: hidden;
+	}
+
+	#drawer-menu {
+		flex: 1 1 auto;
+		min-height: 0;
+		overflow-x: hidden;
+		overflow-y: auto;
+		overscroll-behavior: contain;
 	}
 
 	.drawer-profile {
@@ -379,8 +388,8 @@ const archives = Object.entries(archiveCounts)
 	}
 
 	.drawer-bottom {
-		position: absolute;
-		bottom: 0;
+		flex: 0 0 auto;
+		position: static;
 		width: 100%;
 		border-top: 1px solid rgba(0, 0, 0, 0.05);
 	}

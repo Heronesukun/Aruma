@@ -16,6 +16,14 @@
 </mdui-dropdown>
 
 <style>
+	mdui-dropdown#qrcode-dropdown:not(:defined) {
+		display: contents;
+	}
+
+	mdui-dropdown#qrcode-dropdown:not(:defined) .qrcode-container {
+		display: none;
+	}
+
 	.qrcode-container {
 		box-sizing: border-box;
 		max-width: calc(100vw - 16px);
