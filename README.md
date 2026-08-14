@@ -117,6 +117,23 @@ pnpm dev
 
 ## 添加文章
 
+你可以直接维护 Markdown 文件，也可以使用 [Aruma Editor](https://github.com/Heronesukun/arumaEditor) 完成可视化写作与发布。
+
+### 使用 Aruma Editor（推荐）
+
+Aruma Editor 是面向 Aruma 与 Mizuki 博客的本地优先 Markdown 编辑器，提供实时预览、Frontmatter 表单、草稿自动保存、历史版本、文章同步和发布前差异检查。
+
+1. 前往 [Aruma Editor Releases](https://github.com/Heronesukun/arumaEditor/releases/latest) 下载 Windows x64 便携版。
+2. 在“管理博客连接”中选择 Aruma 项目根目录，或直接选择 `src/content/post/`。
+3. 新建草稿，或者同步并打开已有文章。
+4. 编辑正文、标题、日期、分类、标签、摘要与头图。
+5. 点击“检查并发布”，确认目标路径与文件差异后写入博客目录。
+6. 回到 Aruma 项目运行 `pnpm dev` 预览，确认无误后再提交 Git 变更。
+
+Aruma Editor 只会在你授权的本地博客目录中读写文章，不会代替 Aruma 执行构建、`git commit` 或远程推送。详细功能和安全机制请参阅 [Aruma Editor 项目说明](https://github.com/Heronesukun/arumaEditor#readme)。
+
+### 手动创建
+
 在 `src/content/post/` 下创建 Markdown 或 MDX 文件。推荐每篇文章使用独立目录，方便将正文与图片一起管理：
 
 ```text
@@ -207,7 +224,7 @@ pnpm check
 
 本仓库采用双许可证，代码与文章内容分别授权：
 
-- **代码、模板与脚本：**采用 [MIT License](./LICENSE)。你可以自由使用、复制、修改、合并、发布、分发、再授权或销售，但必须保留原版权与许可声明。
-- **文章内容：**`src/content/post/` 下由 Heronesukun 创作的原创文章及原创随文媒体采用 [CC BY-NC-ND 4.0](./src/content/post/LICENSE)。允许在正确署名并链接原文与许可证的前提下进行非商业、原样转载；禁止分发修改、改编或翻译后的版本。
+- **代码、模板与脚本：** 采用 [MIT License](./LICENSE)。你可以自由使用、复制、修改、合并、发布、分发、再授权或销售，但必须保留原版权与许可声明。
+- **文章内容：** `src/content/post/` 下由 Heronesukun 创作的原创文章及原创随文媒体采用 [CC BY-NC-ND 4.0](./src/content/post/LICENSE)。允许在正确署名并链接原文与许可证的前提下进行非商业、原样转载；禁止分发修改、改编或翻译后的版本。
 
 文章中引用的第三方图片、文字、商标及其他材料仍归原权利人所有，不因本仓库的许可证而被重新授权。
