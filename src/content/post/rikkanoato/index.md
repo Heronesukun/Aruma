@@ -1,14 +1,15 @@
 ---
-title: "夏至之前"
-published: 2026-06-07
-pubDate: 2026-06-07
-pinned: true
-description: "立夏之后，夏至之前"
-tags: [Blogging,commemorate]
+title: 夏至之前
+published: '2026-06-07'
+pubDate: '2026-06-07'
+pinned: false
+description: 立夏之后，夏至之前
+tags:
+  - Blogging
+  - commemorate
 author: 拾音
 draft: false
-category: "随想"
-heroImage: ""
+category: 随想
 ---
 
 *不轻言说爱，不轻言做下承诺，这究竟是顾及于词汇背后的责任，还是只是想增加对自己的保护？*

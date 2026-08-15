@@ -1,13 +1,15 @@
 ---
 title: 写给一年前的拾音
-published: 2026-07-15
-pubDate: 2026-07-15
-pinned: true
+published: '2026-07-15'
+pubDate: '2026-07-15'
+pinned: false
 description: 正式工作一年过去，是喜是悲？
-tags: [commemorate, Blogging]
+tags:
+  - Blogging
+  - commemorate
 author: 拾音
 draft: false
-category: 纪念 
+category: 纪念
 ---
 
 ## 人生的意义
@@ -30,6 +32,3 @@ category: 纪念
 认真的活着究竟是什么？其实只要活着就已经很努力了，活着才有资格谈论一切呢，可以谈论今天的晚餐，路上遇到的趣事，上周出游的见闻，一旦死了就什么都不剩了不是吗？不是每个人都会成为大作家大科学家，也不是每个人都能够名垂千古，平凡才是喜乐。
 
 我不知道这个算不算是我要的答案，人的存在就两个状态，活着和死去，而且每个人最终都会死去，那只要活着也就没有认真与否区分了，今天我还活着就已经很厉害了。
-
-
-
