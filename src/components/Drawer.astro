@@ -406,7 +406,23 @@ const archives = Object.entries(archiveCounts)
 <script>
 	import { navigate } from "astro:transitions/client";
 
+	type DrawerLifecycle = {
+		controller?: AbortController;
+		init?: () => void;
+		pageLoadHandler?: () => void;
+	};
+
+	const drawerWindow = window as typeof window & {
+		__arumaDrawerLifecycle?: DrawerLifecycle;
+	};
+	const drawerLifecycle = (drawerWindow.__arumaDrawerLifecycle ??= {});
+
 	function initDrawer() {
+		drawerLifecycle.controller?.abort();
+		const controller = new AbortController();
+		const { signal } = controller;
+		drawerLifecycle.controller = controller;
+
 		const toggleBtn = document.getElementById("toggle-drawer");
 		const drawer = document.getElementById("main-drawer");
 		const overlay = document.getElementById("drawer-overlay");
@@ -425,69 +441,70 @@ const archives = Object.entries(archiveCounts)
 			document.body.style.overflow = "";
 		};
 
-		if (!toggleBtn.dataset.bound) {
-			toggleBtn.dataset.bound = "true";
-			toggleBtn.addEventListener("click", (e) => {
+		toggleBtn.addEventListener(
+			"click",
+			(e) => {
 				e.stopPropagation();
 				if (drawer?.classList.contains("mdui-drawer-open")) {
 					closeDrawer();
 				} else {
 					openDrawer();
 				}
-			});
-		}
+			},
+			{ signal },
+		);
 
-		if (!overlay.dataset.bound) {
-			overlay.dataset.bound = "true";
-			overlay.addEventListener("click", closeDrawer);
-		}
+		overlay.addEventListener("click", closeDrawer, { signal });
 
 		const collapseItems = document.querySelectorAll(".mdui-collapse-item");
 		collapseItems.forEach((item) => {
 			const header = item.querySelector(".mdui-collapse-item-header");
 			const body = item.querySelector(".mdui-collapse-item-body");
 
-			if (header && body && !(header as HTMLElement).dataset.bound) {
-				(header as HTMLElement).dataset.bound = "true";
-				header.addEventListener("click", (e) => {
-					e.stopPropagation();
-					const isOpen = item.classList.contains("open");
+			if (header && body) {
+				header.addEventListener(
+					"click",
+					(e) => {
+						e.stopPropagation();
+						const isOpen = item.classList.contains("open");
 
-					collapseItems.forEach((otherItem) => {
-						if (
-							otherItem !== item &&
-							otherItem.classList.contains("open")
-						) {
-							otherItem.classList.remove("open");
-							const otherBody = otherItem.querySelector(
-								".mdui-collapse-item-body",
-							);
-							if (otherBody) {
-								(otherBody as HTMLElement).style.maxHeight =
-									"0";
+						collapseItems.forEach((otherItem) => {
+							if (
+								otherItem !== item &&
+								otherItem.classList.contains("open")
+							) {
+								otherItem.classList.remove("open");
+								const otherBody = otherItem.querySelector(
+									".mdui-collapse-item-body",
+								);
+								if (otherBody) {
+									(otherBody as HTMLElement).style.maxHeight =
+										"0";
+								}
 							}
-						}
-					});
-
-					if (isOpen) {
-						item.classList.remove("open");
-						(body as HTMLElement).style.maxHeight = "0";
-					} else {
-						item.classList.add("open");
-						requestAnimationFrame(() => {
-							(body as HTMLElement).style.maxHeight =
-								body.scrollHeight + "px";
 						});
-					}
-				});
+
+						if (isOpen) {
+							item.classList.remove("open");
+							(body as HTMLElement).style.maxHeight = "0";
+						} else {
+							item.classList.add("open");
+							requestAnimationFrame(() => {
+								(body as HTMLElement).style.maxHeight =
+									body.scrollHeight + "px";
+							});
+						}
+					},
+					{ signal },
+				);
 			}
 		});
 
 		const archiveLinks = document.querySelectorAll("[data-archive-link]");
 		archiveLinks.forEach((link) => {
-			if (!(link as HTMLElement).dataset.bound) {
-				(link as HTMLElement).dataset.bound = "true";
-				link.addEventListener("click", (e) => {
+			link.addEventListener(
+				"click",
+				(e) => {
 					e.preventDefault();
 					const year = (link as HTMLElement).dataset.year;
 					const targetHash = `#year-${year}`;
@@ -506,19 +523,44 @@ const archives = Object.entries(archiveCounts)
 						closeDrawer();
 						navigate(`/archive${targetHash}`);
 					}
-				});
-			}
+				},
+				{ signal },
+			);
 		});
 
-		document.addEventListener("keydown", (e) => {
-			if (e.key !== "Escape") return;
-			if (drawer?.classList.contains("mdui-drawer-open")) {
-				drawer.classList.remove("mdui-drawer-open");
-				overlay?.classList.remove("show");
-				document.body.style.overflow = "";
-			}
-		});
+		document.addEventListener(
+			"keydown",
+			(e) => {
+				if (
+					e.key === "Escape" &&
+					drawer.classList.contains("mdui-drawer-open")
+				) {
+					closeDrawer();
+				}
+			},
+			{ signal },
+		);
+
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				closeDrawer();
+				controller.abort();
+				if (drawerLifecycle.controller === controller) {
+					drawerLifecycle.controller = undefined;
+				}
+			},
+			{ once: true, signal },
+		);
 	}
 
-	document.addEventListener("astro:page-load", initDrawer);
+	drawerLifecycle.init = initDrawer;
+	if (!drawerLifecycle.pageLoadHandler) {
+		drawerLifecycle.pageLoadHandler = () => drawerLifecycle.init?.();
+		document.addEventListener(
+			"astro:page-load",
+			drawerLifecycle.pageLoadHandler,
+		);
+	}
+	drawerLifecycle.init();
 </script>

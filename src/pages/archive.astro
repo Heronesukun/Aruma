@@ -52,6 +52,18 @@ const years = Object.keys(groupedPosts)
 </Layout>
 
 <script>
+	type ArchiveLifecycle = {
+		applyFilter?: (hashOverride?: string) => void;
+		pageLoadHandler?: () => void;
+		hashChangeHandler?: () => void;
+	};
+
+	const archiveWindow = window as typeof window & {
+		__arumaArchiveLifecycle?: ArchiveLifecycle;
+		applyArchiveFilter?: (hashOverride?: string) => void;
+	};
+	const archiveLifecycle = (archiveWindow.__arumaArchiveLifecycle ??= {});
+
 	const applyArchiveFilter = (hashOverride?: string) => {
 		const hash = hashOverride || window.location.hash;
 		const sections = document.querySelectorAll<HTMLElement>(
@@ -82,19 +94,29 @@ const years = Object.keys(groupedPosts)
 		});
 	};
 
-	// Expose the function globally for Header.astro to call
-	(window as any).applyArchiveFilter = applyArchiveFilter;
+	archiveLifecycle.applyFilter = applyArchiveFilter;
+	// Expose a stable delegate for Drawer.astro to call.
+	archiveWindow.applyArchiveFilter = (hashOverride?: string) =>
+		archiveLifecycle.applyFilter?.(hashOverride);
 
 	// 页面加载时处理（包括 View Transitions 导航）
-	document.addEventListener("astro:page-load", () => applyArchiveFilter());
+	if (!archiveLifecycle.pageLoadHandler) {
+		archiveLifecycle.pageLoadHandler = () =>
+			archiveLifecycle.applyFilter?.();
+		document.addEventListener(
+			"astro:page-load",
+			archiveLifecycle.pageLoadHandler,
+		);
+	}
 
 	// 处理 hash 变化（同页面内切换年份）
-	// 只在 window 上绑定一次 hashchange
-	if (!(window as any).hasArchiveHashListener) {
-		window.addEventListener("hashchange", () => {
-			(window as any).applyArchiveFilter?.();
-		});
-		(window as any).hasArchiveHashListener = true;
+	if (!archiveLifecycle.hashChangeHandler) {
+		archiveLifecycle.hashChangeHandler = () =>
+			archiveLifecycle.applyFilter?.();
+		window.addEventListener(
+			"hashchange",
+			archiveLifecycle.hashChangeHandler,
+		);
 	}
 
 	// 初始加载时也执行一次

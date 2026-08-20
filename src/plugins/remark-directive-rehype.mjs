@@ -1,5 +1,6 @@
-import { h } from "hastscript";
 import { visit } from "unist-util-visit";
+
+const ALLOWED_DIRECTIVES = new Map([["github", new Set(["repo"])]]);
 
 /**
  * Parses directive nodes in markdown and converts them to HTML elements.
@@ -14,20 +15,24 @@ export function parseDirectiveNode() {
 				node.type === "textDirective"
 			) {
 				const data = node.data || (node.data = {});
-				node.attributes = node.attributes || {};
+				const allowedAttributes = ALLOWED_DIRECTIVES.get(node.name);
 
-				if (
-					node.children.length > 0 &&
-					node.children[0].data &&
-					node.children[0].data.directiveLabel
-				) {
-					node.attributes["has-directive-label"] = true;
+				if (!allowedAttributes) {
+					data.hName =
+						node.type === "containerDirective" ? "div" : "span";
+					data.hProperties = { className: ["unsupported-directive"] };
+					return;
 				}
 
-				const hast = h(node.name, node.attributes);
-
-				data.hName = hast.tagName;
-				data.hProperties = hast.properties;
+				const attributes = node.attributes || {};
+				data.hName = node.name;
+				data.hProperties = Object.fromEntries(
+					Object.entries(attributes).filter(
+						([name, value]) =>
+							allowedAttributes.has(name) &&
+							typeof value === "string",
+					),
+				);
 			}
 		});
 	};

@@ -44,38 +44,3 @@ import ThemeToggle from './ThemeToggle.astro';
   import 'mdui/components/dropdown.js';
   import 'mdui/components/icon.js';
 </script>
-
-{import.meta.env.PROD && <script is:inline>
-  async function loadPagefind() {
-    try {
-      const response = await fetch('/pagefind/pagefind.js', { method: 'HEAD' });
-      if (!response.ok) {
-        throw new Error('Pagefind script not found: ' + response.status);
-      }
-
-      const pagefind = await import('/pagefind/pagefind.js');
-
-      await pagefind.options({
-        excerptLength: 20,
-      });
-
-      window.pagefind = pagefind;
-
-      document.dispatchEvent(new CustomEvent('pagefindready'));
-      console.log('Pagefind loaded and initialized successfully.');
-    } catch (error) {
-      console.error('Failed to load Pagefind:', error);
-      window.pagefind = {
-        search: () => Promise.resolve({ results: [] }),
-        options: () => Promise.resolve(),
-      };
-      document.dispatchEvent(new CustomEvent('pagefindloaderror'));
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', loadPagefind);
-  } else {
-    loadPagefind();
-  }
-</script>}

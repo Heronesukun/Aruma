@@ -10,14 +10,16 @@ const BANGIMI_API_BASE = "https://api.bgm.tv";
  * 支持分页拉取，突破单次请求 100 条的限制
  * @param {Object} config - 配置对象
  * @param {string} config.userId - 用户 ID
+ * @param {string} [config.token] - Bangumi Access Token（可选）
  * @param {number} [config.amount] - 拉取数量（默认 50）
  * @returns {Promise<Array>} 动画列表
  */
 async function fetchBangumiAnime(config) {
-	const { userId, amount = 50 } = config;
+	const { userId, token = "", amount = 50 } = config;
 
 	const headers = {
 		"User-Agent": "Aruma/1.0 (https://github.com/your-repo)",
+		...(token ? { Authorization: `Bearer ${token}` } : {}),
 	};
 
 	const allAnimeList = [];
@@ -71,7 +73,10 @@ async function fetchBangumiAnime(config) {
 
 			offset += limit;
 		} catch (error) {
-			console.error(`Failed to fetch Bangumi anime at offset ${offset}:`, error.message);
+			console.error(
+				`Failed to fetch Bangumi anime at offset ${offset}:`,
+				error.message,
+			);
 			hasMore = false;
 		}
 	}
@@ -90,11 +95,11 @@ async function fetchBangumiAnime(config) {
  */
 function mapBangumiStatus(bangumiType) {
 	const statusMap = {
-		1: "planned",      // wish
-		2: "completed",    // collect
-		3: "watching",     // do
-		4: "onhold",       // on_hold
-		5: "dropped",      // dropped
+		1: "planned", // wish
+		2: "completed", // collect
+		3: "watching", // do
+		4: "onhold", // on_hold
+		5: "dropped", // dropped
 	};
 	return statusMap[bangumiType] || "planned";
 }

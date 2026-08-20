@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "astro dev",
 		"check": "astro check",
-		"build": "node scripts/fetch-external-anime.js && node scripts/fetchTwikooRecentComments.mjs && astro build && node scripts/copy-katex-css.js && node scripts/extract-math-symbols.js && node scripts/compress-katex-fonts.js && pagefind --site dist && node scripts/compress-fonts.js",
+		"build": "node scripts/fetch-external-anime.js && node scripts/fetchTwikooRecentComments.mjs && astro build && pagefind --site dist && node scripts/compress-fonts.js",
 		"preview": "astro preview",
 		"astro": "astro",
 		"type-check": "tsc --noEmit",

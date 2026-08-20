@@ -51,7 +51,7 @@ Aruma 是 [Heronesukun](https://github.com/Heronesukun) 的个人博客项目。
 
 - Astro 6 静态输出，构建结果位于 `dist/`。
 - Svelte 5 按需水合，减少不必要的客户端 JavaScript。
-- Sharp 图片处理、字体压缩、KaTeX 资源裁剪与 Pagefind 离线索引。
+- Sharp 图片处理、字体压缩、KaTeX 按文章加载与 Pagefind 离线索引。
 - TypeScript、Astro Check 与 Prettier 组成基础质量检查流程。
 - 项目内置主题、i18n、组件化和 View Transitions 开发规范。
 
@@ -162,6 +162,8 @@ draft: false
 
 日期字段兼容 `pubDate`、`published` 或 `date`。设置 `draft: true` 后，文章不会出现在生产环境的页面、统计和订阅源中。
 
+数学公式使用 `$$...$$` 定界；单个 `$` 保留为普通文本，避免 `$state`、`$derived` 等代码标识被误判为公式。
+
 ## 构建与部署
 
 ```bash
@@ -172,18 +174,17 @@ pnpm build
 
 1. 拉取配置启用的外部追番与评论数据。
 2. 生成 Astro 静态站点。
-3. 处理 KaTeX 样式与字体资源。
-4. 为 `dist/` 生成 Pagefind 搜索索引。
-5. 压缩站点字体资源。
+3. 为 `dist/` 生成 Pagefind 搜索索引。
+4. 压缩站点字体资源。
 
-最终产物位于 `dist/`，可以部署到支持静态站点的任意平台。构建过程可能访问外部 API；在 CI 环境中请确保网络可用，并通过平台的 Secret 管理敏感配置，不要将令牌或 Cookie 提交到仓库。
+最终产物位于 `dist/`，可以部署到支持静态站点的任意平台。构建过程可能访问外部 API；在 CI 环境中请确保网络可用。Bilibili 与 Bangumi 凭据分别通过 `BILIBILI_SESSDATA` 和 `BANGUMI_ACCESS_TOKEN` 环境变量提供，请使用部署平台的 Secret 管理器，不要将令牌或 Cookie 提交到仓库。
 
 ## 项目结构
 
 ```text
 Aruma/
 ├── public/                 # 字体、音乐、相册和其他静态资源
-├── scripts/                # 数据拉取、字体与 KaTeX 构建脚本
+├── scripts/                # 数据拉取与字体构建脚本
 ├── src/
 │   ├── assets/             # 由 Astro 处理的站点资源
 │   ├── components/         # Astro 与 Svelte 组件

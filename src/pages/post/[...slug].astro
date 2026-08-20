@@ -3,7 +3,7 @@ export const prerender = true;
 
 import { type CollectionEntry, render } from "astro:content";
 import BlogPost from "../../layouts/BlogPost.astro";
-import { getVisiblePosts } from "../../utils/post-list";
+import { getPostDate, getVisiblePosts } from "../../utils/post-list";
 import { getReadingStats } from "../../utils/reading-stats";
 
 export async function getStaticPaths() {
@@ -16,20 +16,25 @@ export async function getStaticPaths() {
 type Props = CollectionEntry<"post">;
 
 const post = Astro.props;
-const { Content } = await render(post);
+const { Content, remarkPluginFrontmatter } = await render(post);
 const readingStats = getReadingStats(post.body ?? "");
-const pubDate =
-	post.data.pubDate ?? post.data.published ?? post.data.date ?? new Date(0);
+const pubDate = getPostDate(post);
+const heroImage = post.data.heroImage || post.data.image;
+const hasMath = remarkPluginFrontmatter.hasMath === true;
 ---
 
 <BlogPost
 	title={post.data.title}
 	description={post.data.description}
 	pubDate={pubDate}
-	heroImage={post.data.heroImage}
+	updatedDate={post.data.updatedDate}
+	heroImage={heroImage}
 	tags={post.data.tags}
 	category={post.data.category}
+	author={post.data.author}
 	id={post.id}
+	hasMath={hasMath}
+	searchIndex={!post.data.draft}
 	wordCount={readingStats.wordCount}
 	readingMinutes={readingStats.readingMinutes}
 >

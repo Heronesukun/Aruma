@@ -32,7 +32,7 @@ export default defineConfig({
 
 	markdown: {
 		remarkPlugins: [
-			remarkMath,
+			[remarkMath, { singleDollarTextMath: false }],
 			remarkDirective,
 			parseDirectiveNode,
 			remarkDetectMath,
