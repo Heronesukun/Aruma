@@ -17,6 +17,14 @@ import {
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CONFIG_FILE = join(__dirname, "../src/site.config.ts");
 
+function readSecret(name) {
+	const value = process.env[name]?.trim() || "";
+	if (/[\r\n]/.test(value)) {
+		throw new Error(`${name} must not contain line breaks`);
+	}
+	return value;
+}
+
 /**
  * 解析 site.config.ts 获取动漫数据源配置
  */
@@ -61,7 +69,7 @@ function parseConfig() {
 		bilibili: {
 			userId:
 				extractConfigValue(configContent, "bilibili", "userId") || "",
-			token: extractConfigValue(configContent, "bilibili", "token") || "",
+			token: readSecret("BILIBILI_SESSDATA"),
 			amount: parseInt(
 				extractConfigValue(configContent, "bilibili", "amount") || "50",
 			),
@@ -73,6 +81,7 @@ function parseConfig() {
 		bangumi: {
 			userId:
 				extractConfigValue(configContent, "bangumi", "userId") || "",
+			token: readSecret("BANGUMI_ACCESS_TOKEN"),
 			amount: parseInt(
 				extractConfigValue(configContent, "bangumi", "amount") || "50",
 			),

@@ -315,31 +315,76 @@ const categories = Object.keys(devices);
 </style>
 
 <script>
-	document.addEventListener("astro:page-load", () => {
+	type DevicesLifecycle = {
+		controller?: AbortController;
+		init?: () => void;
+		pageLoadHandler?: () => void;
+	};
+
+	const devicesWindow = window as typeof window & {
+		__arumaDevicesLifecycle?: DevicesLifecycle;
+	};
+	const devicesLifecycle = (devicesWindow.__arumaDevicesLifecycle ??= {});
+
+	function initDevicesPage() {
+		devicesLifecycle.controller?.abort();
+		const controller = new AbortController();
+		const { signal } = controller;
+		devicesLifecycle.controller = controller;
+
 		const filterBtns = document.querySelectorAll(".filter-btn");
 		const deviceCards = document.querySelectorAll(".device-card-link");
+		if (filterBtns.length === 0 || deviceCards.length === 0) {
+			devicesLifecycle.controller = undefined;
+			return;
+		}
 
 		filterBtns.forEach((btn) => {
-			btn.addEventListener("click", () => {
-				const category = btn.getAttribute("data-category");
+			btn.addEventListener(
+				"click",
+				() => {
+					const category = btn.getAttribute("data-category");
 
-				filterBtns.forEach((b) =>
-					b.classList.remove("mdui-btn-active"),
-				);
-				btn.classList.add("mdui-btn-active");
+					filterBtns.forEach((b) =>
+						b.classList.remove("mdui-btn-active"),
+					);
+					btn.classList.add("mdui-btn-active");
 
-				deviceCards.forEach((card) => {
-					const cardElement = card as HTMLElement;
-					if (card.getAttribute("data-category") === category) {
-						cardElement.style.display = "block";
-						cardElement.style.animation = "fadeIn 0.3s ease";
-					} else {
-						cardElement.style.display = "none";
-					}
-				});
-			});
+					deviceCards.forEach((card) => {
+						const cardElement = card as HTMLElement;
+						if (card.getAttribute("data-category") === category) {
+							cardElement.style.display = "block";
+							cardElement.style.animation = "fadeIn 0.3s ease";
+						} else {
+							cardElement.style.display = "none";
+						}
+					});
+				},
+				{ signal },
+			);
 		});
-	});
+
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				controller.abort();
+				if (devicesLifecycle.controller === controller) {
+					devicesLifecycle.controller = undefined;
+				}
+			},
+			{ once: true, signal },
+		);
+	}
+
+	devicesLifecycle.init = initDevicesPage;
+	if (!devicesLifecycle.pageLoadHandler) {
+		devicesLifecycle.pageLoadHandler = () => devicesLifecycle.init?.();
+		document.addEventListener(
+			"astro:page-load",
+			devicesLifecycle.pageLoadHandler,
+		);
+	}
+	devicesLifecycle.init();
 </script>
 
 <style>

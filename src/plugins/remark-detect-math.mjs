@@ -12,6 +12,8 @@ export function remarkDetectMath() {
 			hasMath = true;
 		});
 
-		file.data.hasMath = hasMath;
+		file.data.astro ??= {};
+		file.data.astro.frontmatter ??= {};
+		file.data.astro.frontmatter.hasMath = hasMath;
 	};
 }

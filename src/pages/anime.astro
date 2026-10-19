@@ -11,6 +11,39 @@ import { join } from "path";
 // 导入本地动漫数据
 import localAnimeData from "../data/anime.json";
 
+function sanitizeAnimeUrl(
+	value: unknown,
+	options: { allowSiteRelative?: boolean; fallback: string },
+): string {
+	if (typeof value !== "string") return options.fallback;
+	const candidate = value.trim();
+	if (
+		options.allowSiteRelative &&
+		candidate.startsWith("/") &&
+		!candidate.startsWith("//")
+	) {
+		return candidate;
+	}
+
+	try {
+		const url = new URL(candidate);
+		return url.protocol === "https:" ? url.href : options.fallback;
+	} catch {
+		return options.fallback;
+	}
+}
+
+function sanitizeAnimeItem(item: AnimeItem): AnimeItem {
+	return {
+		...item,
+		link: sanitizeAnimeUrl(item.link, { fallback: "#" }),
+		cover: sanitizeAnimeUrl(item.cover, {
+			allowSiteRelative: true,
+			fallback: "",
+		}),
+	};
+}
+
 /**
  * 获取外部动漫数据
  * 从 src/data/external-anime.json 读取缓存的数据
@@ -97,7 +130,7 @@ function mergeAnimeData(
 		return yearB - yearA;
 	});
 
-	return result;
+	return result.map(sanitizeAnimeItem);
 }
 
 // 获取数据

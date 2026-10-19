@@ -5,6 +5,7 @@ import FormattedDate from "./FormattedDate.astro";
 import { siteConfig } from "../site.config";
 import { i18n } from "../i18n/translation";
 import I18nKey from "../i18n/i18nKey";
+import { getPostDate } from "../utils/post-list";
 import { formatWordCount, getReadingStats } from "../utils/reading-stats";
 
 interface Props {
@@ -14,8 +15,7 @@ interface Props {
 
 const { post } = Astro.props;
 const { title, description, heroImage, pinned } = post.data;
-const pubDate =
-	post.data.pubDate ?? post.data.published ?? post.data.date ?? new Date(0);
+const pubDate = getPostDate(post);
 
 // 计算文章字数
 const readingStats = getReadingStats(post.body ?? "");

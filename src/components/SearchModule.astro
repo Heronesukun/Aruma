@@ -85,7 +85,23 @@ import I18nKey from "../i18n/i18nKey";
 <script>
 	import { navigate } from "astro:transitions/client";
 
+	type SearchLifecycle = {
+		controller?: AbortController;
+		init?: () => void;
+		pageLoadHandler?: () => void;
+	};
+
+	const searchWindow = window as typeof window & {
+		__arumaSearchLifecycle?: SearchLifecycle;
+	};
+	const searchLifecycle = (searchWindow.__arumaSearchLifecycle ??= {});
+
 	function initSearch() {
+		searchLifecycle.controller?.abort();
+		const controller = new AbortController();
+		const { signal } = controller;
+		searchLifecycle.controller = controller;
+
 		const searchContainer = document.getElementById("search-container");
 		const openSearchBtn = document.getElementById("open-search");
 		const searchInput = document.getElementById(
@@ -113,9 +129,9 @@ import I18nKey from "../i18n/i18nKey";
 			}
 		};
 
-		if (!openSearchBtn.dataset.bound) {
-			openSearchBtn.dataset.bound = "true";
-			openSearchBtn.addEventListener("click", (e) => {
+		openSearchBtn.addEventListener(
+			"click",
+			(e) => {
 				e.stopPropagation();
 				const hasContent = searchInput.value.trim().length > 0;
 				if (
@@ -128,22 +144,26 @@ import I18nKey from "../i18n/i18nKey";
 				} else {
 					openSearch();
 				}
-			});
-		}
+			},
+			{ signal },
+		);
 
-		if (!searchInput.dataset.bound) {
-			searchInput.dataset.bound = "true";
-			searchInput.addEventListener("click", (e) => e.stopPropagation());
-			searchInput.addEventListener("keydown", (e) => {
+		searchInput.addEventListener("click", (e) => e.stopPropagation(), {
+			signal,
+		});
+		searchInput.addEventListener(
+			"keydown",
+			(e) => {
 				if (e.key === "Enter") {
 					performSearch();
 				}
-			});
-		}
+			},
+			{ signal },
+		);
 
-		if (!document.documentElement.dataset.searchClickBound) {
-			document.documentElement.dataset.searchClickBound = "true";
-			document.addEventListener("click", (e) => {
+		document.addEventListener(
+			"click",
+			(e) => {
 				const target = e.target as HTMLElement;
 				if (
 					searchContainer?.classList.contains(
@@ -153,8 +173,35 @@ import I18nKey from "../i18n/i18nKey";
 				) {
 					closeSearch();
 				}
-			});
-		}
+			},
+			{ signal },
+		);
+
+		document.addEventListener(
+			"keydown",
+			(e) => {
+				if (
+					e.key === "Escape" &&
+					searchContainer.classList.contains(
+						"mdui-textfield-expanded",
+					)
+				) {
+					closeSearch();
+				}
+			},
+			{ signal },
+		);
+
+		document.addEventListener(
+			"astro:before-swap",
+			() => {
+				controller.abort();
+				if (searchLifecycle.controller === controller) {
+					searchLifecycle.controller = undefined;
+				}
+			},
+			{ once: true, signal },
+		);
 
 		const urlParams = new URLSearchParams(window.location.search);
 		const queryParam = urlParams.get("q");
@@ -164,13 +211,13 @@ import I18nKey from "../i18n/i18nKey";
 		}
 	}
 
-	document.addEventListener("astro:page-load", initSearch);
-
-	document.addEventListener("keydown", (e) => {
-		if (e.key !== "Escape") return;
-		const searchContainer = document.getElementById("search-container");
-		if (searchContainer?.classList.contains("mdui-textfield-expanded")) {
-			searchContainer.classList.remove("mdui-textfield-expanded");
-		}
-	});
+	searchLifecycle.init = initSearch;
+	if (!searchLifecycle.pageLoadHandler) {
+		searchLifecycle.pageLoadHandler = () => searchLifecycle.init?.();
+		document.addEventListener(
+			"astro:page-load",
+			searchLifecycle.pageLoadHandler,
+		);
+	}
+	searchLifecycle.init();
 </script>

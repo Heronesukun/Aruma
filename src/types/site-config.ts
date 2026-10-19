@@ -141,7 +141,6 @@ export type AnimeSourceConfig = {
 
 export type BilibiliAnimeConfig = {
 	userId: string; // Bilibili 用户 ID
-	token?: string; // SESSDATA（可选，用于获取私有数据）
 	amount?: number; // 拉取数量（默认 50）
 	cacheTime?: number; // 缓存时间（秒，默认 86400）
 	hideMedia?: boolean; // 隐藏媒体信息
@@ -149,7 +148,6 @@ export type BilibiliAnimeConfig = {
 
 export type BangumiAnimeConfig = {
 	userId: string; // Bangumi 用户 ID
-	token?: string; // Access Token（可选）
 	amount?: number; // 拉取数量（默认 50）
 	cacheTime?: number; // 缓存时间（秒，默认 86400）
 };

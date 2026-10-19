@@ -24,7 +24,6 @@ animeSource: {
   // Bilibili 配置
   bilibili: {
     userId: '你的 Bilibili 用户 ID',  // 必填
-    token: '',                        // 可选，SESSDATA token
     amount: 50,                       // 拉取数量
     cacheTime: 86400                  // 缓存时间（秒），默认 24 小时
   },
@@ -50,13 +49,33 @@ animeSource: {
 2. URL 格式：`https://bgm.tv/user/yourname`
 3. `yourname` 部分即为用户 ID
 
-### 3. 获取 Token（可选）
+### 3. 配置 Token（可选）
+
+Token 只能通过构建进程的环境变量提供，不要写入 `src/site.config.ts`、Markdown 或其他会提交到 Git 的文件。可参考仓库根目录的 `.env.example`，真实值应保存在当前 Shell 或部署平台的 Secret 管理器中。
 
 #### Bilibili SESSDATA
 1. 登录 Bilibili 网页版
 2. 打开浏览器开发者工具（F12）
 3. 在 Application/Cookie 中找到 SESSDATA
-4. 复制其值
+4. 复制其值，将它设置为 `BILIBILI_SESSDATA`
+
+#### Bangumi Access Token
+
+如需访问需要认证的 Bangumi 数据，将 Access Token 设置为 `BANGUMI_ACCESS_TOKEN`。
+
+PowerShell 示例：
+
+```powershell
+$env:BILIBILI_SESSDATA = "your-sessdata"
+$env:BANGUMI_ACCESS_TOKEN = "your-access-token"
+pnpm build
+```
+
+Bash 示例：
+
+```bash
+BILIBILI_SESSDATA="your-sessdata" BANGUMI_ACCESS_TOKEN="your-access-token" pnpm build
+```
 
 ## 构建和运行
 
@@ -101,7 +120,8 @@ node scripts/fetch-external-anime.js
 ### 数据拉取失败
 1. 检查用户 ID 是否正确
 2. 检查网络连接
-3. 查看控制台错误信息
+3. 如使用私有数据，检查构建进程是否正确读取了 `BILIBILI_SESSDATA` 或 `BANGUMI_ACCESS_TOKEN`
+4. 查看控制台错误信息
 
 ### 字体压缩失败
 1. 确保 `external-anime.json` 文件存在

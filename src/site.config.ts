@@ -25,7 +25,7 @@ export const siteConfig: SiteConfig = {
 		{ name: "devices", path: "/devices", icon: "devices" },
 		{
 			name: "other",
-			path: "javascript:;",
+			path: "#",
 			icon: "folder",
 			children: [{ name: "about", path: "/about" }],
 		},
@@ -162,14 +162,12 @@ export const siteConfig: SiteConfig = {
 		// Bilibili 数据源配置
 		bilibili: {
 			userId: "20565553", // 必填，从 https://space.bilibili.com/12345678 获取
-			token: "", // 可选，SESSDATA token，从浏览器 Cookie 获取
 			amount: 50, // 拉取数量
 			cacheTime: 86400, // 缓存时间（秒），默认 24 小时
 		},
 		// Bangumi 数据源配置
 		bangumi: {
 			userId: "sai", // 必填，从 https://bgm.tv/user/yourname 获取
-			token: "", // 可选，Access Token，从 https://next.bgm.tv/demo/access-token 获取
 			amount: 50, // 拉取数量
 			cacheTime: 86400, // 缓存时间（秒）
 		},

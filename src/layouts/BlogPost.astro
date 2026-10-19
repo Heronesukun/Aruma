@@ -15,12 +15,15 @@ interface Props {
 	title: string;
 	description: string;
 	pubDate: Date;
+	updatedDate?: Date;
 	heroImage?: ImageMetadata | string;
 	tags?: string[];
 	category?: string;
+	author?: string;
 	id: string;
 	pinned?: boolean;
 	hasMath?: boolean;
+	searchIndex?: boolean;
 	wordCount?: number;
 	readingMinutes?: number;
 }
@@ -29,11 +32,14 @@ const {
 	title,
 	description,
 	pubDate,
+	updatedDate,
 	heroImage,
 	tags,
 	category,
+	author = siteConfig.author,
 	id,
 	hasMath = false,
+	searchIndex = false,
 	wordCount = 0,
 	readingMinutes = 0,
 } = Astro.props;
@@ -59,9 +65,25 @@ if (
 }
 ---
 
-<Layout title={title} description={description} hasMath={hasMath}>
+<Layout
+	title={title}
+	description={description}
+	hasMath={hasMath}
+	image={heroImage}
+	pageType="article"
+	articleTitle={title}
+	publishedTime={pubDate}
+	modifiedTime={updatedDate ?? pubDate}
+	author={author}
+	tags={tags}
+	section={category}
+>
 	<div class="article">
-		<article class="mdui-card post-card-content mdui-hoverable">
+		<article
+			class="mdui-card post-card-content mdui-hoverable"
+			data-pagefind-body={searchIndex ? "" : undefined}
+			data-pagefind-filter={searchIndex ? "type:post" : undefined}
+		>
 			{
 				coverImage && (
 					<div class="mdui-card-media post-header-media">
@@ -74,7 +96,14 @@ if (
 						<div class="post-header-filter" />
 						<div class="mdui-card-media-covered post-header-info">
 							<div class="post-header-primary">
-								<div class="post-header-title">{title}</div>
+								<div
+									class="post-header-title"
+									data-pagefind-meta={
+										searchIndex ? "title" : undefined
+									}
+								>
+									{title}
+								</div>
 								<div class="post-header-subtitle">
 									<FormattedDate date={pubDate} />
 									<span class="post-meta-divider">|</span>
@@ -176,8 +205,14 @@ if (
 					});
 				}
 
-				// 适配 Astro View Transitions
-				document.addEventListener("astro:page-load", initCodeCopy);
+				window.__arumaInitCodeCopy = initCodeCopy;
+				if (!window.__arumaCodeCopyListenerRegistered) {
+					document.addEventListener("astro:page-load", () => {
+						window.__arumaInitCodeCopy?.();
+					});
+					window.__arumaCodeCopyListenerRegistered = true;
+				}
+				initCodeCopy();
 			</script>
 		</article>
 		<Comment id={id} />

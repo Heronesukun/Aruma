@@ -4,55 +4,28 @@ import Sidebar from "../../components/Sidebar.astro";
 import { i18n } from "../../i18n/translation";
 import PostCard from "../../components/PostCard.astro";
 import I18nKey from "../../i18n/i18nKey";
-import { siteConfig } from "../../site.config";
-import { getPostDate, getVisiblePosts } from "../../utils/post-list";
-import { formatWordCount, getReadingStats } from "../../utils/reading-stats";
+import { getVisiblePosts, sortPostsForIndex } from "../../utils/post-list";
 
-const allPosts = (await getVisiblePosts()).sort((a, b) => {
-	// 优先按置顶排序
-	const aSticky = a.data.category === "置顶" ? 1 : 0;
-	const bSticky = b.data.category === "置顶" ? 1 : 0;
-	if (aSticky !== bSticky) return bSticky - aSticky;
-	// 其次按日期排序
-	return getPostDate(b).valueOf() - getPostDate(a).valueOf();
-});
+const allPosts = sortPostsForIndex(await getVisiblePosts());
 
-// 准备文章数据供客户端搜索使用
-const postsData = allPosts.map((post) => {
-	const readingStats = getReadingStats(post.body ?? "");
-	// 处理封面图逻辑（与 PostCard.astro 保持一致）
-	let coverImage = "";
-	if (
-		siteConfig.randomImage &&
-		siteConfig.randomImage.enable &&
-		siteConfig.randomImage.ignoreHeroImage
-	) {
-		coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
-	} else if (post.data.heroImage) {
-		coverImage =
-			typeof post.data.heroImage === "string"
-				? post.data.heroImage
-				: post.data.heroImage.src;
-	} else if (siteConfig.randomImage && siteConfig.randomImage.enable) {
-		coverImage = `${siteConfig.randomImage.url}?v=${post.id}`;
-	}
-
-	return {
-		id: post.id,
-		title: post.data.title,
-		description: post.data.description ?? "",
-		category: post.data.category ?? "",
-		tags: post.data.tags ?? [],
-		pubDate: getPostDate(post).toISOString(),
-		image: coverImage,
-		wordCount: i18n(I18nKey.wordCount, {
-			count: formatWordCount(readingStats.wordCount),
-		}),
-		readingTime: i18n(I18nKey.readingTime, {
-			minutes: readingStats.readingMinutes,
-		}),
-	};
-});
+// Pagefind is generated after `astro build`, so development uses this metadata
+// as a graceful fallback while production searches the rendered article body.
+const fallbackSearchData = allPosts.map((post) => ({
+	url: `/post/${post.id}/`,
+	searchText: [
+		post.data.title,
+		post.data.description,
+		post.data.category,
+		...(post.data.tags ?? []),
+	]
+		.filter(Boolean)
+		.join(" "),
+	description: post.data.description,
+}));
+const fallbackSearchJson = JSON.stringify(fallbackSearchData).replaceAll(
+	"<",
+	"\\u003c",
+);
 ---
 
 <Layout title={i18n(I18nKey.archive)}>
@@ -61,6 +34,7 @@ const postsData = allPosts.map((post) => {
 			id="search-header"
 			class="mdui-card archive-card animation-fadein"
 			style="display: none;"
+			aria-live="polite"
 		>
 			<div class="archive-title">
 				<i class="mdui-icon material-icons">search</i>
@@ -75,7 +49,10 @@ const postsData = allPosts.map((post) => {
 			</div>
 		</div>
 
-		<div id="posts-container">
+		<div
+			id="posts-container"
+			data-pagefind-enabled={import.meta.env.PROD ? "true" : "false"}
+		>
 			{allPosts.map((post) => <PostCard post={post} />)}
 		</div>
 
@@ -93,7 +70,11 @@ const postsData = allPosts.map((post) => {
 					style="font-size: 48px; opacity: 0.5;">find_in_page</i
 				>
 			</div>
-			<div style="text-align: center; opacity: 0.7;" id="no-results-text">
+			<div
+				style="text-align: center; opacity: 0.7;"
+				id="no-results-text"
+				data-template={i18n(I18nKey.noSearchResult)}
+			>
 			</div>
 			<div style="text-align: center; margin-top: 20px;">
 				<a
@@ -104,131 +85,264 @@ const postsData = allPosts.map((post) => {
 				</a>
 			</div>
 		</div>
+
+		<script
+			is:inline
+			id="post-search-fallback-data"
+			type="application/json"
+			set:html={fallbackSearchJson}
+		/>
 	</div>
 
 	<Sidebar slot="sidebar" />
 </Layout>
 
-<!-- 内联文章数据供客户端使用 -->
-<script is:inline define:vars={{ postsData }}>
-	const allPostsData = postsData;
+<script>
+	interface FallbackPost {
+		url: string;
+		searchText: string;
+		description: string;
+	}
 
-	function formatDate(dateStr) {
-		const date = new Date(dateStr);
-		return date.toLocaleDateString("zh-CN", {
-			year: "numeric",
-			month: "2-digit",
-			day: "2-digit",
+	interface SearchHit {
+		url: string;
+		excerpt?: string;
+	}
+
+	interface PagefindResultData {
+		url: string;
+		excerpt?: string;
+		plain_excerpt?: string;
+	}
+
+	interface PagefindApi {
+		options(options: { excerptLength: number }): Promise<void>;
+		search(
+			query: string,
+			options: { filters: { type: string } },
+		): Promise<{
+			results: Array<{
+				data(): Promise<PagefindResultData>;
+			}>;
+		}>;
+	}
+
+	declare global {
+		interface Window {
+			__arumaPostSearchPageLoad?: EventListener;
+			__arumaPostSearchRun?: number;
+		}
+	}
+
+	let pagefindPromise: Promise<PagefindApi> | undefined;
+
+	function normalizePath(url: string): string {
+		let path = new URL(url, window.location.origin).pathname;
+		try {
+			path = decodeURIComponent(path);
+		} catch {
+			// Keep the encoded path when the URL contains malformed escapes.
+		}
+		return path.replace(/\/index\.html$/, "").replace(/\/+$/, "") || "/";
+	}
+
+	function readFallbackPosts(): FallbackPost[] {
+		const data = document.getElementById("post-search-fallback-data");
+		if (!data?.textContent) return [];
+		try {
+			return JSON.parse(data.textContent) as FallbackPost[];
+		} catch (error) {
+			console.warn("Unable to read the local search fallback.", error);
+			return [];
+		}
+	}
+
+	async function loadPagefind(): Promise<PagefindApi> {
+		if (!pagefindPromise) {
+			pagefindPromise = (async () => {
+				// Pagefind writes this module after Astro has finished bundling.
+				const bundlePath = "/pagefind/pagefind.js";
+				const pagefind = (await import(
+					/* @vite-ignore */ bundlePath
+				)) as PagefindApi;
+				await pagefind.options({ excerptLength: 32 });
+				return pagefind;
+			})().catch((error) => {
+				pagefindPromise = undefined;
+				throw error;
+			});
+		}
+		return pagefindPromise;
+	}
+
+	function searchFallback(posts: FallbackPost[], query: string): SearchHit[] {
+		const normalizedQuery = query.toLocaleLowerCase();
+		return posts
+			.filter((post) =>
+				post.searchText.toLocaleLowerCase().includes(normalizedQuery),
+			)
+			.map((post) => ({
+				url: post.url,
+				excerpt: post.description,
+			}));
+	}
+
+	async function searchArticles(query: string): Promise<SearchHit[]> {
+		const pagefind = await loadPagefind();
+		const response = await pagefind.search(query, {
+			filters: { type: "post" },
 		});
+		const results = await Promise.all(
+			response.results.map((result) => result.data()),
+		);
+		return results.map((result) => ({
+			url: result.url,
+			excerpt: result.excerpt ?? result.plain_excerpt,
+		}));
 	}
 
-	function escapeHtml(text) {
-		const div = document.createElement("div");
-		div.textContent = text;
-		return div.innerHTML;
+	function setSafeExcerpt(element: Element, excerpt: string): void {
+		const source = document.createElement("template");
+		source.innerHTML = excerpt;
+		const output = document.createDocumentFragment();
+
+		for (const node of source.content.childNodes) {
+			if (node.nodeType === Node.TEXT_NODE) {
+				output.append(node.cloneNode());
+				continue;
+			}
+			if (node instanceof HTMLElement && node.tagName === "MARK") {
+				const mark = document.createElement("mark");
+				mark.textContent = node.textContent;
+				output.append(mark);
+				continue;
+			}
+			output.append(document.createTextNode(node.textContent ?? ""));
+		}
+
+		element.replaceChildren(output);
 	}
 
-	function renderPostCard(post) {
-		const stickyHtml =
-			post.category === "置顶"
-				? '<span class="mdui-text-color-theme" id="sticky">置顶 </span>'
-				: "";
-		const coverImage = post.image || "";
-
-		return `
-			<a class="post animation-fadein" href="/post/${post.id}/">
-				<div class="mdui-card index-card mdui-hoverable">
-					<div class="mdui-card-media index-img-media">
-						<img
-							class="index-img"
-							src="${coverImage}"
-							alt="${escapeHtml(post.title)}"
-							loading="lazy"
-							decoding="async"
-						/>
-						<div class="index-card-filter"></div>
-						<div class="mdui-card-media-covered">
-							<div class="mdui-card-primary index-primary">
-								<div class="mdui-card-primary-title">
-									${stickyHtml}${escapeHtml(post.title)}
-								</div>
-								<div class="mdui-card-primary-subtitle index-info">
-									${formatDate(post.pubDate)} | ${escapeHtml(post.wordCount)} | ${escapeHtml(post.readingTime)}
-								</div>
-								<div class="mdui-card-primary-subtitle index-subtitle">${escapeHtml(post.description)}</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</a>
-		`;
+	function createCardTemplates(
+		container: HTMLElement,
+	): Map<string, HTMLElement> {
+		const templates = new Map<string, HTMLElement>();
+		container
+			.querySelectorAll<HTMLElement>("a.post[href]")
+			.forEach((card) => {
+				const href = card.getAttribute("href");
+				if (href)
+					templates.set(
+						normalizePath(href),
+						card.cloneNode(true) as HTMLElement,
+					);
+			});
+		return templates;
 	}
 
-	function filterPosts(query) {
-		if (!query) return allPostsData;
+	function renderHits(
+		container: HTMLElement,
+		hits: SearchHit[],
+		templates: Map<string, HTMLElement>,
+	): number {
+		const cards = hits.flatMap((hit) => {
+			const template = templates.get(normalizePath(hit.url));
+			if (!template) return [];
 
-		const lowerQuery = query.toLowerCase();
-		return allPostsData.filter((post) => {
-			const title = post.title.toLowerCase();
-			const description = post.description.toLowerCase();
-			const category = post.category.toLowerCase();
-			const tags = post.tags.map((t) => t.toLowerCase()).join(" ");
-
-			return (
-				title.includes(lowerQuery) ||
-				description.includes(lowerQuery) ||
-				category.includes(lowerQuery) ||
-				tags.includes(lowerQuery)
-			);
+			const card = template.cloneNode(true) as HTMLElement;
+			card.classList.add("search-result");
+			const excerpt = card.querySelector(".index-subtitle");
+			if (excerpt && hit.excerpt) setSafeExcerpt(excerpt, hit.excerpt);
+			return [card];
 		});
+
+		container.replaceChildren(...cards);
+		return cards.length;
 	}
 
-	function renderPosts(query) {
+	async function initPostSearch(): Promise<void> {
 		const container = document.getElementById("posts-container");
 		const searchHeader = document.getElementById("search-header");
 		const noResults = document.getElementById("no-results");
 		const noResultsText = document.getElementById("no-results-text");
-		const queryEl = document.getElementById("search-query");
-		const countEl = document.getElementById("search-count");
-		if (!container || !searchHeader || !noResults || !noResultsText) return;
-
-		const filteredPosts = filterPosts(query);
-
-		if (query) {
-			searchHeader.style.display = "block";
-			if (queryEl) queryEl.textContent = query;
-			if (countEl) countEl.textContent = filteredPosts.length;
-		} else {
-			searchHeader.style.display = "none";
+		const queryElement = document.getElementById("search-query");
+		const countElement = document.getElementById("search-count");
+		if (
+			!container ||
+			!searchHeader ||
+			!noResults ||
+			!noResultsText ||
+			!queryElement ||
+			!countElement
+		) {
+			return;
 		}
 
-		if (filteredPosts.length > 0) {
-			container.innerHTML = filteredPosts.map(renderPostCard).join("");
-			noResults.style.display = "none";
-		} else {
-			container.innerHTML = "";
-			noResults.style.display = "block";
-			if (query) {
-				noResultsText.textContent = `没有找到与 "${query}" 相关的文章`;
-			} else {
-				noResults.style.display = "none";
+		const query =
+			new URLSearchParams(window.location.search).get("q")?.trim() ?? "";
+		if (!query) return;
+
+		const templates = createCardTemplates(container);
+		const fallbackPosts = readFallbackPosts();
+		const run = (window.__arumaPostSearchRun ?? 0) + 1;
+		window.__arumaPostSearchRun = run;
+
+		searchHeader.style.display = "block";
+		queryElement.textContent = query;
+		countElement.textContent = "…";
+		noResults.style.display = "none";
+		container.setAttribute("aria-busy", "true");
+
+		let hits: SearchHit[];
+		if (container.dataset.pagefindEnabled === "true") {
+			try {
+				hits = await searchArticles(query);
+			} catch (error) {
+				console.warn(
+					"Full-text search is unavailable; using metadata fallback.",
+					error,
+				);
+				hits = searchFallback(fallbackPosts, query);
 			}
+		} else {
+			hits = searchFallback(fallbackPosts, query);
+		}
+
+		if (
+			window.__arumaPostSearchRun !== run ||
+			!container.isConnected ||
+			new URLSearchParams(window.location.search).get("q")?.trim() !==
+				query
+		) {
+			return;
+		}
+
+		const count = renderHits(container, hits, templates);
+		countElement.textContent = String(count);
+		container.removeAttribute("aria-busy");
+
+		if (count === 0) {
+			noResultsText.textContent = (
+				noResultsText.dataset.template ?? 'No posts found for "{query}"'
+			).replaceAll("{query}", query);
+			noResults.style.display = "block";
 		}
 	}
 
-	function initSearch() {
-		if (!document.getElementById("posts-container")) return;
-		const urlParams = new URLSearchParams(window.location.search);
-		const query = urlParams.get("q")?.trim() || "";
-		renderPosts(query);
+	if (window.__arumaPostSearchPageLoad) {
+		document.removeEventListener(
+			"astro:page-load",
+			window.__arumaPostSearchPageLoad,
+		);
 	}
+	window.__arumaPostSearchPageLoad = () => void initPostSearch();
+	document.addEventListener(
+		"astro:page-load",
+		window.__arumaPostSearchPageLoad,
+	);
 
-	// 初始加载和 View Transitions 支持
-	document.addEventListener("astro:page-load", initSearch);
-
-	// 如果不是通过 View Transitions 加载的，立即执行
 	if (document.readyState === "complete") {
-		initSearch();
+		void initPostSearch();
 	}
 </script>
 
@@ -261,122 +375,24 @@ const postsData = allPosts.map((post) => {
 		font-style: normal;
 		color: var(--color);
 	}
-
-	/* Post Card Styles */
-	.post-card {
-		margin-bottom: 20px;
-		overflow: hidden;
-		transition:
-			transform 0.3s ease,
-			box-shadow 0.3s ease;
-		border-radius: 7px;
+	#posts-container {
+		transition: opacity 0.2s ease;
 	}
-	.post-card:hover {
-		transform: translateY(-2px);
-		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	#posts-container[aria-busy="true"] {
+		opacity: 0.55;
+		pointer-events: none;
 	}
-	.post-card-link {
-		display: flex;
-		text-decoration: none;
+	:global(.index-subtitle mark) {
+		border-radius: 2px;
+		background: color-mix(in srgb, var(--color) 35%, transparent);
 		color: inherit;
+		padding: 0 2px;
 	}
-	.post-card-image {
-		flex-shrink: 0;
-		width: 200px;
-		height: 150px;
-		overflow: hidden;
-	}
-	.post-card-image img {
-		width: 100%;
-		height: 100%;
-		object-fit: cover;
-		transition: transform 0.3s ease;
-	}
-	.post-card:hover .post-card-image img {
-		transform: scale(1.05);
-	}
-	.post-card-content {
-		flex: 1;
-		padding: 16px 20px;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
-	.post-card-meta {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-		font-size: 13px;
-		color: rgba(var(--mdui-color-on-surface, 28, 27, 31), 0.7);
-		margin-bottom: 8px;
-	}
-	.post-card-date {
-		display: flex;
-		align-items: center;
-		gap: 4px;
-	}
-	.post-card-date i {
-		font-size: 14px;
-	}
-	.post-card-category {
-		background: var(--color);
-		color: #fff;
-		padding: 2px 8px;
-		border-radius: 4px;
-		text-decoration: none;
-		font-size: 12px;
-	}
-	.post-card-category:hover {
-		opacity: 0.8;
-	}
-	.post-card-title {
-		font-size: 18px;
-		font-weight: 500;
-		margin: 0 0 8px 0;
-		line-height: 1.4;
-	}
-	.post-card-description {
-		font-size: 14px;
-		color: rgba(var(--mdui-color-on-surface, 28, 27, 31), 0.7);
-		margin: 0 0 10px 0;
-		line-height: 1.6;
+	:global(.search-result .index-subtitle) {
 		display: -webkit-box;
-		-webkit-line-clamp: 2;
-		-webkit-box-orient: vertical;
-		overflow: hidden;
-	}
-	.post-card-tags {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 6px;
-	}
-	.post-card-tag {
-		font-size: 11px;
-		padding: 2px 6px;
-		border-radius: 3px;
-		background: rgba(0, 0, 0, 0.05);
-		color: rgba(var(--mdui-color-on-surface, 28, 27, 31), 0.7);
-		text-decoration: none;
-		transition: background 0.2s;
-	}
-	.post-card-tag:hover {
-		background: var(--color);
-		color: #fff;
-	}
-	:global(.mdui-theme-layout-dark) .post-card-tag {
-		background: rgba(255, 255, 255, 0.1);
-	}
-
-	@media (max-width: 768px) {
-		.post-card-link {
-			flex-direction: column;
-		}
-		.post-card-image {
-			width: 100%;
-			height: 180px;
-		}
-		.post-card-content {
-			padding: 12px 16px;
-		}
+		opacity: 0.9;
+		max-height: 50px;
+		transform: translateY(0);
+		margin-top: 8px;
 	}
 </style>

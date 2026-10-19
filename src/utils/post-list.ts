@@ -16,12 +16,7 @@ export async function getVisiblePosts(): Promise<CollectionEntry<"post">[]> {
 }
 
 export function getPostDate(post: CollectionEntry<"post">): Date {
-	return (
-		post.data.pubDate ??
-		post.data.published ??
-		post.data.date ??
-		new Date(0)
-	);
+	return post.data.pubDate;
 }
 
 export function sortPostsForIndex(
